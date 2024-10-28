@@ -40,7 +40,7 @@ export const AboutSection = component$(() => {
           {/* Title */}
           <h2 class="font-playfair text-3xl md:text-4xl text-gray-800 mb-6 text-center">
             {CONTENT.title.main}{' '}
-            <span class="font-ephesis">{CONTENT.title.accent}</span>{' '}
+            <span class="font-ephesis">{CONTENT.title.accent} </span>{' '}
             {CONTENT.title.end}
           </h2>
 
@@ -55,7 +55,7 @@ export const AboutSection = component$(() => {
           <div class="mt-6">
             <Link 
               href="/about" 
-              class="font-opensans text-sm text-[#2d2d2d] underline underline-offset-4 hover:text-[#404040] transition-colors duration-300"
+              class="font-opensans text-sm text-[#2d2d2d] relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:bg-[#2d2d2d] hover:after:h-[2px] after:transition-all after:rounded-full duration-300"
             >
               Learn More
             </Link>

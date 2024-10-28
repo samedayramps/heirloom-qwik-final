@@ -1,48 +1,9 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useSignal, $, useTask$ } from "@builder.io/qwik";
+import type { PropFunction } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import texture from '~/assets/images/22-texture.webp';
-
-// Define metadata for better SEO
-const META = {
-  title: "Wedding Films - HEIRLOOM Wedding Films",
-  description: "Watch our collection of cinematic wedding films. Each film is crafted to capture the unique story and emotions of your special day.",
-} as const;
-
-// Static content
-const CONTENT = {
-  hero: {
-    title: {
-      main: "Our",
-      accent: "latest",
-      end: "films"
-    },
-    subtitle: "A collection of love stories, beautifully captured"
-  },
-  films: [
-    {
-      title: "Sarah & Michael",
-      location: "Napa Valley, CA",
-      date: "Summer 2023",
-      thumbnail: "https://placehold.co/600x400", // Replace with actual image
-      description: "An intimate vineyard wedding filled with romantic moments and golden sunlight."
-    },
-    {
-      title: "Emma & James",
-      location: "Seattle, WA",
-      date: "Fall 2023",
-      thumbnail: "https://placehold.co/600x400", // Replace with actual image
-      description: "A modern celebration in the heart of the city with stunning skyline views."
-    },
-    {
-      title: "Olivia & William",
-      location: "Charleston, SC",
-      date: "Spring 2023",
-      thumbnail: "https://placehold.co/600x400", // Replace with actual image
-      description: "A classic southern wedding with historic charm and elegant details."
-    },
-    // Add more films as needed
-  ]
-} as const;
+import type { Film } from './content';
+import { META, CONTENT } from './content';
 
 // Background styles
 const BACKGROUND_STYLES = {
@@ -52,6 +13,68 @@ const BACKGROUND_STYLES = {
   backgroundRepeat: 'repeat-y',
 } as const;
 
+// Video Modal Component with lazy loading
+const VideoModal = component$<{
+  isOpen: boolean;
+  videoUrl: string;
+  onClose$: PropFunction<() => void>;
+}>(({ isOpen, videoUrl, onClose$ }) => {
+  const vimeoId = videoUrl.split('/').pop();
+  const iframeLoaded = useSignal(false);
+
+  // Using useTask$ instead of useVisibleTask$ for better performance
+  useTask$(({ track }) => {
+    track(() => isOpen);
+    if (isOpen) {
+      // Small delay to ensure smooth animation
+      setTimeout(() => {
+        iframeLoaded.value = true;
+      }, 300);
+    } else {
+      iframeLoaded.value = false;
+    }
+  });
+
+  if (!isOpen) return null;
+
+  return (
+    <div 
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm transition-opacity duration-300"
+      onClick$={onClose$}
+      role="dialog"
+      aria-modal="true"
+    >
+      {/* Close button */}
+      <button 
+        onClick$={onClose$}
+        class="absolute top-4 right-4 p-2 text-white/80 hover:text-white transition-colors"
+        aria-label="Close modal"
+      >
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+
+      {/* Video container with loading state */}
+      <div class="w-full max-w-7xl aspect-video px-4" onClick$={(e) => e.stopPropagation()}>
+        {iframeLoaded.value ? (
+          <iframe
+            src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&title=0&byline=0&portrait=0&dnt=1`}
+            class="w-full h-full"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullscreen
+            loading="lazy"
+          />
+        ) : (
+          <div class="w-full h-full bg-black/50 animate-pulse flex items-center justify-center">
+            <div class="loading-spinner" />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+});
+
 // Film Card Component
 const FilmCard = component$<{
   title: string;
@@ -59,58 +82,57 @@ const FilmCard = component$<{
   date: string;
   thumbnail: string;
   description: string;
-}>(({ title, location, date, thumbnail, description }) => {
+  onPlay$: PropFunction<() => void>;
+}>(({ title, location, date, thumbnail, description, onPlay$ }) => {
   return (
-    <div class="group relative overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-xl">
-      {/* Thumbnail with fixed dimensions */}
+    <button 
+      onClick$={onPlay$}
+      class="group relative overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-xl text-left w-full"
+    >
       <div class="aspect-video overflow-hidden">
         <img 
-          src={thumbnail} 
+          src={thumbnail}
           alt={`${title} wedding film thumbnail`}
-          width={600}
-          height={338} // 16:9 aspect ratio (600 * 9/16)
-          class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy" // Add lazy loading for better performance
+          width={1200}
+          height={675}
+          loading="lazy"
+          decoding="async"
+          class="h-full w-full object-cover transform transition duration-500 group-hover:scale-105"
         />
       </div>
       
-      {/* Content */}
       <div class="p-6">
         <h3 class="font-playfair text-xl text-gray-800 mb-2">{title}</h3>
-        <div class="font-opensans text-sm text-gray-600 mb-3">
+        <div class="font-opensans text-sm text-gray-600 space-y-1">
           <p>{location}</p>
           <p>{date}</p>
         </div>
-        <p class="font-opensans text-gray-700">{description}</p>
-        
-        {/* Play Button */}
-        <button class="mt-4 inline-flex items-center gap-2 text-[#315141] font-opensans font-medium group-hover:text-[#52453A] transition-colors duration-300">
-          Watch Film
-          <svg 
-            class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor"
-          >
-            <path 
-              stroke-linecap="round" 
-              stroke-linejoin="round" 
-              stroke-width="2" 
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </button>
+        <p class="font-opensans text-gray-700 mt-3">{description}</p>
       </div>
-    </div>
+    </button>
   );
 });
 
 export default component$(() => {
+  const activeVideoUrl = useSignal('');
+  const isModalOpen = useSignal(false);
+
+  const handleClose = $(() => {
+    isModalOpen.value = false;
+    activeVideoUrl.value = '';
+  });
+
   return (
-    <main class="w-full relative">
+    <main class="w-full">
+      <VideoModal 
+        isOpen={isModalOpen.value}
+        videoUrl={activeVideoUrl.value}
+        onClose$={handleClose}
+      />
+
       {/* Hero Section */}
-      <section class="relative bg-[#faf9f6] w-full py-24 overflow-hidden">
-        <div class="container relative z-10">
+      <section class="bg-[#faf9f6] py-24">
+        <div class="container">
           <div class="max-w-4xl mx-auto text-center">
             <h1 class="font-playfair text-4xl md:text-5xl lg:text-6xl text-gray-800 mb-4">
               {CONTENT.hero.title.main}{' '}
@@ -125,9 +147,9 @@ export default component$(() => {
       </section>
 
       {/* Films Grid Section */}
-      <section class="relative bg-[#d5c6ad] w-full py-16 overflow-hidden">
+      <section class="bg-[#d5c6ad] py-16">
         <div 
-          class="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none transition-opacity duration-700"
+          class="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
           style={BACKGROUND_STYLES}
           aria-hidden="true"
         />
@@ -135,10 +157,14 @@ export default component$(() => {
         <div class="container relative z-10">
           <div class="max-w-6xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {CONTENT.films.map((film) => (
+              {CONTENT.films.map((film: Film) => (
                 <FilmCard 
                   key={film.title}
                   {...film}
+                  onPlay$={() => {
+                    activeVideoUrl.value = film.videoUrl;
+                    isModalOpen.value = true;
+                  }}
                 />
               ))}
             </div>

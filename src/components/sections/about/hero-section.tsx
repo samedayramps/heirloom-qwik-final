@@ -5,7 +5,7 @@ const CONTENT = {
   intro: "After 8 years of filming weddings, I realized a simple truth: while wedding films make great social posts, they should be created for something more enduring:",
   points: [
     "Something you'll want to watch every anniversary",
-    "Gathering with love ones to watch it together",
+    "Gathering with loved ones to watch it together",
     "An heirloom your future generations will treasure"
   ]
 } as const;
