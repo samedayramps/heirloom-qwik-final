@@ -1,4 +1,5 @@
 import { component$ } from '@builder.io/qwik';
+import { Link } from '@builder.io/qwik-city';
 // Import the image and use relative path from assets
 import textureImage from '~/assets/images/16-texture-square.webp';
 
@@ -48,6 +49,16 @@ export const AboutSection = component$(() => {
             {CONTENT.paragraphs.map((paragraph, index) => (
               <p key={index} class="leading-relaxed">{paragraph}</p>
             ))}
+          </div>
+
+          {/* Learn More Link */}
+          <div class="mt-6">
+            <Link 
+              href="/about" 
+              class="font-opensans text-sm text-[#2d2d2d] underline underline-offset-4 hover:text-[#404040] transition-colors duration-300"
+            >
+              Learn More
+            </Link>
           </div>
         </div>
       </div>

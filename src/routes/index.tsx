@@ -3,11 +3,11 @@ import type { DocumentHead } from "@builder.io/qwik-city";
 import { createLeadFormAction } from '~/lib/actions/lead';
 
 // Import section components
-import { HeroSection } from "~/components/sections/hero-section";
-import { AboutSection } from "~/components/sections/about-section";
-import { FeaturesSection } from "~/components/sections/features-section";
-import { FAQSection } from "~/components/sections/faq-section";
-import { ProcessSection } from "~/components/sections/process-section";
+import { HeroSection } from "~/components/sections/home/hero-section";
+import { AboutSection } from "~/components/sections/home/about-section";
+import { FeaturesSection } from "~/components/sections/home/features-section";
+import { FAQSection } from "~/components/sections/home/faq-section";
+import { ProcessSection } from "~/components/sections/home/process-section";
 
 // Re-export the action
 export const useLeadFormAction = createLeadFormAction();

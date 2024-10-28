@@ -1,5 +1,5 @@
 import { component$ } from '@builder.io/qwik';
-import { Stepper } from '../stepper/stepper';
+import { Stepper } from '../../stepper/stepper';
 import texture from '~/assets/images/9-texture.webp'; // Using existing texture
 
 // Static content

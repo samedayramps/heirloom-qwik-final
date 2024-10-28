@@ -26,7 +26,7 @@ export const LeadForm = component$<{
       <div class="fixed inset-0 flex items-center justify-center p-4 md:p-4">
         <div 
           class={[
-            'w-full max-w-md bg-white/95 rounded-3xl shadow-2xl border border-white/20 transition-all duration-300 transform',
+            'w-full max-w-md bg-[#faf9f6] rounded-3xl shadow-2xl border border-white/20 transition-all duration-300 transform',
             isVisible 
               ? 'opacity-100 translate-y-0 scale-100' 
               : 'opacity-0 translate-y-8 scale-95'
@@ -34,7 +34,7 @@ export const LeadForm = component$<{
         >
           <button 
             onClick$={onClose$}
-            class="absolute -top-4 -right-4 bg-white rounded-full p-2 shadow-lg text-gray-500 hover:text-gray-700 hover:scale-110 transition-all duration-300"
+            class="absolute -top-4 -right-4 bg-[#faf9f6] rounded-full p-2 shadow-lg text-gray-500 hover:text-gray-700 hover:scale-110 transition-all duration-300"
             aria-label="Close"
           >
             <svg class="h-6 w-6" viewBox="0 0 24 24">
@@ -42,7 +42,7 @@ export const LeadForm = component$<{
             </svg>
           </button>
 
-          {/* Form Content - updated spacing */}
+          {/* Form Content */}
           <div class="p-3 md:p-8">
             <h3 class="text-2xl md:text-3xl text-center font-playfair mb-2 md:mb-8 text-gray-800">Let's Talk</h3>
 
@@ -59,17 +59,10 @@ export const LeadForm = component$<{
               }}
               onSubmitCompleted$={async () => {
                 if (action.value?.success) {
-                  // Show spinner for 1 second
                   await new Promise(resolve => setTimeout(resolve, 1000));
                   isSubmitting.value = false;
-                  
-                  // Close form with animation
                   onClose$();
-                  
-                  // Wait for form close animation to complete
                   await new Promise(resolve => setTimeout(resolve, 300));
-                  
-                  // Show toast
                   onSuccess$();
                 } else {
                   isSubmitting.value = false;
