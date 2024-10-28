@@ -2,6 +2,7 @@ import { component$, useSignal, $, type QRL, useOnWindow, useOnDocument } from '
 import { Link } from '@builder.io/qwik-city';
 import LogoSvg from '../../assets/images/logo.svg?jsx';
 import LogoMobileSvg from '../../assets/images/logo-mobile.svg?jsx';
+import { LetsTalkButton } from "~/components/ui/lets-talk-button";
 
 // Constants for static classes
 const WRAPPER_CLASSES = 'fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out transform-gpu';
@@ -64,12 +65,10 @@ const MobileMenu = component$<{
         ))}
         {/* Add button for extra small screens */}
         <div class="xs:hidden pt-2">
-          <button
-            onClick$={onTalkClick$}
-            class="w-full bg-[#d5c6ad] hover:bg-[#c0b298] text-gray-800 font-opensans font-bold py-3 px-6 text-sm rounded-full transition-all duration-300"
-          >
-            LET'S TALK
-          </button>
+          <LetsTalkButton
+            onTalkClick$={onTalkClick$}
+            class="w-full"
+          />
         </div>
       </div>
     </div>
@@ -199,18 +198,10 @@ export default component$<NavbarProps>(({ onTalkClick$ }) => {
               'hidden xs:flex flex-1', // Fixed order: hidden by default, flex on xs and up
               isScrolled.value ? 'mr-1' : ''
             ]}>
-              <button
-                onClick$={onTalkClick$}
-                class={[
-                  'bg-[#d5c6ad] hover:bg-[#c0b298] text-gray-800 font-opensans font-bold py-3 text-sm transition-all duration-700 ease-in-out',
-                  'px-3 sm:px-6',
-                  isScrolled.value
-                    ? 'rounded-[24px]'
-                    : 'rounded-full'
-                ]}
-              >
-                LET'S TALK
-              </button>
+              <LetsTalkButton
+                onTalkClick$={onTalkClick$}
+                class={isScrolled.value ? 'rounded-[24px]' : ''}
+              />
             </div>
           </div>
         </div>

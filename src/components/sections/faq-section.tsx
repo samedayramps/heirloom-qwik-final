@@ -1,5 +1,6 @@
 import { component$, useSignal, type QRL } from "@builder.io/qwik";
 import texture from '~/assets/images/18-texture.webp';
+import { LetsTalkButton } from "~/components/ui/lets-talk-button";
 
 // Static content and types
 interface FAQItem {
@@ -122,15 +123,12 @@ export const FAQSection = component$<FAQSectionProps>(({ onTalkClick$ }) => {
         <div class="max-w-4xl mx-auto text-center">
           <h2 class="font-playfair text-3xl md:text-4xl text-white mb-16 flex items-center justify-center gap-8">
             {CONTENT.title}{" "}
-            <button 
-              class={TRANSITION_CLASSES.talkButton}
-              onClick$={() => {
-                document.body.style.overflow = 'hidden'; // Add this line
+            <LetsTalkButton 
+              onTalkClick$={() => {
+                document.body.style.overflow = 'hidden';
                 onTalkClick$();
               }}
-            >
-              {CONTENT.buttonText}
-            </button>
+            />
           </h2>
 
           <div class="space-y-4 text-left">
