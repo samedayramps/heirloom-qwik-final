@@ -3,22 +3,38 @@ import { Form } from '@builder.io/qwik-city';
 import { useLeadFormAction } from '~/routes/index';
 import { FormInput } from './form-input';
 
-export const LeadForm = component$<{ onClose$: QRL<() => void> }>(({ onClose$ }) => {
+export const LeadForm = component$<{ 
+  onClose$: QRL<() => void>;
+  onSuccess$: QRL<() => void>;
+  isVisible: boolean;
+}>(({ onClose$, onSuccess$, isVisible }) => {
   const action = useLeadFormAction();
   const isSubmitting = useSignal(false);
 
   return (
-    <div class="fixed inset-0 z-[100] overflow-y-auto">
+    <>
+      {/* Backdrop */}
       <div 
-        class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
+        class={[
+          'fixed inset-0 bg-black/70 transition-opacity duration-300',
+          isVisible ? 'opacity-100' : 'opacity-0'
+        ]}
         onClick$={onClose$}
       />
 
-      <div class="relative min-h-screen flex items-center justify-center p-4">
-        <div class="relative w-full max-w-md bg-white rounded-3xl shadow-xl">
+      {/* Modal Container */}
+      <div class="fixed inset-0 flex items-center justify-center p-4">
+        <div 
+          class={[
+            'w-full max-w-md bg-white/95 rounded-3xl shadow-2xl border border-white/20 transition-all duration-300 transform',
+            isVisible 
+              ? 'opacity-100 translate-y-0 scale-100' 
+              : 'opacity-0 translate-y-8 scale-95'
+          ]}
+        >
           <button 
             onClick$={onClose$}
-            class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            class="absolute -top-4 -right-4 bg-white rounded-full p-2 shadow-lg text-gray-500 hover:text-gray-700 hover:scale-110 transition-all duration-300"
             aria-label="Close"
           >
             <svg class="h-6 w-6" viewBox="0 0 24 24">
@@ -26,17 +42,12 @@ export const LeadForm = component$<{ onClose$: QRL<() => void> }>(({ onClose$ })
             </svg>
           </button>
 
-          <div class="p-6">
-            <h3 class="text-2xl text-center font-playfair mb-6">Let's Talk</h3>
+          {/* Form Content */}
+          <div class="p-8">
+            <h3 class="text-3xl text-center font-playfair mb-8 text-gray-800">Let's Talk</h3>
 
             {action.value?.failed && (
-              <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
-                {action.value.message}
-              </div>
-            )}
-
-            {action.value?.success && (
-              <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
+              <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r">
                 {action.value.message}
               </div>
             )}
@@ -45,20 +56,28 @@ export const LeadForm = component$<{ onClose$: QRL<() => void> }>(({ onClose$ })
               action={action}
               onSubmit$={() => {
                 isSubmitting.value = true;
-                // Ensure spinner shows for at least 1 second
-                setTimeout(() => {
-                  isSubmitting.value = false;
-                }, 1000);
               }}
-              onSubmitCompleted$={() => {
-                isSubmitting.value = false;
+              onSubmitCompleted$={async () => {
                 if (action.value?.success) {
-                  setTimeout(onClose$, 2000);
+                  // Show spinner for 1 second
+                  await new Promise(resolve => setTimeout(resolve, 1000));
+                  isSubmitting.value = false;
+                  
+                  // Close form with animation
+                  onClose$();
+                  
+                  // Wait for form close animation to complete
+                  await new Promise(resolve => setTimeout(resolve, 300));
+                  
+                  // Show toast
+                  onSuccess$();
+                } else {
+                  isSubmitting.value = false;
                 }
               }}
-              class="space-y-4"
+              class="space-y-6"
             >
-              <div class="flex space-x-4">
+              <div class="grid grid-cols-2 gap-4">
                 <FormInput
                   id="firstName"
                   label="First Name"
@@ -75,7 +94,7 @@ export const LeadForm = component$<{ onClose$: QRL<() => void> }>(({ onClose$ })
                 />
               </div>
 
-              <div class="flex space-x-4">
+              <div class="grid grid-cols-2 gap-4">
                 <FormInput
                   id="email"
                   label="Email"
@@ -91,7 +110,7 @@ export const LeadForm = component$<{ onClose$: QRL<() => void> }>(({ onClose$ })
                 />
               </div>
 
-              <div class="flex space-x-4">
+              <div class="grid grid-cols-2 gap-4">
                 <FormInput
                   id="weddingDate"
                   label="Wedding Date"
@@ -107,22 +126,22 @@ export const LeadForm = component$<{ onClose$: QRL<() => void> }>(({ onClose$ })
               </div>
 
               <div class="w-full">
-                <label for="message" class="block text-gray-700 text-sm font-bold mb-2">
-                  Message (Please include how you heard about us)
+                <label for="message" class="block text-gray-700 text-sm font-medium mb-2">
+                  Message
                 </label>
                 <textarea
                   id="message"
                   name="message"
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#d5c6ad] focus:ring-2 focus:ring-[#d5c6ad]/20 transition-all duration-200 resize-none bg-white/50 backdrop-blur-sm"
                   rows={4}
                   placeholder="Share your thoughts and let us know how you found us..."
                 />
               </div>
 
-              <div class="flex items-center justify-center mt-8">
+              <div class="flex items-center justify-center pt-4">
                 <button 
                   type="submit" 
-                  class="bg-[#d5c6ad] hover:bg-[#c0b298] text-gray-800 font-bold py-3 px-8 rounded-full text-sm uppercase tracking-wider relative disabled:opacity-70 disabled:cursor-not-allowed"
+                  class="bg-[#d5c6ad] hover:bg-[#c0b298] text-gray-800 font-bold py-4 px-10 rounded-full text-sm uppercase tracking-wider relative disabled:opacity-70 disabled:cursor-not-allowed transform hover:-translate-y-0.5 transition-all duration-200"
                   disabled={isSubmitting.value}
                 >
                   {isSubmitting.value ? (
@@ -158,6 +177,6 @@ export const LeadForm = component$<{ onClose$: QRL<() => void> }>(({ onClose$ })
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 });

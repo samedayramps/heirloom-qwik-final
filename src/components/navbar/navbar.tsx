@@ -28,7 +28,7 @@ const NavLink = component$<{
   <Link 
     href={href}
     class={[
-      'text-[#faf9f6] hover:bg-gray-700 rounded-md font-opensans transition-colors duration-300',
+      'text-[#faf9f6] hover:text-[#d5c6ad] rounded-md font-opensans transition-all duration-300 hover:scale-110',
       isMobile 
         ? 'block px-3 py-2 text-base' 
         : 'px-3 py-2 text-sm'
@@ -137,12 +137,12 @@ export default component$<NavbarProps>(({ onTalkClick$ }) => {
         ]}>
           <div class="flex items-center justify-between h-16">
             {/* Navbar Start */}
-            <div class="flex items-center">
+            <div class="flex items-center flex-1 lg:flex-none">
               <div class="lg:hidden">
                 <button
                   ref={menuButtonRef}
                   onClick$={() => isDropdownOpen.value = !isDropdownOpen.value}
-                  class="inline-flex items-center justify-center p-2 rounded-md text-[#faf9f6] hover:bg-gray-700 focus:outline-none"
+                  class="inline-flex items-center justify-center p-2 rounded-md text-[#faf9f6] hover:text-[#d5c6ad] hover:scale-110 focus:outline-none transition-all duration-300"
                   aria-label="Toggle menu"
                 >
                   <svg 
@@ -176,7 +176,7 @@ export default component$<NavbarProps>(({ onTalkClick$ }) => {
 
             {/* Navbar Center */}
             <div class="hidden lg:flex items-center justify-center flex-1">
-              <div class="flex space-x-4">
+              <div class="absolute left-1/2 transform -translate-x-1/2 flex space-x-4">
                 {NAV_LINKS.map((link) => (
                   <NavLink key={link.href} {...link} />
                 ))}
@@ -185,7 +185,7 @@ export default component$<NavbarProps>(({ onTalkClick$ }) => {
 
             {/* Navbar End */}
             <div class={[
-              'transition-all duration-700 ease-in-out',
+              'transition-all duration-700 ease-in-out flex-1 lg:flex-none flex justify-end',
               isScrolled.value ? 'mr-1' : '' // Reduced fixed margin when scrolled
             ]}>
               <button

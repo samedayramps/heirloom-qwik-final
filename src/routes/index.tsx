@@ -6,30 +6,34 @@ import { createLeadFormAction } from '~/lib/actions/lead';
 import { HeroSection } from "~/components/sections/hero-section";
 import { AboutSection } from "~/components/sections/about-section";
 import { FeaturesSection } from "~/components/sections/features-section";
+import { FAQSection } from "~/components/sections/faq-section";
 
 // Re-export the action
 export const useLeadFormAction = createLeadFormAction();
 
+// Define metadata for better SEO
+const META = {
+  title: "HEIRLOOM Wedding Films - Cinematic Wedding Videography",
+  description: "Crafting cinematic wedding films that capture your unique love story. Full-day coverage, 30+ minute films, and a personalized experience.",
+} as const;
+
 export default component$(() => {
   return (
-    <>
-      {/* Main container with proper spacing */}
-      <main class="w-full relative">
-        {/* Each section as a separate component */}
-        <HeroSection />
-        <AboutSection />
-        <FeaturesSection />
-      </main>
-    </>
+    <main class="w-full relative">
+      <HeroSection />
+      <AboutSection />
+      <FeaturesSection />
+      <FAQSection />
+    </main>
   );
 });
 
 export const head: DocumentHead = {
-  title: "Welcome to Qwik",
+  title: META.title,
   meta: [
     {
       name: "description",
-      content: "Qwik site description",
+      content: META.description,
     },
   ],
 };
