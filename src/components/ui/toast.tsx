@@ -27,7 +27,7 @@ export const Toast = component$<ToastProps>(({
   return (
     <div 
       class={[
-        'fixed top-24 left-1/2 -translate-x-1/2 bg-[#315141] text-[#faf9f6] py-3 px-6 rounded-[24px] shadow-lg transition-all duration-500 ease-out z-[150] w-fit mx-auto',
+        'fixed top-24 left-1/2 -translate-x-1/2 bg-[#315141] text-[#faf9f6] py-3 px-6 rounded-[24px] shadow-lg transition-all duration-500 ease-out z-[150] w-fit mx-auto max-w-[calc(100%-32px)]',
         isVisible.value 
           ? 'opacity-100 translate-y-0'
           : 'opacity-0 -translate-y-4'

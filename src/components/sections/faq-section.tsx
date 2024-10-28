@@ -124,7 +124,10 @@ export const FAQSection = component$<FAQSectionProps>(({ onTalkClick$ }) => {
             {CONTENT.title}{" "}
             <button 
               class={TRANSITION_CLASSES.talkButton}
-              onClick$={onTalkClick$}
+              onClick$={() => {
+                document.body.style.overflow = 'hidden'; // Add this line
+                onTalkClick$();
+              }}
             >
               {CONTENT.buttonText}
             </button>

@@ -6,7 +6,7 @@ interface FormInputProps {
   type: string;
   required?: boolean;
   error?: string;
-  fullWidth?: boolean;
+  class?: string;
 }
 
 export const FormInput = component$<FormInputProps>(({ 
@@ -15,10 +15,10 @@ export const FormInput = component$<FormInputProps>(({
   type, 
   required, 
   error,
-  fullWidth
+  class: className
 }) => {
   return (
-    <div class={fullWidth ? 'w-full' : 'w-full'}>
+    <div class="w-full">
       <label 
         for={id}
         class="block text-gray-700 text-sm font-medium mb-2"
@@ -30,10 +30,14 @@ export const FormInput = component$<FormInputProps>(({
         name={id}
         type={type}
         required={required}
-        class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#d5c6ad] focus:ring-2 focus:ring-[#d5c6ad]/20 transition-all duration-200 bg-white/50 backdrop-blur-sm"
+        class={[
+          'w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#d5c6ad] focus:ring-2 focus:ring-[#d5c6ad]/20 transition-all duration-200 bg-white/50 backdrop-blur-sm',
+          error && 'border-red-500',
+          className
+        ].join(' ')}
       />
       {error && (
-        <p class="text-red-500 text-xs mt-1">{error}</p>
+        <p class="mt-1 text-sm text-red-500">{error}</p>
       )}
     </div>
   );
