@@ -1,4 +1,4 @@
-import { component$, useSignal } from "@builder.io/qwik";
+import { component$, useSignal, type QRL } from "@builder.io/qwik";
 import texture from '~/assets/images/18-texture.webp';
 
 // Static content and types
@@ -39,7 +39,8 @@ const TRANSITION_CLASSES = {
   button: "w-full text-left px-6 py-5 flex justify-between items-center transition-colors duration-300",
   chevron: "transform transition-transform duration-300 ease-in-out",
   content: "transition-all duration-500 ease-in-out overflow-hidden",
-  text: "px-6 pb-5 text-gray-600 font-opensans transform transition-all duration-500 ease-in-out"
+  text: "px-6 pb-5 text-gray-600 font-opensans transform transition-all duration-500 ease-in-out",
+  talkButton: "bg-[#d5c6ad] hover:bg-[#c0b298] text-gray-800 font-opensans font-bold py-3 px-6 text-sm rounded-full transition-all duration-300"
 } as const;
 
 // Separate FAQ Item component for better organization
@@ -102,7 +103,11 @@ const FAQItem = component$((props: {
   );
 });
 
-export const FAQSection = component$(() => {
+interface FAQSectionProps {
+  onTalkClick$: QRL<() => void>;
+}
+
+export const FAQSection = component$<FAQSectionProps>(({ onTalkClick$ }) => {
   const openIndex = useSignal<number | null>(null);
 
   return (
@@ -117,7 +122,10 @@ export const FAQSection = component$(() => {
         <div class="max-w-4xl mx-auto text-center">
           <h2 class="font-playfair text-3xl md:text-4xl text-white mb-16 flex items-center justify-center gap-8">
             {CONTENT.title}{" "}
-            <button class="talk-button px-8">
+            <button 
+              class={TRANSITION_CLASSES.talkButton}
+              onClick$={onTalkClick$}
+            >
               {CONTENT.buttonText}
             </button>
           </h2>

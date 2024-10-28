@@ -18,7 +18,7 @@ const NAV_LINKS = [
   { href: '/blog', text: 'Blog' },
 ] as const;
 
-// Extracted NavLink component for better performance
+// Update the NavLink component
 const NavLink = component$<{
   href: string;
   text: string;
@@ -28,10 +28,10 @@ const NavLink = component$<{
   <Link 
     href={href}
     class={[
-      'text-[#faf9f6] hover:text-[#d5c6ad] rounded-md font-opensans transition-all duration-300 hover:scale-110',
+      'text-[#faf9f6] hover:text-[#d5c6ad] rounded-md font-opensans transition-colors duration-300',
       isMobile 
-        ? 'block px-3 py-2 text-base' 
-        : 'px-3 py-2 text-sm'
+        ? 'block px-3 py-2 text-base' // Removed hover:scale-110 for mobile
+        : 'px-3 py-2 text-sm hover:scale-110' // Keep scale animation for desktop
     ]}
     onClick$={onClick$}
   >

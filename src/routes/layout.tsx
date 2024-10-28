@@ -1,4 +1,4 @@
-import { component$, Slot, useSignal, $ } from "@builder.io/qwik";
+import { component$, Slot, useSignal, $, useOnWindow } from "@builder.io/qwik";
 import Navbar from '../components/navbar/navbar'; // Ensure this path is correct
 import { Footer } from '../components/footer/footer';
 import { LeadForm } from '../components/leadForm/leadForm';
@@ -44,6 +44,11 @@ export default component$(() => {
   const handleHideToast = $(() => {
     showToast.value = false;
   });
+
+  // Add event listener for custom event
+  useOnWindow('toggleLeadForm', $(() => {
+    handleOpenModal();
+  }));
 
   return (
     <div class="min-h-screen bg-[#faf9f6] relative flex flex-col">

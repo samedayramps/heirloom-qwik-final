@@ -7,6 +7,7 @@ import { HeroSection } from "~/components/sections/hero-section";
 import { AboutSection } from "~/components/sections/about-section";
 import { FeaturesSection } from "~/components/sections/features-section";
 import { FAQSection } from "~/components/sections/faq-section";
+import { ProcessSection } from "~/components/sections/process-section";
 
 // Re-export the action
 export const useLeadFormAction = createLeadFormAction();
@@ -23,7 +24,14 @@ export default component$(() => {
       <HeroSection />
       <AboutSection />
       <FeaturesSection />
-      <FAQSection />
+      <ProcessSection />
+      <FAQSection 
+        onTalkClick$={() => {
+          // Dispatch custom event that layout listens for
+          const event = new CustomEvent('toggleLeadForm');
+          window.dispatchEvent(event);
+        }}
+      />
     </main>
   );
 });
