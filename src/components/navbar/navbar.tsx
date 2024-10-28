@@ -43,12 +43,13 @@ const NavLink = component$<{
 const MobileMenu = component$<{
   isOpen: boolean;
   onLinkClick$: QRL<() => void>;
-}>(({ isOpen, onLinkClick$ }) => (
+  onTalkClick$: QRL<() => void>;
+}>(({ isOpen, onLinkClick$, onTalkClick$ }) => (
   <div 
     class={{
       [MOBILE_MENU_CLASSES]: true,
-      'opacity-100 translate-y-1': isOpen, // Reduced translation for snappier feel
-      'opacity-0 -translate-y-2 pointer-events-none': !isOpen // Reduced negative translation
+      'opacity-100 translate-y-1': isOpen,
+      'opacity-0 -translate-y-2 pointer-events-none': !isOpen
     }}
   >
     <div class="bg-[#2d2d2d] rounded-2xl shadow-lg overflow-hidden transform-gpu">
@@ -61,6 +62,15 @@ const MobileMenu = component$<{
             onClick$={onLinkClick$}
           />
         ))}
+        {/* Add button for extra small screens */}
+        <div class="xs:hidden pt-2">
+          <button
+            onClick$={onTalkClick$}
+            class="w-full bg-[#d5c6ad] hover:bg-[#c0b298] text-gray-800 font-opensans font-bold py-3 px-6 text-sm rounded-full transition-all duration-300"
+          >
+            LET'S TALK
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -142,7 +152,7 @@ export default component$<NavbarProps>(({ onTalkClick$ }) => {
                 <button
                   ref={menuButtonRef}
                   onClick$={() => isDropdownOpen.value = !isDropdownOpen.value}
-                  class="inline-flex items-center justify-center p-2 rounded-md text-[#faf9f6] hover:text-[#d5c6ad] hover:scale-110 focus:outline-none transition-all duration-300"
+                  class="inline-flex items-center justify-center p-1 rounded-md text-[#faf9f6] hover:text-[#d5c6ad] hover:scale-110 focus:outline-none transition-all duration-300"
                   aria-label="Toggle menu"
                 >
                   <svg 
@@ -162,13 +172,13 @@ export default component$<NavbarProps>(({ onTalkClick$ }) => {
                 </button>
               </div>
 
-              <Link href="/" class="flex-shrink-0 ml-4 lg:ml-0">
+              <Link href="/" class="flex-shrink min-w-0 ml-2 lg:ml-0">
                 <LogoSvg 
                   class="hidden md:block h-8 w-auto" 
                   aria-label="Logo"
                 />
                 <LogoMobileSvg 
-                  class="block md:hidden h-6 w-auto" 
+                  class="block md:hidden h-6 w-auto min-w-0" 
                   aria-label="Mobile Logo"
                 />
               </Link>
@@ -185,13 +195,15 @@ export default component$<NavbarProps>(({ onTalkClick$ }) => {
 
             {/* Navbar End */}
             <div class={[
-              'transition-all duration-700 ease-in-out flex-1 lg:flex-none flex justify-end',
-              isScrolled.value ? 'mr-1' : '' // Reduced fixed margin when scrolled
+              'transition-all duration-700 ease-in-out lg:flex-none justify-end',
+              'hidden xs:flex flex-1', // Fixed order: hidden by default, flex on xs and up
+              isScrolled.value ? 'mr-1' : ''
             ]}>
               <button
                 onClick$={onTalkClick$}
                 class={[
-                  'bg-[#d5c6ad] hover:bg-[#c0b298] text-gray-800 font-opensans font-bold py-3 px-6 text-sm transition-all duration-700 ease-in-out',
+                  'bg-[#d5c6ad] hover:bg-[#c0b298] text-gray-800 font-opensans font-bold py-3 text-sm transition-all duration-700 ease-in-out',
+                  'px-3 sm:px-6',
                   isScrolled.value
                     ? 'rounded-[24px]'
                     : 'rounded-full'
@@ -208,6 +220,7 @@ export default component$<NavbarProps>(({ onTalkClick$ }) => {
           <MobileMenu 
             isOpen={isDropdownOpen.value} 
             onLinkClick$={() => isDropdownOpen.value = false}
+            onTalkClick$={onTalkClick$}
           />
         </div>
       </nav>

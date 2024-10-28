@@ -43,6 +43,9 @@ module.exports = {
           },
         },
       },
+      screens: {
+        'xs': '400px', // New breakpoint for very small screens
+      },
     },
   },
   plugins: [
