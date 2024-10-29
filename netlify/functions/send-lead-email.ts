@@ -44,7 +44,7 @@ const handler: Handler = async (event) => {
       },
       method: "POST",
       body: JSON.stringify({
-        from: "HEIRLOOM Wedding Films <hello@heirloomweddingfilms.com>",
+        from: "HEIRLOOM Wedding Films <ty@heirloomweddingfilms.com>",
         to: "ty@heirloomweddingfilms.com",
         subject: "New Lead Form Submission",
         parameters: {
@@ -73,7 +73,7 @@ const handler: Handler = async (event) => {
       },
       method: "POST",
       body: JSON.stringify({
-        from: "HEIRLOOM Wedding Films <hello@heirloomweddingfilms.com>",
+        from: "HEIRLOOM Wedding Films <ty@heirloomweddingfilms.com>",
         to: requestBody.email,
         subject: "Thanks for Contacting HEIRLOOM Wedding Films",
         parameters: {
