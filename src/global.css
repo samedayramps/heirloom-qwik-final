@@ -18,26 +18,47 @@
   }
   
   .talk-button {
-    @apply bg-[#d5c6ad] hover:bg-[#c0b298] text-gray-800 font-light py-3 rounded-full text-sm uppercase tracking-wider transition-all duration-300;
+    @apply bg-[#d5c6ad] hover:bg-[#c0b298] text-gray-800 font-opensans-light py-3 rounded-full text-sm uppercase tracking-wider transition-all duration-300;
   }
 }
 
+/* Font Classes */
 .font-playfair {
-  font-family: 'Playfair Display', serif;
-  font-weight: 300; /* Light weight */
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .font-opensans {
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 400; /* Regular weight */
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
 }
 
 .font-ephesis {
-  font-family: 'Ephesis', cursive;
+  font-family: "Ephesis", cursive;
   font-weight: 400;
   font-style: normal;
-  /* Scale up the font size by 20% */
   font-size: 1.6em;
-  /* Optionally adjust the line height to maintain layout */
   line-height: 1;
+}
+
+/* Open Sans Weight Variations */
+.font-opensans-light {
+  font-weight: 300;
+}
+
+.font-opensans-regular {
+  font-weight: 400;
+}
+
+.font-opensans-medium {
+  font-weight: 500;
+}
+
+.font-opensans-semibold {
+  font-weight: 600;
 }
