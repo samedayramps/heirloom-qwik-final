@@ -21,14 +21,14 @@ export const RouterHead = component$(() => {
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-WDV40YN0D8"
       />
-      <script
-        dangerouslySetInnerHTML={`
+      <script>
+        {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'G-WDV40YN0D8');
         `}
-      />
+      </script>
 
       {head.meta.map((m) => (
         <meta key={m.key} {...m} />
@@ -39,21 +39,15 @@ export const RouterHead = component$(() => {
       ))}
 
       {head.styles.map((s) => (
-        <style
-          key={s.key}
-          {...s.props}
-          {...(s.props?.dangerouslySetInnerHTML
-            ? {}
-            : { dangerouslySetInnerHTML: s.style })}
-        />
+        <style key={s.key} {...s.props}>
+          {s.style}
+        </style>
       ))}
 
       {head.scripts.map((s) => (
-        <script
-          key={s.key}
-          {...s.props}
-          dangerouslySetInnerHTML={s.script}
-        />
+        <script key={s.key} {...s.props}>
+          {s.script}
+        </script>
       ))}
     </>
   );
