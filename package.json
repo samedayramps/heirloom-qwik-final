@@ -50,6 +50,9 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "dependencies": {
-    "@builder.io/partytown": "^0.10.2"
+    "@builder.io/partytown": "^0.10.2",
+    "@netlify/functions": "^2.8.2",
+    "@types/node-fetch": "^2.6.11",
+    "node-fetch": "^3.3.2"
   }
 }

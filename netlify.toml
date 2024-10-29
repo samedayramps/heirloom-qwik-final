@@ -27,3 +27,6 @@ command = "npm run build"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Content-Security-Policy = "upgrade-insecure-requests"
     Permissions-Policy = "interest-cohort=()"
+
+[[plugins]]
+  package = "@netlify/plugin-emails"

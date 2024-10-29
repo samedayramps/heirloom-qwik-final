@@ -16,6 +16,15 @@ export const createLeadFormAction = () => routeAction$(
         });
       }
 
+      // Send email notification
+      fetch('/.netlify/functions/send-lead-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
       return {
         success: true,
         message: 'Thank you for your submission! We\'ll be in touch soon.'
