@@ -36,17 +36,15 @@ const handler: Handler = async (event) => {
       };
     }
 
-    // Get the site URL
-    const siteUrl = process.env.URL || 'http://localhost:8888';
-
     // Send notification email to you
-    const notificationResponse = await fetch('https://heirloomweddingfilms.com/.netlify/functions/emails/lead-notification', {
+    const notificationResponse = await fetch('/.netlify/functions/emails/lead-notification', {
       headers: {
         "netlify-emails-secret": process.env.NETLIFY_EMAILS_SECRET,
+        "Content-Type": "application/json"
       },
       method: "POST",
       body: JSON.stringify({
-        from: "hello@heirloomweddingfilms.com",
+        from: "HEIRLOOM Wedding Films <hello@heirloomweddingfilms.com>",
         to: "ty@heirloomweddingfilms.com",
         subject: "New Lead Form Submission",
         parameters: {
@@ -62,17 +60,20 @@ const handler: Handler = async (event) => {
     });
 
     if (!notificationResponse.ok) {
-      throw new Error(`Notification email failed: ${await notificationResponse.text()}`);
+      const errorText = await notificationResponse.text();
+      console.error('Notification email error:', errorText);
+      throw new Error(`Notification email failed: ${errorText}`);
     }
 
     // Send confirmation email to the customer
-    const confirmationResponse = await fetch('https://heirloomweddingfilms.com/.netlify/functions/emails/lead-confirmation', {
+    const confirmationResponse = await fetch('/.netlify/functions/emails/lead-confirmation', {
       headers: {
         "netlify-emails-secret": process.env.NETLIFY_EMAILS_SECRET,
+        "Content-Type": "application/json"
       },
       method: "POST",
       body: JSON.stringify({
-        from: "hello@heirloomweddingfilms.com",
+        from: "HEIRLOOM Wedding Films <hello@heirloomweddingfilms.com>",
         to: requestBody.email,
         subject: "Thanks for Contacting HEIRLOOM Wedding Films",
         parameters: {
@@ -84,7 +85,9 @@ const handler: Handler = async (event) => {
     });
 
     if (!confirmationResponse.ok) {
-      throw new Error(`Confirmation email failed: ${await confirmationResponse.text()}`);
+      const errorText = await confirmationResponse.text();
+      console.error('Confirmation email error:', errorText);
+      throw new Error(`Confirmation email failed: ${errorText}`);
     }
 
     return {
