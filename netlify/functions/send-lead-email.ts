@@ -38,6 +38,19 @@ const handler: Handler = async (event) => {
 
     const siteUrl = 'https://heirloomweddingfilms.com';
 
+    // Add a verification check
+    const POSTMARK_VERIFIED = false; // Toggle this when verified
+
+    if (!POSTMARK_VERIFIED) {
+      console.log('Postmark not verified yet. Would have sent email with:', requestBody);
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ 
+          message: "Form submitted successfully (email sending temporarily disabled)" 
+        }),
+      };
+    }
+
     // Send notification email to you
     const notificationResponse = await fetch(`${siteUrl}/.netlify/functions/emails/lead-notification`, {
       headers: {
@@ -46,7 +59,8 @@ const handler: Handler = async (event) => {
       },
       method: "POST",
       body: JSON.stringify({
-        from: "HEIRLOOM Wedding Films <ty@heirloomweddingfilms.com>",
+        from: "ty@heirloomweddingfilms.com",
+        fromName: "HEIRLOOM Wedding Films",
         to: "ty@heirloomweddingfilms.com",
         subject: "New Lead Form Submission",
         parameters: {
@@ -75,7 +89,8 @@ const handler: Handler = async (event) => {
       },
       method: "POST",
       body: JSON.stringify({
-        from: "HEIRLOOM Wedding Films <ty@heirloomweddingfilms.com>",
+        from: "ty@heirloomweddingfilms.com",
+        fromName: "HEIRLOOM Wedding Films",
         to: requestBody.email,
         subject: "Thanks for Contacting HEIRLOOM Wedding Films",
         parameters: {

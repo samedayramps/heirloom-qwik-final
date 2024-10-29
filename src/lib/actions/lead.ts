@@ -3,18 +3,7 @@ import { routeAction$, zod$, z } from '@builder.io/qwik-city';
 export const createLeadFormAction = () => routeAction$(
   async (data, { fail }) => {
     try {
-      // First send to Pipedream
-      const pipedreamResponse = await fetch('https://eo61u3encsl1c2v.m.pipedream.net', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-
-      if (!pipedreamResponse.ok) {
-        console.error('Pipedream submission failed');
-      }
-
-      // Then send email notifications with absolute URL
+      // Send email notifications with absolute URL
       const emailResponse = await fetch('https://heirloomweddingfilms.com/.netlify/functions/send-lead-email', {
         method: 'POST',
         headers: {
