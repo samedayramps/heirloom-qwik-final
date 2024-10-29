@@ -28,7 +28,7 @@ const CONTENT = {
       slug: "how-to-choose-wedding-videographer"
     },
     {
-      title: "Sarah & Michael's Vineyard Wedding",
+      title: "Sarah and Michael's Vineyard Wedding",
       category: "Real Weddings",
       date: "December 28, 2023",
       excerpt: "An intimate celebration in Napa Valley filled with romantic moments and golden light. See how we captured their special day.",
