@@ -3,36 +3,34 @@ import Navbar from '../components/navbar/navbar';
 import { Toast } from '../components/ui/toast';
 import type { RequestHandler } from "@builder.io/qwik-city";
 
-// Add cache control headers for static assets
-export const onGet: RequestHandler = async ({ cacheControl }) => {
-  // Aggressive caching for static routes
-  cacheControl({
-    public: true,
-    maxAge: 3600,
-    staleWhileRevalidate: 60 * 60 * 24 * 365,
-    sMaxAge: 60 * 60 * 24,
-  });
-};
+// Types
+interface LayoutStyles {
+  wrapper: string;
+  overlay: string;
+  main: string;
+  modal: string;
+}
 
-// Optimize styles by using CSS background instead of image
-const styles = {
+// Styles
+const styles: LayoutStyles = {
   wrapper: "min-h-screen bg-[#faf9f6] relative flex flex-col",
-  overlay: [
-    "fixed top-0 left-0 w-full h-16",
-    "bg-gradient-to-b from-black/20 to-transparent",
-    "pointer-events-none z-10"
-  ].join(' '),
+  overlay: "fixed top-0 left-0 w-full h-16 bg-gradient-to-b from-black/20 to-transparent pointer-events-none z-10",
   main: "pt-16 flex-grow",
-  modal: "fixed inset-0 z-[100] transition-all duration-300 opacity-100 pointer-events-auto",
-  texture: [
-    "absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none",
-    "bg-[url('/assets/16-texture-square.webp')]",
-    "bg-cover bg-center bg-repeat-y"
-  ].join(' ')
+  modal: "fixed inset-0 z-[100] transition-all duration-300 opacity-100 pointer-events-auto"
+} as const;
+
+// Cache configuration
+const CACHE_CONFIG = {
+  staleWhileRevalidate: 60 * 60 * 24 * 7, // 7 days
+  maxAge: 5 // 5 seconds
 } as const;
 
 // Debounce scroll handler
 const SCROLL_DEBOUNCE = 150; // ms
+
+export const onGet: RequestHandler = async ({ cacheControl }) => {
+  cacheControl(CACHE_CONFIG);
+};
 
 export const onRequest: RequestHandler = async ({ redirect, url }) => {
   if (url.pathname.startsWith('/blog')) {
@@ -100,8 +98,6 @@ export default component$(() => {
 
   return (
     <div class={styles.wrapper}>
-      {/* Replace image with CSS background */}
-      <div class={styles.texture} aria-hidden="true" />
       <div class={styles.overlay} aria-hidden="true" />
       
       <Navbar onTalkClick$={handleOpenModal} />
@@ -110,28 +106,44 @@ export default component$(() => {
         <Slot />
       </main>
       
-      {/* Optimize lazy loading */}
+      {/* Lazy load footer with error boundary */}
       {footerLoaded.value && (
         <div>
-          {import('../components/footer/footer').then(({ Footer }) => <Footer />)}
+          {import('../components/footer/footer')
+            .then(({ Footer }) => <Footer />)
+            .catch(error => {
+              console.error('Error loading footer:', error);
+              return null;
+            })
+          }
         </div>
       )}
       
-      {/* Optimize modal loading */}
+      {/* Lazy load LeadForm with error boundary */}
       {showLeadForm.value && (
         <div class={styles.modal}>
-          {import('../components/leadForm/leadForm').then(({ LeadForm }) => (
-            <LeadForm 
-              isVisible={showLeadForm.value} 
-              onClose$={handleCloseModal}
-              onSuccess$={handleShowToast}
-            />
-          ))}
+          {import('../components/leadForm/leadForm')
+            .then(({ LeadForm }) => (
+              <LeadForm 
+                isVisible={showLeadForm.value} 
+                onClose$={handleCloseModal}
+                onSuccess$={handleShowToast}
+              />
+            ))
+            .catch(error => {
+              console.error('Error loading lead form:', error);
+              handleCloseModal();
+              return null;
+            })
+          }
         </div>
       )}
 
       {showToast.value && (
-        <Toast onClose$={handleHideToast} duration={5000} />
+        <Toast
+          onClose$={handleHideToast}
+          duration={5000}
+        />
       )}
     </div>
   );

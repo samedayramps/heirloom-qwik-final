@@ -1,6 +1,7 @@
 import { component$ } from "@builder.io/qwik";
-import type { DocumentHead } from "@builder.io/qwik-city";
+import type { DocumentHead, RequestHandler } from "@builder.io/qwik-city";
 import { routeLoader$ } from "@builder.io/qwik-city";
+import texture from '../../../assets/images/16-texture-square.webp?jsx';
 
 // Define blog posts data
 const BLOG_POSTS = {
@@ -131,17 +132,15 @@ export default component$(() => {
       {/* Content Section */}
       <section class="relative bg-[#faf9f6] w-full py-16 overflow-hidden">
         <div 
-          class="absolute inset-0 pointer-events-none"
-          style={TEXTURE_BG}
+          class="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
+          style={{
+            backgroundImage: `url(${texture})`,
+            backgroundSize: '100% auto',
+            backgroundPosition: 'top center',
+            backgroundRepeat: 'repeat-y',
+          }}
           aria-hidden="true"
-        >
-          <texture 
-            class="w-full h-full object-cover"
-            loading="eager"
-            decoding="sync"
-            fetchPriority="high"
-          />
-        </div>
+        />
         
         <div class="container relative z-10">
           <article class="max-w-3xl mx-auto">
@@ -169,14 +168,12 @@ export const head: DocumentHead = ({ resolveValue }) => {
     ],
   };
 };
+// Add this export
+export const onGet: RequestHandler = async ({ cacheControl }) => {
+  cacheControl({
+    private: true,
+    noCache: true,
+    maxAge: 0
+  });
+};
 
-// Define texture background styles
-const TEXTURE_BG = {
-  backgroundColor: '#faf9f6',
-  backgroundImage: 'url("/assets/16-texture-square.webp")',
-  backgroundSize: '100% auto',
-  backgroundPosition: 'top center',
-  backgroundRepeat: 'repeat-y',
-  opacity: 0.3,
-  mixBlendMode: 'overlay'
-} as const;

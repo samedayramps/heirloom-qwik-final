@@ -43,7 +43,7 @@ export const AboutSection = component$(() => {
         <div class={styles.content}>
           <h2 class={styles.title}>
             {ABOUT_CONTENT.title.main}{' '}
-            <span class={styles.accent}>{ABOUT_CONTENT.title.accent}</span>{' '}
+            <span class={styles.accent}>{ABOUT_CONTENT.title.accent} </span>{' '}
             {ABOUT_CONTENT.title.end}
           </h2>
 

@@ -43,7 +43,7 @@ export const ProcessSection = component$(() => {
         <div class={styles.content}>
           <h2 class={styles.title}>
             {PROCESS_CONTENT.title.main}{' '}
-            <span class="font-ephesis">{PROCESS_CONTENT.title.accent}</span>{' '}
+            <span class="font-ephesis">{PROCESS_CONTENT.title.accent} </span>{' '}
             {PROCESS_CONTENT.title.end}
           </h2>
           <p class={styles.subtitle}>
