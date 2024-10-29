@@ -1,5 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import { useDocumentHead, useLocation } from "@builder.io/qwik-city";
+import { FontLoader } from "../fonts/font-loader";
 
 /**
  * The RouterHead component is placed inside of the document `<head>` element.
@@ -16,12 +17,15 @@ export const RouterHead = component$(() => {
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-      {/* Google Analytics */}
+      {/* Add FontLoader component */}
+      <FontLoader />
+
+      {/* Google Analytics - Load with defer */}
       <script
-        async
+        defer
         src="https://www.googletagmanager.com/gtag/js?id=G-WDV40YN0D8"
       />
-      <script>
+      <script defer>
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
@@ -45,7 +49,7 @@ export const RouterHead = component$(() => {
       ))}
 
       {head.scripts.map((s) => (
-        <script key={s.key} {...s.props}>
+        <script key={s.key} {...s.props} defer>
           {s.script}
         </script>
       ))}

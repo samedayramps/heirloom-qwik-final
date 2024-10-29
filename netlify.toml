@@ -28,5 +28,11 @@ command = "npm run build"
     Content-Security-Policy = "upgrade-insecure-requests"
     Permissions-Policy = "interest-cohort=()"
 
+# Add font caching headers
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 [[plugins]]
   package = "@netlify/plugin-emails"

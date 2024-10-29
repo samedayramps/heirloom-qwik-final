@@ -34,9 +34,6 @@ export default component$(() => {
         <meta charset="utf-8" />
         <link rel="manifest" href={`${import.meta.env.BASE_URL}manifest.json`} />
         <RouterHead />
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Ephesis&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
       </head>
       <body lang="en">
         <Navbar onTalkClick$={handleOpenModal} />
