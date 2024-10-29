@@ -170,7 +170,7 @@ export const LeadForm = component$<LeadFormProps>(({
                   name="message"
                   class={styles.messageInput}
                   rows={3}
-                  placeholder="Share your thoughts and let us know how you found us..."
+                  placeholder="Share any additional details about your wedding..."
                 />
               </div>
 

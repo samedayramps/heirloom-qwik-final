@@ -2,34 +2,49 @@ import type { Handler } from "@netlify/functions";
 import fetch from "node-fetch";
 
 const handler: Handler = async (event) => {
-  if (event.body === null) {
+  if (!process.env.NETLIFY_EMAILS_SECRET) {
+    console.error('Missing required environment variable: NETLIFY_EMAILS_SECRET');
     return {
-      statusCode: 400,
-      body: JSON.stringify("Payload required"),
+      statusCode: 500,
+      body: JSON.stringify({ message: "Server configuration error" }),
     };
   }
 
-  const requestBody = JSON.parse(event.body) as {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phoneNumber?: string;
-    weddingDate?: string;
-    weddingVenue?: string;
-    message?: string;
-    referralSource?: string;
-  };
+  if (event.body === null) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: "Payload required" }),
+    };
+  }
 
   try {
-    // Send email using Netlify Email function with Postmark
-    await fetch(`${process.env.URL}/.netlify/functions/emails/lead-notification`, {
+    const requestBody = JSON.parse(event.body) as {
+      firstName: string;
+      lastName: string;
+      email: string;
+      phoneNumber?: string;
+      weddingDate?: string;
+      weddingVenue?: string;
+      message?: string;
+    };
+
+    // Validate required fields
+    if (!requestBody.firstName || !requestBody.lastName || !requestBody.email) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ message: "Missing required fields" }),
+      };
+    }
+
+    // Send notification email to you
+    const notificationResponse = await fetch('/.netlify/functions/emails/lead-notification', {
       headers: {
-        "netlify-emails-secret": process.env.NETLIFY_EMAILS_SECRET as string,
+        "netlify-emails-secret": process.env.NETLIFY_EMAILS_SECRET,
       },
       method: "POST",
       body: JSON.stringify({
-        from: "hello@heirloomweddingfilms.com", // Update with your verified Postmark sender
-        to: "ty@heirloomweddingfilms.com",      // Update with your recipient email
+        from: "hello@heirloomweddingfilms.com",
+        to: "ty@heirloomweddingfilms.com",
         subject: "New Lead Form Submission",
         parameters: {
           name: `${requestBody.firstName} ${requestBody.lastName}`,
@@ -38,21 +53,48 @@ const handler: Handler = async (event) => {
           weddingDate: requestBody.weddingDate || 'Not provided',
           weddingVenue: requestBody.weddingVenue || 'Not provided',
           message: requestBody.message || 'No message provided',
-          referralSource: requestBody.referralSource || 'Not provided',
           date: new Date().toLocaleString()
         },
       }),
     });
 
+    if (!notificationResponse.ok) {
+      throw new Error(`Notification email failed: ${await notificationResponse.text()}`);
+    }
+
+    // Send confirmation email to the customer
+    const confirmationResponse = await fetch('/.netlify/functions/emails/lead-confirmation', {
+      headers: {
+        "netlify-emails-secret": process.env.NETLIFY_EMAILS_SECRET,
+      },
+      method: "POST",
+      body: JSON.stringify({
+        from: "hello@heirloomweddingfilms.com",
+        to: requestBody.email,
+        subject: "Thanks for Contacting HEIRLOOM Wedding Films",
+        parameters: {
+          name: requestBody.firstName,
+          weddingDate: requestBody.weddingDate || 'Not provided',
+          weddingVenue: requestBody.weddingVenue || 'Not provided'
+        },
+      }),
+    });
+
+    if (!confirmationResponse.ok) {
+      throw new Error(`Confirmation email failed: ${await confirmationResponse.text()}`);
+    }
+
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: "Email sent successfully" }),
+      body: JSON.stringify({ message: "Emails sent successfully" }),
     };
   } catch (error) {
     console.error('Error sending email:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: "Error sending email" }),
+      body: JSON.stringify({ 
+        message: error instanceof Error ? error.message : "Error sending email" 
+      }),
     };
   }
 };
