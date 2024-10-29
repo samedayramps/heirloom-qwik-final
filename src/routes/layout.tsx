@@ -19,18 +19,8 @@ const styles: LayoutStyles = {
   modal: "fixed inset-0 z-[100] transition-all duration-300 opacity-100 pointer-events-auto"
 } as const;
 
-// Cache configuration
-const CACHE_CONFIG = {
-  staleWhileRevalidate: 60 * 60 * 24 * 7, // 7 days
-  maxAge: 5 // 5 seconds
-} as const;
-
 // Debounce scroll handler
 const SCROLL_DEBOUNCE = 150; // ms
-
-export const onGet: RequestHandler = async ({ cacheControl }) => {
-  cacheControl(CACHE_CONFIG);
-};
 
 export const onRequest: RequestHandler = async ({ redirect, url }) => {
   if (url.pathname.startsWith('/blog')) {

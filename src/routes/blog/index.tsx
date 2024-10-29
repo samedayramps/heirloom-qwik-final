@@ -1,8 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { Link } from "@builder.io/qwik-city";
-import texture from '../../assets/images/16-texture-square.webp?jsx';
-import type { RequestHandler } from "@builder.io/qwik-city";
 
 // Define metadata for better SEO
 const META = {
@@ -128,12 +126,15 @@ export default component$(() => {
       {/* Blog Posts Grid Section */}
       <section class="relative bg-[#d5c6ad] w-full py-16 overflow-hidden">
         <div 
-          class="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
+          class="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: `url(${texture})`,
+            backgroundColor: '#faf9f6',
+            backgroundImage: 'url("/assets/16-texture-square.webp")',
             backgroundSize: '100% auto',
             backgroundPosition: 'top center',
             backgroundRepeat: 'repeat-y',
+            opacity: 0.3,
+            mixBlendMode: 'overlay'
           }}
           aria-hidden="true"
         />
@@ -163,12 +164,4 @@ export const head: DocumentHead = {
       content: META.description,
     },
   ],
-};
-
-export const onGet: RequestHandler = async ({ cacheControl }) => {
-  cacheControl({
-    private: true,
-    noCache: true,
-    maxAge: 0
-  });
 };
