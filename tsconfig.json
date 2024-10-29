@@ -18,11 +18,12 @@
     "noEmit": true,
     "paths": {
       "~/*": ["./src/*"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "files": [
     "./.eslintrc.cjs",
     "./tailwind.config.js"
   ],
-  "include": ["src", "./*.d.ts", "./*.config.ts", "./*.config.js", "netlify/functions/**/*"]
+  "include": ["src", "./*.d.ts", "./*.config.ts", "./*.config.js", "netlify/functions/**/*", "src/types/**/*"]
 }

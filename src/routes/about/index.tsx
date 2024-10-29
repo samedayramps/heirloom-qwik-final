@@ -6,7 +6,7 @@ import { CtaSection } from "~/components/sections/about/cta-section";
 
 // Define metadata for better SEO
 const META = {
-  title: "About HEIRLOOM Wedding Films - Our Story & Approach",
+  title: "About HEIRLOOM Wedding Films - Our Story and Approach",
   description: "Learn about our unique approach to wedding videography. We create cinematic films that capture authentic moments and emotions, turning them into cherished family heirlooms.",
 } as const;
 

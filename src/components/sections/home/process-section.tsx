@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { Stepper } from '~/components/stepper/stepper';
-import texture from '~/assets/images/9-texture.webp';
+import texture from '~/assets/images/9-texture.webp?jsx';
 import { PROCESS_CONTENT } from '~/constants/process';
 
 // Types
@@ -23,14 +23,6 @@ const styles: ProcessStyles = {
   subtitle: "text-center font-opensans text-gray-600 mb-12 max-w-3xl mx-auto",
 } as const;
 
-// Background configuration
-const backgroundConfig = {
-  backgroundImage: `url(${texture})`,
-  backgroundSize: '100% auto',
-  backgroundPosition: 'top center',
-  backgroundRepeat: 'repeat-y',
-} as const;
-
 export const ProcessSection = component$(() => {
   const steps = [...PROCESS_CONTENT.steps];
 
@@ -38,7 +30,12 @@ export const ProcessSection = component$(() => {
     <section class={styles.section}>
       <div 
         class={styles.overlay}
-        style={backgroundConfig}
+        style={{
+          backgroundImage: `url(${texture})`,
+          backgroundSize: '100% auto',
+          backgroundPosition: 'top center',
+          backgroundRepeat: 'repeat-y',
+        }}
         aria-hidden="true"
       />
       

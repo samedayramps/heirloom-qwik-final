@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
-import textureImage from '~/assets/images/16-texture-square.webp';
+import Texture from '~/assets/images/16-texture-square.webp?jsx';
 import { ABOUT_CONTENT } from '~/constants/about';
 
 // Types
@@ -31,20 +31,11 @@ const styles: AboutStyles = {
   link: "font-opensans text-sm text-[#2d2d2d] relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:bg-[#2d2d2d] hover:after:h-[2px] after:transition-all after:rounded-full duration-300"
 } as const;
 
-// Background configuration
-const backgroundConfig = {
-  backgroundImage: `url(${textureImage})`,
-  backgroundSize: '100% auto',
-  backgroundPosition: 'top center',
-  backgroundRepeat: 'repeat-y',
-} as const;
-
 export const AboutSection = component$(() => {
   return (
     <section class={styles.section}>
-      <div 
+      <Texture 
         class={styles.overlay}
-        style={backgroundConfig}
         aria-hidden="true"
       />
 
@@ -64,7 +55,7 @@ export const AboutSection = component$(() => {
 
           <div class={styles.linkWrapper}>
             <Link href="/about" class={styles.link}>
-              Learn More
+              Learn More About Heirloom Wedding Films
             </Link>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import { component$ } from '@builder.io/qwik';
-import textureImage from '~/assets/images/16-texture-square.webp';
+import Texture from '~/assets/images/16-texture-square.webp?jsx';
 import { MISSION_CONTENT } from '~/constants/about-page/mission';
 
 // Types
@@ -22,20 +22,11 @@ const styles: MissionStyles = {
   signature: "font-opensans text-gray-700 leading-relaxed text-right"
 } as const;
 
-// Background configuration
-const backgroundConfig = {
-  backgroundImage: `url(${textureImage})`,
-  backgroundSize: '100% auto',
-  backgroundPosition: 'top center',
-  backgroundRepeat: 'repeat-y',
-} as const;
-
 export const MissionSection = component$(() => {
   return (
     <section class={styles.section}>
-      <div 
+      <Texture 
         class={styles.overlay}
-        style={backgroundConfig}
         aria-hidden="true"
       />
       <div class={styles.container}>

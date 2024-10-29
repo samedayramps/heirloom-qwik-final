@@ -1,6 +1,6 @@
 import { component$ } from "@builder.io/qwik";
-import whitePaintBlock from '~/assets/images/white-paint-block.webp';
-import texture from '~/assets/images/22-texture.webp';
+import WhitePaintBlock from '~/assets/images/white-paint-block.webp?jsx';
+import Texture from '~/assets/images/22-texture.webp?jsx';
 import { FEATURES_CONTENT } from '~/constants/features';
 
 // Types
@@ -33,32 +33,20 @@ const styles: FeatureStyles = {
   title: "font-playfair text-3xl md:text-4xl text-white mb-8 text-center",
   grid: "grid grid-cols-1 md:grid-cols-3 gap-8",
   card: {
-    wrapper: "w-full h-auto rounded-lg relative",
-    content: "p-6 flex flex-col",
+    wrapper: "w-full h-auto rounded-lg relative min-h-[300px]",
+    content: "p-6 flex flex-col relative z-10",
     title: "font-playfair text-xl mb-4 text-center",
     text: "font-opensans text-sm text-justify leading-relaxed"
   }
 } as const;
 
-// Background configurations
-const backgroundConfig = {
-  texture: {
-    backgroundImage: `url(${texture})`,
-    backgroundSize: '100% auto',
-    backgroundPosition: 'top center',
-    backgroundRepeat: 'repeat-y',
-  },
-  card: {
-    backgroundImage: `url(${whitePaintBlock})`,
-    backgroundSize: '100% 100%',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-  }
-} as const;
-
 // Feature Card Component
 const FeatureCard = component$((props: FeatureCardProps) => (
-  <div class={styles.card.wrapper} style={backgroundConfig.card}>
+  <div class={styles.card.wrapper}>
+    <WhitePaintBlock 
+      class="absolute inset-0 w-full h-full object-cover rounded-lg"
+      aria-hidden="true"
+    />
     <div class={styles.card.content}>
       <h3 class={styles.card.title}>{props.title}</h3>
       <p class={styles.card.text}>{props.content}</p>
@@ -70,9 +58,8 @@ const FeatureCard = component$((props: FeatureCardProps) => (
 export const FeaturesSection = component$(() => {
   return (
     <section class={styles.section}>
-      <div 
+      <Texture 
         class={styles.overlay}
-        style={backgroundConfig.texture}
         aria-hidden="true"
       />
       <div class={styles.container}>

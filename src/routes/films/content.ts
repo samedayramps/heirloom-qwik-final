@@ -25,7 +25,7 @@ export const CONTENT = {
   },
   films: [
     {
-      title: "Harlie & Garret",
+      title: "Harlie and Garret",
       location: "The Grand Ivory",
       date: "Summer 2024",
       thumbnail: harlieGarretThumbnail,

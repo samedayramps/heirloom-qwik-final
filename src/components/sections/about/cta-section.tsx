@@ -1,7 +1,7 @@
 import { component$ } from '@builder.io/qwik';
 import type { PropFunction } from '@builder.io/qwik';
 import { LetsTalkButton } from '~/components/ui/lets-talk-button';
-import textureImage from '~/assets/images/18-texture.webp';
+import Texture from '~/assets/images/18-texture.webp?jsx';
 import { CTA_CONTENT } from '~/constants/about-page/cta';
 
 // Types
@@ -28,20 +28,11 @@ const styles: CTAStyles = {
   accent: "font-ephesis"
 } as const;
 
-// Background configuration
-const backgroundConfig = {
-  backgroundImage: `url(${textureImage})`,
-  backgroundSize: '100% auto',
-  backgroundPosition: 'top center',
-  backgroundRepeat: 'repeat-y',
-} as const;
-
 export const CtaSection = component$<CTASectionProps>(({ onTalkClick$ }) => {
   return (
     <section class={styles.section}>
-      <div 
+      <Texture 
         class={styles.overlay}
-        style={backgroundConfig}
         aria-hidden="true"
       />
       <div class={styles.container}>

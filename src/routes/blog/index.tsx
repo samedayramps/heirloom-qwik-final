@@ -1,7 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { Link } from "@builder.io/qwik-city";
-import texture from '~/assets/images/16-texture-square.webp';
+import texture from '../../assets/images/16-texture-square.webp?jsx';
 
 // Define metadata for better SEO
 const META = {
@@ -13,7 +13,7 @@ const META = {
 const CONTENT = {
   hero: {
     title: {
-      main: "Stories &",
+      main: "Stories and",
       accent: "inspiration",
     },
     subtitle: "Wedding planning tips, behind-the-scenes insights, and real love stories"
@@ -44,14 +44,6 @@ const CONTENT = {
       slug: "what-to-expect-wedding-film-day"
     }
   ]
-} as const;
-
-// Background styles
-const BACKGROUND_STYLES = {
-  backgroundImage: `url(${texture})`,
-  backgroundSize: '100% auto',
-  backgroundPosition: 'top center',
-  backgroundRepeat: 'repeat-y',
 } as const;
 
 // Blog Post Card Component
@@ -135,8 +127,13 @@ export default component$(() => {
       {/* Blog Posts Grid Section */}
       <section class="relative bg-[#d5c6ad] w-full py-16 overflow-hidden">
         <div 
-          class="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none transition-opacity duration-700"
-          style={BACKGROUND_STYLES}
+          class="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
+          style={{
+            backgroundImage: `url(${texture})`,
+            backgroundSize: '100% auto',
+            backgroundPosition: 'top center',
+            backgroundRepeat: 'repeat-y',
+          }}
           aria-hidden="true"
         />
         

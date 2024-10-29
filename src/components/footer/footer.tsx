@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import Logo from '~/assets/images/logo.svg?jsx';
-import texture from '~/assets/images/9-texture.webp';
+import Texture from '~/assets/images/9-texture.webp?jsx';
 
 // Social media icons as separate components for better organization
 const TwitterIcon = () => (
@@ -45,20 +45,12 @@ const SOCIAL_LINKS = [
   { href: '#', icon: FacebookIcon, label: 'Facebook' }
 ] as const;
 
-const BACKGROUND_STYLES = {
-  backgroundImage: `url(${texture})`,
-  backgroundSize: '100% auto',
-  backgroundPosition: 'top center',
-  backgroundRepeat: 'repeat-y',
-} as const;
-
 export const Footer = component$(() => {
   return (
     <footer class="relative bg-[#2d2d2d] w-full py-10 overflow-hidden">
       {/* Background texture */}
-      <div 
+      <Texture 
         class="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none transition-opacity duration-700"
-        style={BACKGROUND_STYLES}
         aria-hidden="true"
       />
       

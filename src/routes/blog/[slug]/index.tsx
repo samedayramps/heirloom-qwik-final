@@ -1,7 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 import type { DocumentHead, StaticGenerateHandler } from "@builder.io/qwik-city";
 import { routeLoader$ } from "@builder.io/qwik-city";
-import texture from '~/assets/images/16-texture-square.webp';
+import texture from '../../../assets/images/16-texture-square.webp?jsx';
 
 // Define blog posts data
 const BLOG_POSTS = {
@@ -24,7 +24,7 @@ const BLOG_POSTS = {
     `
   },
   'sarah-michael-vineyard-wedding': {
-    title: "Sarah & Michael's Vineyard Wedding",
+    title: "Sarah and Michael's Vineyard Wedding",
     category: "Real Weddings",
     date: "December 28, 2023",
     image: "https://placehold.co/1200x800",
@@ -61,14 +61,6 @@ const BLOG_POSTS = {
   }
 } as const;
 
-// Background styles
-const BACKGROUND_STYLES = {
-  backgroundImage: `url(${texture})`,
-  backgroundSize: '100% auto',
-  backgroundPosition: 'top center',
-  backgroundRepeat: 'repeat-y',
-} as const;
-
 // Route loader to get blog post data
 export const useBlogPost = routeLoader$(({ params, status }) => {
   const slug = params.slug as keyof typeof BLOG_POSTS;
@@ -86,7 +78,6 @@ export default component$(() => {
   const postSignal = useBlogPost();
   const post = postSignal.value;
 
-  // Type guard to handle null case
   if (!post) {
     return (
       <main class="w-full relative py-24">
@@ -141,8 +132,13 @@ export default component$(() => {
       {/* Content Section */}
       <section class="relative bg-[#faf9f6] w-full py-16 overflow-hidden">
         <div 
-          class="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none transition-opacity duration-700"
-          style={BACKGROUND_STYLES}
+          class="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
+          style={{
+            backgroundImage: `url(${texture})`,
+            backgroundSize: '100% auto',
+            backgroundPosition: 'top center',
+            backgroundRepeat: 'repeat-y',
+          }}
           aria-hidden="true"
         />
         

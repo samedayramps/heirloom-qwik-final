@@ -1,6 +1,6 @@
 import { component$, useSignal, type QRL } from "@builder.io/qwik";
 import { FAQ_CONTENT } from "~/constants/faq";
-import texture from '~/assets/images/18-texture.webp';
+import Texture from '~/assets/images/18-texture.webp?jsx';
 import { LetsTalkButton } from "~/components/ui/lets-talk-button";
 
 // Types
@@ -21,14 +21,6 @@ const styles = {
   content: "max-w-4xl mx-auto text-center",
   title: "font-playfair text-3xl md:text-4xl text-white mb-16 flex items-center justify-center gap-8",
   faqList: "space-y-4 text-left",
-} as const;
-
-// Background configuration
-const backgroundConfig = {
-  backgroundImage: `url(${texture})`,
-  backgroundSize: '100% auto',
-  backgroundPosition: 'top center',
-  backgroundRepeat: 'repeat-y',
 } as const;
 
 // FAQ Item Component
@@ -96,9 +88,8 @@ export const FAQSection = component$<FAQSectionProps>(({ onTalkClick$ }) => {
 
   return (
     <section class={styles.section}>
-      <div 
+      <Texture 
         class={styles.overlay}
-        style={backgroundConfig}
         aria-hidden="true"
       />
       
