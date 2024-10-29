@@ -1,5 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import type { DocumentHead, StaticGenerateHandler } from "@builder.io/qwik-city";
+import type { DocumentHead, RequestHandler } from "@builder.io/qwik-city";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import texture from '../../../assets/images/16-texture-square.webp?jsx';
 
@@ -66,7 +66,7 @@ export const useBlogPost = routeLoader$(({ params, status }) => {
   const slug = params.slug as keyof typeof BLOG_POSTS;
   const post = BLOG_POSTS[slug];
   
-  if (!post) {
+  if (!(slug in BLOG_POSTS)) {
     status(404);
     return null;
   }
@@ -155,13 +155,6 @@ export default component$(() => {
   );
 });
 
-// Generate static paths for all blog posts
-export const onStaticGenerate: StaticGenerateHandler = () => {
-  return {
-    params: Object.keys(BLOG_POSTS).map(slug => ({ slug }))
-  };
-};
-
 // Dynamic head metadata based on post
 export const head: DocumentHead = ({ resolveValue }) => {
   const post = resolveValue(useBlogPost);
@@ -174,4 +167,13 @@ export const head: DocumentHead = ({ resolveValue }) => {
       },
     ],
   };
+};
+
+// Add this export
+export const onGet: RequestHandler = async ({ cacheControl }) => {
+  cacheControl({
+    private: true,
+    noCache: true,
+    maxAge: 0
+  });
 };

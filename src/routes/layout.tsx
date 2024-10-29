@@ -32,6 +32,12 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
   cacheControl(CACHE_CONFIG);
 };
 
+export const onRequest: RequestHandler = async ({ redirect, url }) => {
+  if (url.pathname.startsWith('/blog')) {
+    throw redirect(301, '/');
+  }
+};
+
 export default component$(() => {
   const showLeadForm = useSignal(false);
   const showToast = useSignal(false);
