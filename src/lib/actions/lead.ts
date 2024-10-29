@@ -14,8 +14,8 @@ export const createLeadFormAction = () => routeAction$(
         console.error('Pipedream submission failed');
       }
 
-      // Then send email notifications
-      const emailResponse = await fetch('/.netlify/functions/send-lead-email', {
+      // Then send email notifications with absolute URL
+      const emailResponse = await fetch('https://heirloomweddingfilms.com/.netlify/functions/send-lead-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

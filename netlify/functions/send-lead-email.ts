@@ -36,8 +36,11 @@ const handler: Handler = async (event) => {
       };
     }
 
+    // Get the site URL
+    const siteUrl = process.env.URL || 'http://localhost:8888';
+
     // Send notification email to you
-    const notificationResponse = await fetch('/.netlify/functions/emails/lead-notification', {
+    const notificationResponse = await fetch('https://heirloomweddingfilms.com/.netlify/functions/emails/lead-notification', {
       headers: {
         "netlify-emails-secret": process.env.NETLIFY_EMAILS_SECRET,
       },
@@ -63,7 +66,7 @@ const handler: Handler = async (event) => {
     }
 
     // Send confirmation email to the customer
-    const confirmationResponse = await fetch('/.netlify/functions/emails/lead-confirmation', {
+    const confirmationResponse = await fetch('https://heirloomweddingfilms.com/.netlify/functions/emails/lead-confirmation', {
       headers: {
         "netlify-emails-secret": process.env.NETLIFY_EMAILS_SECRET,
       },
