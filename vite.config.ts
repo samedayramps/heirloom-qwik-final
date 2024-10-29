@@ -6,6 +6,7 @@ import { defineConfig, type UserConfig } from "vite";
 import { qwikVite } from "@builder.io/qwik/optimizer";
 import { qwikCity } from "@builder.io/qwik-city/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+import { imagetools } from 'vite-imagetools';
 import pkg from "./package.json";
 
 type PkgDep = Record<string, string>;
@@ -21,7 +22,18 @@ errorOnDuplicatesPkgDeps(devDependencies, dependencies);
  */
 export default defineConfig(({ command, mode }): UserConfig => {
   return {
-    plugins: [qwikCity(), qwikVite(), tsconfigPaths()],
+    plugins: [
+      qwikCity(), 
+      qwikVite(), 
+      tsconfigPaths(),
+      imagetools({
+        defaultDirectives: new URLSearchParams({
+          format: 'webp',
+          quality: '80',
+          w: '1200'
+        })
+      })
+    ],
     resolve: {
       alias: {
         '~/assets': '/src/assets'
@@ -33,8 +45,42 @@ export default defineConfig(({ command, mode }): UserConfig => {
     build: {
       rollupOptions: {
         output: {
-          assetFileNames: 'assets/[name].[hash][extname]'
+          assetFileNames: 'assets/[name].[hash][extname]',
+          manualChunks(id) {
+            // Create separate chunks for large dependencies
+            if (id.includes('node_modules')) {
+              return 'vendor';
+            }
+          }
         }
+      },
+      // Remove imageOptimization as it's not a valid option
+      assetsInlineLimit: 0, // Never inline assets
+      cssCodeSplit: true,
+      sourcemap: false,
+      minify: 'esbuild',
+      target: 'es2020'
+    },
+    server: {
+      headers: {
+        'Cache-Control': 'public, max-age=31536000',
+      },
+    },
+    preview: {
+      headers: {
+        'Cache-Control': 'public, max-age=31536000',
+      },
+    },
+    // Add preload directives
+    experimental: {
+      renderBuiltUrl(filename) {
+        if (filename.endsWith('.webp')) {
+          return {
+            runtime: `window.__preloadImage("${filename}")`,
+            preload: true
+          };
+        }
+        return filename;
       }
     }
   };

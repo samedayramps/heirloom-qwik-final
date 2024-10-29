@@ -3,20 +3,32 @@ import Navbar from '../components/navbar/navbar';
 import { Toast } from '../components/ui/toast';
 import type { RequestHandler } from "@builder.io/qwik-city";
 
-// Types
-interface LayoutStyles {
-  wrapper: string;
-  overlay: string;
-  main: string;
-  modal: string;
-}
+// Add cache control headers for static assets
+export const onGet: RequestHandler = async ({ cacheControl }) => {
+  // Aggressive caching for static routes
+  cacheControl({
+    public: true,
+    maxAge: 3600,
+    staleWhileRevalidate: 60 * 60 * 24 * 365,
+    sMaxAge: 60 * 60 * 24,
+  });
+};
 
-// Styles
-const styles: LayoutStyles = {
+// Optimize styles by using CSS background instead of image
+const styles = {
   wrapper: "min-h-screen bg-[#faf9f6] relative flex flex-col",
-  overlay: "fixed top-0 left-0 w-full h-16 bg-gradient-to-b from-black/20 to-transparent pointer-events-none z-10",
+  overlay: [
+    "fixed top-0 left-0 w-full h-16",
+    "bg-gradient-to-b from-black/20 to-transparent",
+    "pointer-events-none z-10"
+  ].join(' '),
   main: "pt-16 flex-grow",
-  modal: "fixed inset-0 z-[100] transition-all duration-300 opacity-100 pointer-events-auto"
+  modal: "fixed inset-0 z-[100] transition-all duration-300 opacity-100 pointer-events-auto",
+  texture: [
+    "absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none",
+    "bg-[url('/assets/16-texture-square.webp')]",
+    "bg-cover bg-center bg-repeat-y"
+  ].join(' ')
 } as const;
 
 // Debounce scroll handler
@@ -88,6 +100,8 @@ export default component$(() => {
 
   return (
     <div class={styles.wrapper}>
+      {/* Replace image with CSS background */}
+      <div class={styles.texture} aria-hidden="true" />
       <div class={styles.overlay} aria-hidden="true" />
       
       <Navbar onTalkClick$={handleOpenModal} />
@@ -96,44 +110,28 @@ export default component$(() => {
         <Slot />
       </main>
       
-      {/* Lazy load footer with error boundary */}
+      {/* Optimize lazy loading */}
       {footerLoaded.value && (
         <div>
-          {import('../components/footer/footer')
-            .then(({ Footer }) => <Footer />)
-            .catch(error => {
-              console.error('Error loading footer:', error);
-              return null;
-            })
-          }
+          {import('../components/footer/footer').then(({ Footer }) => <Footer />)}
         </div>
       )}
       
-      {/* Lazy load LeadForm with error boundary */}
+      {/* Optimize modal loading */}
       {showLeadForm.value && (
         <div class={styles.modal}>
-          {import('../components/leadForm/leadForm')
-            .then(({ LeadForm }) => (
-              <LeadForm 
-                isVisible={showLeadForm.value} 
-                onClose$={handleCloseModal}
-                onSuccess$={handleShowToast}
-              />
-            ))
-            .catch(error => {
-              console.error('Error loading lead form:', error);
-              handleCloseModal();
-              return null;
-            })
-          }
+          {import('../components/leadForm/leadForm').then(({ LeadForm }) => (
+            <LeadForm 
+              isVisible={showLeadForm.value} 
+              onClose$={handleCloseModal}
+              onSuccess$={handleShowToast}
+            />
+          ))}
         </div>
       )}
 
       {showToast.value && (
-        <Toast
-          onClose$={handleHideToast}
-          duration={5000}
-        />
+        <Toast onClose$={handleHideToast} duration={5000} />
       )}
     </div>
   );
