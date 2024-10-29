@@ -1,37 +1,56 @@
 import { component$ } from '@builder.io/qwik';
+import { ABOUT_HERO_CONTENT } from '~/constants/about-page/hero';
 
-const CONTENT = {
-  title: "You should want to watch your wedding film every anniversary.",
-  intro: "After 8 years of filming weddings, I realized a simple truth: while wedding films make great social posts, they should be created for something more enduring:",
-  points: [
-    "Something you'll want to watch every anniversary",
-    "Gathering with loved ones to watch it together",
-    "An heirloom your future generations will treasure"
-  ]
+// Types
+interface HeroStyles {
+  section: string;
+  container: string;
+  content: string;
+  title: string;
+  divider: string;
+  textContainer: string;
+  intro: string;
+  list: string;
+  listItem: string;
+  bullet: string;
+  point: string;
+}
+
+// Styles optimized for above-the-fold content
+const styles: HeroStyles = {
+  section: "relative bg-[#faf9f6] w-full py-24 overflow-hidden",
+  container: "container relative z-10",
+  content: "max-w-4xl mx-auto",
+  title: "font-playfair text-3xl md:text-4xl lg:text-6xl text-gray-800 mb-8 text-center",
+  divider: "w-24 h-px bg-[#d5c6ad] mx-auto mb-12",
+  textContainer: "max-w-3xl mx-auto",
+  intro: "font-opensans text-gray-700 leading-relaxed mb-8 text-left",
+  list: "font-opensans text-gray-700 leading-relaxed space-y-4 max-w-2xl",
+  listItem: "flex items-start",
+  bullet: "mr-3 text-xl",
+  point: "italic"
 } as const;
 
 export const HeroSection = component$(() => {
   return (
-    <section class="relative bg-[#faf9f6] w-full py-24 overflow-hidden">
-      <div class="container relative z-10">
-        <div class="max-w-4xl mx-auto">
-          <h1 class="font-playfair text-3xl md:text-4xl lg:text-6xl text-gray-800 mb-8 text-center">
-            {CONTENT.title}
+    <section class={styles.section}>
+      <div class={styles.container}>
+        <div class={styles.content}>
+          <h1 class={styles.title}>
+            {ABOUT_HERO_CONTENT.title}
           </h1>
           
-          {/* Decorative divider */}
-          <div class="w-24 h-px bg-[#d5c6ad] mx-auto mb-12"></div>
+          <div class={styles.divider} aria-hidden="true" />
           
-          {/* Added intro text and points */}
-          <div class="max-w-3xl mx-auto">
-            <p class="font-opensans text-gray-700 leading-relaxed mb-8 text-left">
-              {CONTENT.intro}
+          <div class={styles.textContainer}>
+            <p class={styles.intro}>
+              {ABOUT_HERO_CONTENT.intro}
             </p>
-            <ul class="font-opensans text-gray-700 leading-relaxed space-y-4 max-w-2xl">
-              {CONTENT.points.map((point) => (
-                <li key={point} class="flex items-start">
-                  <span class="mr-3 text-xl">•</span>
-                  <span class="italic">{point}</span>
+            <ul class={styles.list}>
+              {ABOUT_HERO_CONTENT.points.map((point) => (
+                <li key={point} class={styles.listItem}>
+                  <span class={styles.bullet}>•</span>
+                  <span class={styles.point}>{point}</span>
                 </li>
               ))}
             </ul>

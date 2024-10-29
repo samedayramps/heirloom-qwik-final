@@ -1,67 +1,88 @@
 import { component$ } from "@builder.io/qwik";
 import whitePaintBlock from '~/assets/images/white-paint-block.webp';
 import texture from '~/assets/images/22-texture.webp';
+import { FEATURES_CONTENT } from '~/constants/features';
 
-const CONTENT = {
-  title: {
-    main: "HEIRLOOM is",
-    accent: "different"
+// Types
+interface FeatureCardProps {
+  title: string;
+  content: string;
+}
+
+interface FeatureStyles {
+  section: string;
+  overlay: string;
+  container: string;
+  content: string;
+  title: string;
+  grid: string;
+  card: {
+    wrapper: string;
+    content: string;
+    title: string;
+    text: string;
+  };
+}
+
+// Styles
+const styles: FeatureStyles = {
+  section: "relative bg-[#52453A] w-full py-16 overflow-hidden",
+  overlay: "absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none transition-opacity duration-700 z-0",
+  container: "container relative z-10",
+  content: "max-w-6xl mx-auto",
+  title: "font-playfair text-3xl md:text-4xl text-white mb-8 text-center",
+  grid: "grid grid-cols-1 md:grid-cols-3 gap-8",
+  card: {
+    wrapper: "w-full h-auto rounded-lg relative",
+    content: "p-6 flex flex-col",
+    title: "font-playfair text-xl mb-4 text-center",
+    text: "font-opensans text-sm text-justify leading-relaxed"
+  }
+} as const;
+
+// Background configurations
+const backgroundConfig = {
+  texture: {
+    backgroundImage: `url(${texture})`,
+    backgroundSize: '100% auto',
+    backgroundPosition: 'top center',
+    backgroundRepeat: 'repeat-y',
   },
-  features: [
-    {
-      title: "The Full Story",
-      content: "This isn't a quick highlight video—it's the complete story of your day. Get comfortable, pour some wine, and relive every moment. Our films typically run 30 minutes."
-    },
-    {
-      title: "Unlimited Hours",
-      content: "We film your entire day—from the wedding party getting ready until your sparkler exit. No hourly limits. No watching the clock. Just enjoy your wedding day."
-    },
-    {
-      title: "All Your People",
-      content: "Your wedding film includes everyone you love. We capture real moments and natural conversations with family and friends throughout your day. Because they're part of your story."
-    }
-  ]
+  card: {
+    backgroundImage: `url(${whitePaintBlock})`,
+    backgroundSize: '100% 100%',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+  }
 } as const;
 
-const BACKGROUND_STYLES = {
-  backgroundImage: `url(${texture})`,
-  backgroundSize: '100% auto',
-  backgroundPosition: 'top center',
-  backgroundRepeat: 'repeat-y',
-} as const;
-
-const CARD_STYLES = {
-  backgroundImage: `url(${whitePaintBlock})`,
-  backgroundSize: '100% 100%',
-  backgroundPosition: 'center',
-  backgroundRepeat: 'no-repeat',
-} as const;
-
-const FeatureCard = component$((props: { title: string; content: string }) => (
-  <div class="w-full h-auto rounded-lg relative" style={CARD_STYLES}>
-    <div class="p-6 flex flex-col">
-      <h3 class="font-playfair text-xl mb-4 text-center">{props.title}</h3>
-      <p class="font-opensans text-sm text-justify leading-relaxed">{props.content}</p>
+// Feature Card Component
+const FeatureCard = component$((props: FeatureCardProps) => (
+  <div class={styles.card.wrapper} style={backgroundConfig.card}>
+    <div class={styles.card.content}>
+      <h3 class={styles.card.title}>{props.title}</h3>
+      <p class={styles.card.text}>{props.content}</p>
     </div>
   </div>
 ));
 
+// Main Features Section Component
 export const FeaturesSection = component$(() => {
   return (
-    <section class="relative bg-[#52453A] w-full py-16 overflow-hidden">
+    <section class={styles.section}>
       <div 
-        class="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none transition-opacity duration-700 z-0"
-        style={BACKGROUND_STYLES}
+        class={styles.overlay}
+        style={backgroundConfig.texture}
         aria-hidden="true"
       />
-      <div class="container relative z-10">
-        <div class="max-w-6xl mx-auto">
-          <h2 class="font-playfair text-3xl md:text-4xl text-white mb-8 text-center">
-            {CONTENT.title.main}{' '}
-            <span class="font-ephesis">{CONTENT.title.accent}</span>
+      <div class={styles.container}>
+        <div class={styles.content}>
+          <h2 class={styles.title}>
+            {FEATURES_CONTENT.title.main}{' '}
+            <span class="font-ephesis">{FEATURES_CONTENT.title.accent}</span>
           </h2>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {CONTENT.features.map((feature) => (
+          <div class={styles.grid}>
+            {FEATURES_CONTENT.features.map((feature) => (
               <FeatureCard key={feature.title} {...feature} />
             ))}
           </div>

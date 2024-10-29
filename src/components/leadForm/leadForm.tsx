@@ -3,11 +3,60 @@ import { Form } from '@builder.io/qwik-city';
 import { useLeadFormAction } from '~/routes/index';
 import { FormInput } from './form-input';
 
-export const LeadForm = component$<{ 
+// Types
+interface LeadFormProps {
   onClose$: QRL<() => void>;
   onSuccess$: QRL<() => void>;
   isVisible: boolean;
-}>(({ onClose$, onSuccess$, isVisible }) => {
+}
+
+interface FormStyles {
+  backdrop: string;
+  container: string;
+  modal: (isVisible: boolean) => string;
+  closeButton: string;
+  content: string;
+  title: string;
+  error: string;
+  form: string;
+  grid: string;
+  messageLabel: string;
+  messageInput: string;
+  submitWrapper: string;
+  submitButton: (isSubmitting: boolean) => string;
+}
+
+// Styles
+const styles: FormStyles = {
+  backdrop: "fixed inset-0 bg-black/70 transition-opacity duration-300",
+  container: "fixed inset-0 flex items-center justify-center p-4 md:p-4",
+  modal: (isVisible: boolean) => [
+    'w-full max-w-md bg-[#faf9f6] rounded-3xl shadow-2xl border border-white/20 transition-all duration-300 transform',
+    isVisible 
+      ? 'opacity-100 translate-y-0 scale-100' 
+      : 'opacity-0 translate-y-8 scale-95'
+  ].join(' '),
+  closeButton: "absolute -top-4 -right-4 bg-[#faf9f6] rounded-full p-2 shadow-lg text-gray-500 hover:text-gray-700 hover:scale-110 transition-all duration-300",
+  content: "p-3 md:p-8",
+  title: "text-2xl md:text-3xl text-center font-playfair mb-2 md:mb-8 text-gray-800",
+  error: "mb-3 md:mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r",
+  form: "space-y-2 md:space-y-6",
+  grid: "grid grid-cols-2 gap-4",
+  messageLabel: "block text-gray-700 text-sm font-medium mb-1 md:mb-2",
+  messageInput: "w-full px-4 py-2 md:py-3 rounded-lg border border-gray-200 focus:border-[#d5c6ad] focus:ring-2 focus:ring-[#d5c6ad]/20 transition-all duration-200 resize-none bg-white/50 backdrop-blur-sm",
+  submitWrapper: "flex items-center justify-center pt-1 md:pt-4",
+  submitButton: (isSubmitting: boolean) => [
+    'w-full md:w-auto bg-[#d5c6ad] hover:bg-[#c0b298] text-gray-800 font-bold py-3 md:py-4 px-6 md:px-10 rounded-full text-sm uppercase tracking-wider relative',
+    'disabled:opacity-70 disabled:cursor-not-allowed transform hover:-translate-y-0.5 transition-all duration-200',
+    isSubmitting ? 'cursor-not-allowed' : 'cursor-pointer'
+  ].join(' ')
+} as const;
+
+export const LeadForm = component$<LeadFormProps>(({ 
+  onClose$, 
+  onSuccess$, 
+  isVisible 
+}) => {
   const action = useLeadFormAction();
   const isSubmitting = useSignal(false);
 
@@ -16,25 +65,18 @@ export const LeadForm = component$<{
       {/* Backdrop */}
       <div 
         class={[
-          'fixed inset-0 bg-black/70 transition-opacity duration-300',
+          styles.backdrop,
           isVisible ? 'opacity-100' : 'opacity-0'
         ]}
         onClick$={onClose$}
       />
 
       {/* Modal Container */}
-      <div class="fixed inset-0 flex items-center justify-center p-4 md:p-4">
-        <div 
-          class={[
-            'w-full max-w-md bg-[#faf9f6] rounded-3xl shadow-2xl border border-white/20 transition-all duration-300 transform',
-            isVisible 
-              ? 'opacity-100 translate-y-0 scale-100' 
-              : 'opacity-0 translate-y-8 scale-95'
-          ]}
-        >
+      <div class={styles.container}>
+        <div class={styles.modal(isVisible)}>
           <button 
             onClick$={onClose$}
-            class="absolute -top-4 -right-4 bg-[#faf9f6] rounded-full p-2 shadow-lg text-gray-500 hover:text-gray-700 hover:scale-110 transition-all duration-300"
+            class={styles.closeButton}
             aria-label="Close"
           >
             <svg class="h-6 w-6" viewBox="0 0 24 24">
@@ -43,11 +85,11 @@ export const LeadForm = component$<{
           </button>
 
           {/* Form Content */}
-          <div class="p-3 md:p-8">
-            <h3 class="text-2xl md:text-3xl text-center font-playfair mb-2 md:mb-8 text-gray-800">Let's Talk</h3>
+          <div class={styles.content}>
+            <h3 class={styles.title}>Let's Talk</h3>
 
             {action.value?.failed && (
-              <div class="mb-3 md:mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r">
+              <div class={styles.error}>
                 {action.value.message}
               </div>
             )}
@@ -68,9 +110,9 @@ export const LeadForm = component$<{
                   isSubmitting.value = false;
                 }
               }}
-              class="space-y-2 md:space-y-6"
+              class={styles.form}
             >
-              <div class="grid grid-cols-2 gap-4">
+              <div class={styles.grid}>
                 <FormInput
                   id="firstName"
                   label="First Name"
@@ -87,7 +129,7 @@ export const LeadForm = component$<{
                 />
               </div>
 
-              <div class="grid grid-cols-2 gap-4">
+              <div class={styles.grid}>
                 <FormInput
                   id="email"
                   label="Email"
@@ -103,7 +145,7 @@ export const LeadForm = component$<{
                 />
               </div>
 
-              <div class="grid grid-cols-2 gap-4">
+              <div class={styles.grid}>
                 <FormInput
                   id="weddingDate"
                   label="Wedding Date"
@@ -120,22 +162,22 @@ export const LeadForm = component$<{
               </div>
 
               <div class="w-full">
-                <label for="message" class="block text-gray-700 text-sm font-medium mb-1 md:mb-2">
+                <label for="message" class={styles.messageLabel}>
                   Message
                 </label>
                 <textarea
                   id="message"
                   name="message"
-                  class="w-full px-4 py-2 md:py-3 rounded-lg border border-gray-200 focus:border-[#d5c6ad] focus:ring-2 focus:ring-[#d5c6ad]/20 transition-all duration-200 resize-none bg-white/50 backdrop-blur-sm"
+                  class={styles.messageInput}
                   rows={3}
                   placeholder="Share your thoughts and let us know how you found us..."
                 />
               </div>
 
-              <div class="flex items-center justify-center pt-1 md:pt-4">
+              <div class={styles.submitWrapper}>
                 <button 
                   type="submit" 
-                  class="w-full md:w-auto bg-[#d5c6ad] hover:bg-[#c0b298] text-gray-800 font-bold py-3 md:py-4 px-6 md:px-10 rounded-full text-sm uppercase tracking-wider relative disabled:opacity-70 disabled:cursor-not-allowed transform hover:-translate-y-0.5 transition-all duration-200"
+                  class={styles.submitButton(isSubmitting.value)}
                   disabled={isSubmitting.value}
                 >
                   {isSubmitting.value ? (

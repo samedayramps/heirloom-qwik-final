@@ -2,15 +2,9 @@ import { component$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { createLeadFormAction } from '~/lib/actions/lead';
 
-// Import section components
+// Import components that are needed for initial render
 import { HeroSection } from "~/components/sections/home/hero-section";
 import { AboutSection } from "~/components/sections/home/about-section";
-import { FeaturesSection } from "~/components/sections/home/features-section";
-import { FAQSection } from "~/components/sections/home/faq-section";
-import { ProcessSection } from "~/components/sections/home/process-section";
-
-// Re-export the action
-export const useLeadFormAction = createLeadFormAction();
 
 // Define metadata for better SEO
 const META = {
@@ -18,20 +12,39 @@ const META = {
   description: "Crafting cinematic wedding films that capture your unique love story. Full-day coverage, 30+ minute films, and a personalized experience.",
 } as const;
 
+// Re-export the action
+export const useLeadFormAction = createLeadFormAction();
+
 export default component$(() => {
   return (
     <main class="w-full relative">
+      {/* Immediately render above-the-fold content */}
       <HeroSection />
       <AboutSection />
-      <FeaturesSection />
-      <ProcessSection />
-      <FAQSection 
-        onTalkClick$={() => {
-          // Dispatch custom event that layout listens for
-          const event = new CustomEvent('toggleLeadForm');
-          window.dispatchEvent(event);
-        }}
-      />
+
+      {/* Lazy load components below the fold using Qwik's built-in lazy loading */}
+      <div data-component="features">
+        {import("~/components/sections/home/features-section").then((mod) => (
+          <mod.FeaturesSection />
+        ))}
+      </div>
+
+      <div data-component="process">
+        {import("~/components/sections/home/process-section").then((mod) => (
+          <mod.ProcessSection />
+        ))}
+      </div>
+
+      <div data-component="faq">
+        {import("~/components/sections/home/faq-section").then((mod) => (
+          <mod.FAQSection 
+            onTalkClick$={() => {
+              const event = new CustomEvent('toggleLeadForm');
+              window.dispatchEvent(event);
+            }}
+          />
+        ))}
+      </div>
     </main>
   );
 });

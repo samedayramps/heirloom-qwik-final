@@ -1,85 +1,138 @@
-import { component$, Slot, useSignal, $, useOnWindow } from "@builder.io/qwik";
-import Navbar from '../components/navbar/navbar'; // Ensure this path is correct
-import { Footer } from '../components/footer/footer';
-import { LeadForm } from '../components/leadForm/leadForm';
+import { component$, Slot, useSignal, $, useOnWindow, useTask$ } from "@builder.io/qwik";
+import Navbar from '../components/navbar/navbar';
 import { Toast } from '../components/ui/toast';
 import type { RequestHandler } from "@builder.io/qwik-city";
 
+// Types
+interface LayoutStyles {
+  wrapper: string;
+  overlay: string;
+  main: string;
+  modal: string;
+}
+
+// Styles
+const styles: LayoutStyles = {
+  wrapper: "min-h-screen bg-[#faf9f6] relative flex flex-col",
+  overlay: "fixed top-0 left-0 w-full h-16 bg-gradient-to-b from-black/20 to-transparent pointer-events-none z-10",
+  main: "pt-16 flex-grow",
+  modal: "fixed inset-0 z-[100] transition-all duration-300 opacity-100 pointer-events-auto"
+} as const;
+
+// Cache configuration
+const CACHE_CONFIG = {
+  staleWhileRevalidate: 60 * 60 * 24 * 7, // 7 days
+  maxAge: 5 // 5 seconds
+} as const;
+
+// Debounce scroll handler
+const SCROLL_DEBOUNCE = 150; // ms
+
 export const onGet: RequestHandler = async ({ cacheControl }) => {
-  // Control caching for this request for best performance and to reduce hosting costs:
-  // https://qwik.dev/docs/caching/
-  cacheControl({
-    // Always serve a cached response by default, up to a week stale
-    staleWhileRevalidate: 60 * 60 * 24 * 7,
-    // Max once every 5 seconds, revalidate on the server to get a fresh version of this page
-    maxAge: 5,
-  });
+  cacheControl(CACHE_CONFIG);
 };
 
 export default component$(() => {
-  // Lift modal state to layout level
   const showLeadForm = useSignal(false);
   const showToast = useSignal(false);
+  const footerLoaded = useSignal(false);
+  const scrollTimeout = useSignal<number | undefined>();
 
-  // Handler to open modal
+  // Modal handlers
   const handleOpenModal = $(() => {
     showLeadForm.value = true;
-    // Prevent body scroll when modal is open
     document.body.style.overflow = 'hidden';
   });
 
-  // Handler to close modal
   const handleCloseModal = $(() => {
     showLeadForm.value = false;
-    // Restore body scroll when modal is closed
     document.body.style.overflow = 'unset';
   });
 
-  // Handler to show toast
+  // Toast handlers
   const handleShowToast = $(() => {
     showToast.value = true;
   });
 
-  // Handler to hide toast
   const handleHideToast = $(() => {
     showToast.value = false;
   });
 
-  // Add event listener for custom event
+  // Event listeners
   useOnWindow('toggleLeadForm', $(() => {
     handleOpenModal();
   }));
 
+  // Debounced scroll handler for footer loading
+  useOnWindow('scroll', $(() => {
+    if (scrollTimeout.value) {
+      clearTimeout(scrollTimeout.value);
+    }
+
+    scrollTimeout.value = setTimeout(() => {
+      if (!footerLoaded.value) {
+        const scrollPosition = window.scrollY + window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        
+        if (documentHeight - scrollPosition < 200) {
+          footerLoaded.value = true;
+        }
+      }
+    }, SCROLL_DEBOUNCE) as any;
+  }));
+
+  // Cleanup scroll timeout
+  useTask$(({ cleanup }) => {
+    cleanup(() => {
+      if (scrollTimeout.value) {
+        clearTimeout(scrollTimeout.value);
+      }
+    });
+  });
+
   return (
-    <div class="min-h-screen bg-[#faf9f6] relative flex flex-col">
-      {/* Updated gradient from 20% to 0% opacity */}
-      <div class="fixed top-0 left-0 w-full h-16 bg-gradient-to-b from-black/20 to-transparent pointer-events-none z-10" />
+    <div class={styles.wrapper}>
+      <div class={styles.overlay} aria-hidden="true" />
       
       <Navbar onTalkClick$={handleOpenModal} />
       
-      <main class="pt-16 flex-grow">
+      <main class={styles.main}>
         <Slot />
       </main>
       
-      <Footer />
+      {/* Lazy load footer with error boundary */}
+      {footerLoaded.value && (
+        <div>
+          {import('../components/footer/footer')
+            .then(({ Footer }) => <Footer />)
+            .catch(error => {
+              console.error('Error loading footer:', error);
+              return null;
+            })
+          }
+        </div>
+      )}
       
-      {/* Lead Form Modal - Always render but control visibility with opacity/pointer-events */}
-      <div 
-        class={[
-          'fixed inset-0 z-[100] transition-all duration-300',
-          showLeadForm.value 
-            ? 'opacity-100 pointer-events-auto' 
-            : 'opacity-0 pointer-events-none'
-        ]}
-      >
-        <LeadForm 
-          isVisible={showLeadForm.value} 
-          onClose$={handleCloseModal}
-          onSuccess$={handleShowToast}
-        />
-      </div>
+      {/* Lazy load LeadForm with error boundary */}
+      {showLeadForm.value && (
+        <div class={styles.modal}>
+          {import('../components/leadForm/leadForm')
+            .then(({ LeadForm }) => (
+              <LeadForm 
+                isVisible={showLeadForm.value} 
+                onClose$={handleCloseModal}
+                onSuccess$={handleShowToast}
+              />
+            ))
+            .catch(error => {
+              console.error('Error loading lead form:', error);
+              handleCloseModal();
+              return null;
+            })
+          }
+        </div>
+      )}
 
-      {/* Toast */}
       {showToast.value && (
         <Toast
           onClose$={handleHideToast}

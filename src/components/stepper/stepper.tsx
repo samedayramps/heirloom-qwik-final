@@ -1,9 +1,9 @@
 import { component$ } from '@builder.io/qwik';
 
 export interface Step {
-  number: number;
-  title: string;
-  description: string;
+  readonly number: number;
+  readonly title: string;
+  readonly description: string;
 }
 
 // Reusable classes for better maintainability
@@ -13,9 +13,14 @@ const CLASSES = {
   title: "font-playfair text-xl text-gray-800 mb-2",
   description: "font-opensans text-gray-600 leading-relaxed",
   connector: {
-    base: "bg-[#d5c6ad] rounded-full transform transition-transform duration-500 scale-100",
+    base: "bg-[#d5c6ad] rounded-full transition-transform duration-500 ease-in-out",
     horizontal: "h-0.5 flex-1 mx-2",
     vertical: "w-0.5 flex-1 my-2"
+  },
+  // Use Tailwind's built-in animation classes
+  animation: {
+    item: "animate-fade-in transition-all duration-500 ease-in-out",
+    container: "motion-safe:animate-fade-in-up"
   }
 } as const;
 
@@ -23,42 +28,39 @@ export const Stepper = component$<{ steps: Step[] }>(({ steps }) => {
   return (
     <div class="relative">
       {/* Desktop version */}
-      <div class="hidden md:block">
-        <ul class="grid grid-cols-4">
-          {steps.map((step, index) => (
-            <li 
-              key={step.number} 
-              class="relative transform transition-transform duration-500 translate-y-0 opacity-100"
-              style={{ transitionDelay: `${index * 100}ms` }}
-            >
-              <div class="flex items-center w-full">
-                <div class={CLASSES.stepNumber}>
-                  <span class={CLASSES.stepText}>{step.number}</span>
-                </div>
-                {index !== steps.length - 1 && (
-                  <div 
-                    class={[CLASSES.connector.base, CLASSES.connector.horizontal].join(" ")}
-                    style={{ transitionDelay: `${index * 100}ms` }}
-                    aria-hidden="true"
-                  />
-                )}
+      <ul class="hidden md:grid md:grid-cols-4 gap-0">
+        {steps.map((step, index) => (
+          <li 
+            key={step.number} 
+            class={`${CLASSES.animation.item} opacity-0`}
+            style={{ animationDelay: `${index * 100}ms` }}
+          >
+            <div class="flex items-center w-full">
+              <div class={CLASSES.stepNumber}>
+                <span class={CLASSES.stepText}>{step.number}</span>
               </div>
-              <div class="mt-4 pr-6">
-                <h3 class={CLASSES.title}>{step.title}</h3>
-                <p class={CLASSES.description}>{step.description}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+              {index !== steps.length - 1 && (
+                <div 
+                  class={`${CLASSES.connector.base} ${CLASSES.connector.horizontal}`}
+                  aria-hidden="true"
+                />
+              )}
+            </div>
+            <div class="mt-4 pr-6">
+              <h3 class={CLASSES.title}>{step.title}</h3>
+              <p class={CLASSES.description}>{step.description}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
 
       {/* Mobile version */}
       <ul class="md:hidden">
         {steps.map((step, index) => (
           <li 
             key={step.number} 
-            class="flex group transform transition-transform duration-500 translate-x-0 opacity-100"
-            style={{ transitionDelay: `${index * 100}ms` }}
+            class={`flex ${CLASSES.animation.item} opacity-0`}
+            style={{ animationDelay: `${index * 100}ms` }}
           >
             <div class="flex flex-col items-center">
               <div class={CLASSES.stepNumber}>
@@ -66,8 +68,7 @@ export const Stepper = component$<{ steps: Step[] }>(({ steps }) => {
               </div>
               {index !== steps.length - 1 && (
                 <div 
-                  class={[CLASSES.connector.base, CLASSES.connector.vertical].join(" ")}
-                  style={{ transitionDelay: `${index * 100}ms` }}
+                  class={`${CLASSES.connector.base} ${CLASSES.connector.vertical}`}
                   aria-hidden="true"
                 />
               )}

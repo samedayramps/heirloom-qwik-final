@@ -1,23 +1,38 @@
 import { component$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
-// Import the image and use relative path from assets
 import textureImage from '~/assets/images/16-texture-square.webp';
+import { ABOUT_CONTENT } from '~/constants/about';
 
-// Separate the text content for better maintainability
-const CONTENT = {
-  title: {
-    main: "Our",
-    accent: "unique",
-    end: "approach"
-  },
-  paragraphs: [
-    "At HEIRLOOM Wedding Films, we craft cinematic stories that you'll cherish for a lifetime and pass down through generations. Whether it's a traditional ceremony close to home or an exotic destination elopement, we're here to capture your unique love story in full.",
-    "We take the time to get to know you, so your film truly reflects who you are. As passionate storytellers, we're constantly honing our craft to match the depth of your love. We love working with couples who are excited about preserving their memories as much as we are about capturing them."
-  ]
+// Types
+interface AboutStyles {
+  section: string;
+  overlay: string;
+  container: string;
+  content: string;
+  title: string;
+  accent: string;
+  textContainer: string;
+  paragraph: string;
+  link: string;
+  linkWrapper: string;
+}
+
+// Styles
+const styles: AboutStyles = {
+  section: "relative bg-[#d5c6ad] w-full py-16 overflow-hidden",
+  overlay: "absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none transition-opacity duration-700",
+  container: "container relative z-10",
+  content: "max-w-6xl mx-auto",
+  title: "font-playfair text-3xl md:text-4xl text-gray-800 mb-6 text-center",
+  accent: "font-ephesis",
+  textContainer: "font-opensans text-gray-700 space-y-4",
+  paragraph: "leading-relaxed",
+  linkWrapper: "mt-6",
+  link: "font-opensans text-sm text-[#2d2d2d] relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:bg-[#2d2d2d] hover:after:h-[2px] after:transition-all after:rounded-full duration-300"
 } as const;
 
-// Extract background styles to reduce inline styles
-const BACKGROUND_STYLES = {
+// Background configuration
+const backgroundConfig = {
   backgroundImage: `url(${textureImage})`,
   backgroundSize: '100% auto',
   backgroundPosition: 'top center',
@@ -26,37 +41,29 @@ const BACKGROUND_STYLES = {
 
 export const AboutSection = component$(() => {
   return (
-    <section class="relative bg-[#d5c6ad] w-full py-16 overflow-hidden">
-      {/* Background texture */}
+    <section class={styles.section}>
       <div 
-        class="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none transition-opacity duration-700"
-        style={BACKGROUND_STYLES}
+        class={styles.overlay}
+        style={backgroundConfig}
         aria-hidden="true"
       />
 
-      {/* Content container */}
-      <div class="container relative z-10">
-        <div class="max-w-6xl mx-auto">
-          {/* Title */}
-          <h2 class="font-playfair text-3xl md:text-4xl text-gray-800 mb-6 text-center">
-            {CONTENT.title.main}{' '}
-            <span class="font-ephesis">{CONTENT.title.accent} </span>{' '}
-            {CONTENT.title.end}
+      <div class={styles.container}>
+        <div class={styles.content}>
+          <h2 class={styles.title}>
+            {ABOUT_CONTENT.title.main}{' '}
+            <span class={styles.accent}>{ABOUT_CONTENT.title.accent}</span>{' '}
+            {ABOUT_CONTENT.title.end}
           </h2>
 
-          {/* Text content */}
-          <div class="font-opensans text-gray-700 space-y-4">
-            {CONTENT.paragraphs.map((paragraph, index) => (
-              <p key={index} class="leading-relaxed">{paragraph}</p>
+          <div class={styles.textContainer}>
+            {ABOUT_CONTENT.paragraphs.map((paragraph, index) => (
+              <p key={index} class={styles.paragraph}>{paragraph}</p>
             ))}
           </div>
 
-          {/* Learn More Link */}
-          <div class="mt-6">
-            <Link 
-              href="/about" 
-              class="font-opensans text-sm text-[#2d2d2d] relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:bg-[#2d2d2d] hover:after:h-[2px] after:transition-all after:rounded-full duration-300"
-            >
+          <div class={styles.linkWrapper}>
+            <Link href="/about" class={styles.link}>
               Learn More
             </Link>
           </div>

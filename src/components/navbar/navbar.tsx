@@ -4,14 +4,35 @@ import LogoSvg from '../../assets/images/logo.svg?jsx';
 import LogoMobileSvg from '../../assets/images/logo-mobile.svg?jsx';
 import { LetsTalkButton } from "~/components/ui/lets-talk-button";
 
-// Constants for static classes
-const WRAPPER_CLASSES = 'fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out transform-gpu';
-const NAV_CLASSES = 'w-full bg-[#2d2d2d] will-change-transform transition-all duration-700 ease-in-out transform-gpu';
-const MOBILE_MENU_CLASSES = 'lg:hidden overflow-hidden transition-all duration-300 ease-out fixed left-0 right-0 px-5 top-16'; // Updated with faster transition
-
+// Types
 interface NavbarProps {
   onTalkClick$: QRL<() => void>;
 }
+
+interface NavStyles {
+  wrapper: string;
+  nav: string;
+  mobileMenu: string;
+  menuButton: string;
+  logo: {
+    wrapper: string;
+    desktop: string;
+    mobile: string;
+  };
+}
+
+// Styles
+const styles: NavStyles = {
+  wrapper: 'fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out transform-gpu',
+  nav: 'w-full bg-[#2d2d2d] will-change-transform transition-all duration-700 ease-in-out transform-gpu',
+  mobileMenu: 'lg:hidden overflow-hidden transition-all duration-300 ease-out fixed left-0 right-0 px-5 top-16',
+  menuButton: "inline-flex items-center justify-center p-1 rounded-md text-[#faf9f6] hover:text-[#d5c6ad] hover:scale-110 focus:outline-none transition-all duration-300",
+  logo: {
+    wrapper: "flex-shrink min-w-0 ml-2 lg:ml-0",
+    desktop: "hidden md:block h-8 w-auto",
+    mobile: "block md:hidden h-6 w-auto min-w-0"
+  }
+} as const;
 
 const NAV_LINKS = [
   { href: '/about', text: 'About' },
@@ -31,8 +52,8 @@ const NavLink = component$<{
     class={[
       'text-[#faf9f6] hover:text-[#d5c6ad] rounded-md font-opensans transition-colors duration-300',
       isMobile 
-        ? 'block px-3 py-2 text-base' // Removed hover:scale-110 for mobile
-        : 'px-3 py-2 text-sm hover:scale-110' // Keep scale animation for desktop
+        ? 'block px-3 py-2 text-base'
+        : 'px-3 py-2 text-sm hover:scale-110'
     ]}
     onClick$={onClick$}
   >
@@ -40,40 +61,45 @@ const NavLink = component$<{
   </Link>
 ));
 
-// Extracted MobileMenu component
+// Lazy loaded MobileMenu component
 const MobileMenu = component$<{
   isOpen: boolean;
   onLinkClick$: QRL<() => void>;
   onTalkClick$: QRL<() => void>;
-}>(({ isOpen, onLinkClick$, onTalkClick$ }) => (
-  <div 
-    class={{
-      [MOBILE_MENU_CLASSES]: true,
-      'opacity-100 translate-y-1': isOpen,
-      'opacity-0 -translate-y-2 pointer-events-none': !isOpen
-    }}
-  >
-    <div class="bg-[#2d2d2d] rounded-2xl shadow-lg overflow-hidden transform-gpu">
-      <div class="p-4 space-y-1">
-        {NAV_LINKS.map((link) => (
-          <NavLink
-            key={link.href}
-            {...link}
-            isMobile={true}
-            onClick$={onLinkClick$}
-          />
-        ))}
-        {/* Add button for extra small screens */}
-        <div class="xs:hidden pt-2">
-          <LetsTalkButton
-            onTalkClick$={onTalkClick$}
-            class="w-full"
-          />
+}>(({ isOpen, onLinkClick$, onTalkClick$ }) => {
+  const menuStyles = {
+    wrapper: [
+      styles.mobileMenu,
+      isOpen ? 'opacity-100 translate-y-1' : 'opacity-0 -translate-y-2 pointer-events-none'
+    ].join(' '),
+    inner: "bg-[#2d2d2d] rounded-2xl shadow-lg overflow-hidden transform-gpu",
+    content: "p-4 space-y-1",
+    buttonWrapper: "xs:hidden pt-2"
+  };
+
+  return (
+    <div class={menuStyles.wrapper}>
+      <div class={menuStyles.inner}>
+        <div class={menuStyles.content}>
+          {NAV_LINKS.map((link) => (
+            <NavLink
+              key={link.href}
+              {...link}
+              isMobile={true}
+              onClick$={onLinkClick$}
+            />
+          ))}
+          <div class={menuStyles.buttonWrapper}>
+            <LetsTalkButton
+              onTalkClick$={onTalkClick$}
+              class="w-full"
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
-));
+  );
+});
 
 export default component$<NavbarProps>(({ onTalkClick$ }) => {
   const isScrolled = useSignal(false);
@@ -88,8 +114,6 @@ export default component$<NavbarProps>(({ onTalkClick$ }) => {
     'click',
     $((event) => {
       const target = event.target as Element;
-      
-      // Check if click is outside both the menu and the toggle button
       if (isDropdownOpen.value && 
           mobileMenuRef.value && 
           menuButtonRef.value && 
@@ -100,7 +124,7 @@ export default component$<NavbarProps>(({ onTalkClick$ }) => {
     })
   );
 
-  // Debounced scroll handler with initial render check
+  // Debounced scroll handler
   useOnWindow(
     'scroll',
     $(() => {
@@ -122,27 +146,25 @@ export default component$<NavbarProps>(({ onTalkClick$ }) => {
   return (
     <div 
       class={[
-        WRAPPER_CLASSES,
+        styles.wrapper,
         isScrolled.value ? 'px-5' : 'px-0',
-        // Only apply transition after initial render
         isInitialRender.value ? 'transition-none' : ''
       ]}
     >
       <nav 
         class={[
-          NAV_CLASSES,
+          styles.nav,
           isScrolled.value 
             ? 'translate-y-5 rounded-full shadow-lg'
             : 'translate-y-0 rounded-none',
-          // Only apply transition after initial render
           isInitialRender.value ? 'transition-none' : ''
         ]}
       >
         <div class={[
           'transition-all duration-700 ease-in-out',
           isScrolled.value 
-            ? 'px-2' // Reduced fixed padding when scrolled
-            : 'px-4 sm:px-6 lg:px-8'  // Original responsive padding when not scrolled
+            ? 'px-2'
+            : 'px-4 sm:px-6 lg:px-8'
         ]}>
           <div class="flex items-center justify-between h-16">
             {/* Navbar Start */}
@@ -151,8 +173,9 @@ export default component$<NavbarProps>(({ onTalkClick$ }) => {
                 <button
                   ref={menuButtonRef}
                   onClick$={() => isDropdownOpen.value = !isDropdownOpen.value}
-                  class="inline-flex items-center justify-center p-1 rounded-md text-[#faf9f6] hover:text-[#d5c6ad] hover:scale-110 focus:outline-none transition-all duration-300"
+                  class={styles.menuButton}
                   aria-label="Toggle menu"
+                  aria-expanded={isDropdownOpen.value}
                 >
                   <svg 
                     class="h-8 w-8" 
@@ -171,13 +194,13 @@ export default component$<NavbarProps>(({ onTalkClick$ }) => {
                 </button>
               </div>
 
-              <Link href="/" class="flex-shrink min-w-0 ml-2 lg:ml-0">
+              <Link href="/" class={styles.logo.wrapper}>
                 <LogoSvg 
-                  class="hidden md:block h-8 w-auto" 
+                  class={styles.logo.desktop}
                   aria-label="Logo"
                 />
                 <LogoMobileSvg 
-                  class="block md:hidden h-6 w-auto min-w-0" 
+                  class={styles.logo.mobile}
                   aria-label="Mobile Logo"
                 />
               </Link>
@@ -195,7 +218,7 @@ export default component$<NavbarProps>(({ onTalkClick$ }) => {
             {/* Navbar End */}
             <div class={[
               'transition-all duration-700 ease-in-out lg:flex-none justify-end',
-              'hidden xs:flex flex-1', // Fixed order: hidden by default, flex on xs and up
+              'hidden xs:flex flex-1',
               isScrolled.value ? 'mr-1' : ''
             ]}>
               <LetsTalkButton
@@ -206,14 +229,16 @@ export default component$<NavbarProps>(({ onTalkClick$ }) => {
           </div>
         </div>
 
-        {/* Mobile Menu with ref */}
-        <div ref={mobileMenuRef}>
-          <MobileMenu 
-            isOpen={isDropdownOpen.value} 
-            onLinkClick$={() => isDropdownOpen.value = false}
-            onTalkClick$={onTalkClick$}
-          />
-        </div>
+        {/* Lazy loaded Mobile Menu */}
+        {isDropdownOpen.value && (
+          <div ref={mobileMenuRef}>
+            <MobileMenu 
+              isOpen={isDropdownOpen.value} 
+              onLinkClick$={() => isDropdownOpen.value = false}
+              onTalkClick$={onTalkClick$}
+            />
+          </div>
+        )}
       </nav>
     </div>
   );
