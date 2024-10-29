@@ -19,20 +19,26 @@ const VideoModal = component$<{
   videoUrl: string;
   onClose$: PropFunction<() => void>;
 }>(({ isOpen, videoUrl, onClose$ }) => {
-  const vimeoId = videoUrl.split('/').pop();
+  const vimeoId = useSignal(videoUrl.split('/').pop());
   const iframeLoaded = useSignal(false);
 
-  // Using useTask$ instead of useVisibleTask$ for better performance
-  useTask$(({ track }) => {
+  // Use requestAnimationFrame instead of setTimeout
+  useTask$(({ track, cleanup }) => {
     track(() => isOpen);
     if (isOpen) {
-      // Small delay to ensure smooth animation
-      setTimeout(() => {
+      const frame = requestAnimationFrame(() => {
         iframeLoaded.value = true;
-      }, 300);
+      });
+      cleanup(() => cancelAnimationFrame(frame));
     } else {
       iframeLoaded.value = false;
     }
+  });
+
+  // Track videoUrl changes
+  useTask$(({ track }) => {
+    track(() => videoUrl);
+    vimeoId.value = videoUrl.split('/').pop();
   });
 
   if (!isOpen) return null;
@@ -59,7 +65,7 @@ const VideoModal = component$<{
       <div class="w-full max-w-7xl aspect-video px-4" onClick$={(e) => e.stopPropagation()}>
         {iframeLoaded.value ? (
           <iframe
-            src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&title=0&byline=0&portrait=0&dnt=1`}
+            src={`https://player.vimeo.com/video/${vimeoId.value}?autoplay=1&title=0&byline=0&portrait=0&dnt=1`}
             class="w-full h-full"
             allow="autoplay; fullscreen; picture-in-picture"
             allowFullscreen
@@ -97,6 +103,7 @@ const FilmCard = component$<{
           height={675}
           loading="lazy"
           decoding="async"
+          fetchPriority="low"
           class="h-full w-full object-cover transform transition duration-500 group-hover:scale-105"
         />
       </div>
@@ -185,4 +192,13 @@ export const head: DocumentHead = {
       content: META.description,
     },
   ],
+  // Add preload for critical images
+  links: [
+    {
+      rel: 'preload',
+      as: 'image',
+      href: texture,
+      type: 'image/webp'
+    }
+  ]
 };
