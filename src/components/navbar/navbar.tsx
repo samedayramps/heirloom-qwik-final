@@ -37,7 +37,6 @@ const styles: NavStyles = {
 const NAV_LINKS = [
   { href: '/about', text: 'About' },
   { href: '/films', text: 'Films' },
-  { href: '/blog', text: 'Blog' },
 ] as const;
 
 // Update the NavLink component

@@ -122,6 +122,11 @@ export default component$(() => {
     activeVideoUrl.value = '';
   });
 
+  const handlePlay = $((videoUrl: string) => {
+    activeVideoUrl.value = videoUrl;
+    isModalOpen.value = true;
+  });
+
   return (
     <main class="w-full">
       <VideoModal 
@@ -161,10 +166,7 @@ export default component$(() => {
                 <FilmCard 
                   key={film.title}
                   {...film}
-                  onPlay$={() => {
-                    activeVideoUrl.value = film.videoUrl;
-                    isModalOpen.value = true;
-                  }}
+                  onPlay$={() => handlePlay(film.videoUrl)}
                 />
               ))}
             </div>
