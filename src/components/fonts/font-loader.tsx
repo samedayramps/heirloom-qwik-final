@@ -21,6 +21,14 @@ export const FontLoader = component$(() => {
         crossOrigin="anonymous"
       />
 
+      {/* Preload critical images */}
+      <link
+        rel="preload"
+        href="/assets/images/16-texture-square.webp"
+        as="image"
+        type="image/webp"
+      />
+
       {/* Optimized Google Fonts loading for Ephesis */}
       <link 
         rel="preconnect" 

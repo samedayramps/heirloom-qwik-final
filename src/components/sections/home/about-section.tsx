@@ -34,12 +34,6 @@ const styles: AboutStyles = {
 export const AboutSection = component$(() => {
   return (
     <section class={styles.section}>
-      <Link
-        prefetch={true}
-        href="/assets/images/16-texture-square.webp"
-        style={{ display: 'none' }}
-      />
-      
       <Texture 
         class={styles.overlay}
         aria-hidden="true"
