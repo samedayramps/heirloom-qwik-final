@@ -1,4 +1,6 @@
+import type { QwikIntrinsicElements } from '@builder.io/qwik';
+
 declare module '*?jsx' {
-  const Component: import('@builder.io/qwik').QwikIntrinsicElements['img'];
+  const Component: QwikIntrinsicElements['img'];
   export default Component;
 } 
