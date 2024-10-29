@@ -30,7 +30,7 @@ export const CONTENT = {
       date: "Summer 2024",
       thumbnail: harlieGarretThumbnail,
       videoUrl: "https://vimeo.com/999361246",
-      description: "An intimate vineyard wedding filled with romantic moments and golden sunlight."
+      description: "An scenic countryside wedding filled with romantic moments and golden sunlight."
     },
     // Add more films as needed
   ] satisfies Film[]
