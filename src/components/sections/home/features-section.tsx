@@ -33,10 +33,10 @@ const styles: FeatureStyles = {
   title: "font-playfair text-3xl md:text-4xl text-white mb-8 text-center",
   grid: "grid grid-cols-1 md:grid-cols-3 gap-8",
   card: {
-    wrapper: "w-full h-auto rounded-lg relative min-h-[300px]",
-    content: "p-6 flex flex-col relative z-10",
+    wrapper: "w-full h-full rounded-lg relative flex flex-col",
+    content: "p-6 flex flex-col h-full relative z-10",
     title: "font-playfair text-xl mb-4 text-center",
-    text: "font-opensans text-sm text-justify leading-relaxed"
+    text: "font-opensans text-sm text-justify leading-relaxed flex-1"
   }
 } as const;
 

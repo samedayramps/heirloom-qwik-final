@@ -2,42 +2,21 @@
 publish = "dist"
 command = "npm run build"
 
-# Cache static assets aggressively
+# Add caching headers for static assets
 [[headers]]
   for = "/build/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-    Expires = "access plus 1 year"
 
 [[headers]]
   for = "/*.webp"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-    Expires = "access plus 1 year"
     
 [[headers]]
   for = "/*.svg"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-    Expires = "access plus 1 year"
-
-[[headers]]
-  for = "/fonts/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Expires = "access plus 1 year"
-
-[[headers]]
-  for = "/*.css"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Expires = "access plus 1 year"
-
-[[headers]]
-  for = "/*.js"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Expires = "access plus 1 year"
 
 # Add compression and security headers
 [[headers]]
@@ -48,26 +27,12 @@ command = "npm run build"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Content-Security-Policy = "upgrade-insecure-requests"
     Permissions-Policy = "interest-cohort=()"
-    Vary = "Accept-Encoding"
-    Access-Control-Allow-Origin = "*"
+
+# Add font caching headers
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
 
 [[plugins]]
   package = "@netlify/plugin-emails"
-
-# Enable Brotli and Gzip compression
-[build.processing]
-  skip_processing = false
-
-[build.processing.css]
-  bundle = true
-  minify = true
-
-[build.processing.js]
-  bundle = true
-  minify = true
-
-[build.processing.html]
-  pretty_urls = true
-
-[build.processing.images]
-  compress = true

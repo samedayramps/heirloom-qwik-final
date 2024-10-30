@@ -28,7 +28,7 @@ const styles: NavStyles = {
   mobileMenu: 'lg:hidden overflow-hidden transition-all duration-300 ease-out fixed left-0 right-0 px-5 top-16',
   menuButton: "inline-flex items-center justify-center p-1 rounded-md text-[#faf9f6] hover:text-[#d5c6ad] hover:scale-110 focus:outline-none transition-all duration-300",
   logo: {
-    wrapper: "flex-shrink min-w-0 ml-2 lg:ml-0",
+    wrapper: "flex-shrink min-w-0 ml-2 lg:ml-6",
     desktop: "hidden md:block h-8 w-auto",
     mobile: "block md:hidden h-6 w-auto min-w-0"
   }
