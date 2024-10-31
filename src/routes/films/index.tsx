@@ -1,5 +1,5 @@
-import { component$, useSignal, $, useTask$ } from "@builder.io/qwik";
-import type { PropFunction } from "@builder.io/qwik";
+import { component$ } from "@builder.io/qwik";
+import { Link } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import texture from '~/assets/images/22-texture.webp';
 import type { Film } from './content';
@@ -13,87 +13,19 @@ const BACKGROUND_STYLES = {
   backgroundRepeat: 'repeat-y',
 } as const;
 
-// Video Modal Component with lazy loading
-const VideoModal = component$<{
-  isOpen: boolean;
-  videoUrl: string;
-  onClose$: PropFunction<() => void>;
-}>(({ isOpen, videoUrl, onClose$ }) => {
-  const vimeoId = useSignal(videoUrl.split('/').pop());
-  const iframeLoaded = useSignal(false);
-
-  // Use requestAnimationFrame instead of setTimeout
-  useTask$(({ track, cleanup }) => {
-    track(() => isOpen);
-    if (isOpen) {
-      const frame = requestAnimationFrame(() => {
-        iframeLoaded.value = true;
-      });
-      cleanup(() => cancelAnimationFrame(frame));
-    } else {
-      iframeLoaded.value = false;
-    }
-  });
-
-  // Track videoUrl changes
-  useTask$(({ track }) => {
-    track(() => videoUrl);
-    vimeoId.value = videoUrl.split('/').pop();
-  });
-
-  if (!isOpen) return null;
-
-  return (
-    <div 
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm transition-opacity duration-300"
-      onClick$={onClose$}
-      role="dialog"
-      aria-modal="true"
-    >
-      {/* Close button */}
-      <button 
-        onClick$={onClose$}
-        class="absolute top-4 right-4 p-2 text-white/80 hover:text-white transition-colors"
-        aria-label="Close modal"
-      >
-        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-      </button>
-
-      {/* Video container with loading state */}
-      <div class="w-full max-w-7xl aspect-video px-4" onClick$={(e) => e.stopPropagation()}>
-        {iframeLoaded.value ? (
-          <iframe
-            src={`https://player.vimeo.com/video/${vimeoId.value}?autoplay=1&title=0&byline=0&portrait=0&dnt=1`}
-            class="w-full h-full"
-            allow="autoplay; fullscreen; picture-in-picture"
-            allowFullscreen
-            loading="lazy"
-          />
-        ) : (
-          <div class="w-full h-full bg-black/50 animate-pulse flex items-center justify-center">
-            <div class="loading-spinner" />
-          </div>
-        )}
-      </div>
-    </div>
-  );
-});
-
 // Film Card Component
 const FilmCard = component$<{
+  slug: string;
   title: string;
   location: string;
   date: string;
   thumbnail: string;
   description: string;
-  onPlay$: PropFunction<() => void>;
-}>(({ title, location, date, thumbnail, description, onPlay$ }) => {
+}>(({ slug, title, location, date, thumbnail, description }) => {
   return (
-    <button 
-      onClick$={onPlay$}
-      class="group relative overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-xl text-left w-full"
+    <Link 
+      href={`/films/${slug}`}
+      class="group relative overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-xl text-left block w-full"
     >
       <div class="aspect-video overflow-hidden">
         <img 
@@ -116,32 +48,13 @@ const FilmCard = component$<{
         </div>
         <p class="font-opensans text-gray-700 mt-3">{description}</p>
       </div>
-    </button>
+    </Link>
   );
 });
 
 export default component$(() => {
-  const activeVideoUrl = useSignal('');
-  const isModalOpen = useSignal(false);
-
-  const handleClose = $(() => {
-    isModalOpen.value = false;
-    activeVideoUrl.value = '';
-  });
-
-  const handlePlay = $((videoUrl: string) => {
-    activeVideoUrl.value = videoUrl;
-    isModalOpen.value = true;
-  });
-
   return (
     <main class="w-full">
-      <VideoModal 
-        isOpen={isModalOpen.value}
-        videoUrl={activeVideoUrl.value}
-        onClose$={handleClose}
-      />
-
       {/* Hero Section */}
       <section class="bg-[#faf9f6] py-24">
         <div class="container">
@@ -173,7 +86,6 @@ export default component$(() => {
                 <FilmCard 
                   key={film.title}
                   {...film}
-                  onPlay$={() => handlePlay(film.videoUrl)}
                 />
               ))}
             </div>
