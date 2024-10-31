@@ -27,8 +27,8 @@ const CLASSES = {
 export const Stepper = component$<{ steps: Step[] }>(({ steps }) => {
   return (
     <div class="relative">
-      {/* Desktop version */}
-      <ul class="hidden md:grid md:grid-cols-4 gap-0">
+      {/* Desktop version - Changed md: to lg: */}
+      <ul class="hidden lg:grid lg:grid-cols-5 gap-0">
         {steps.map((step, index) => (
           <li 
             key={step.number} 
@@ -54,8 +54,8 @@ export const Stepper = component$<{ steps: Step[] }>(({ steps }) => {
         ))}
       </ul>
 
-      {/* Mobile version */}
-      <ul class="md:hidden">
+      {/* Mobile version - Changed md: to lg: */}
+      <ul class="lg:hidden">
         {steps.map((step, index) => (
           <li 
             key={step.number} 

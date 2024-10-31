@@ -15,12 +15,12 @@ interface FAQSectionProps {
 
 // Styles as constants
 const styles = {
-  section: "relative bg-[#315141] py-24 overflow-hidden",
+  section: "relative bg-[#315141] py-24 px-4 overflow-hidden",
   overlay: "absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none transition-opacity duration-700",
   container: "container relative z-10",
   content: "max-w-4xl mx-auto text-center",
-  title: "font-playfair text-3xl md:text-4xl text-white mb-16 flex items-center justify-center gap-8",
-  faqList: "space-y-4 text-left",
+  title: "font-playfair text-3xl md:text-4xl text-white mb-12 flex items-center justify-center gap-8",
+  faqList: "space-y-3 text-left",
 } as const;
 
 // FAQ Item Component

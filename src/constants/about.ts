@@ -1,11 +1,12 @@
 export const ABOUT_CONTENT = {
   title: {
-    main: "Our",
+    main: "My",
     accent: "unique",
     end: "approach"
   },
   paragraphs: [
-    "At HEIRLOOM Wedding Films, we craft cinematic stories that you'll cherish for a lifetime and pass down through generations. Whether it's a traditional ceremony close to home or an exotic destination elopement, we're here to capture your unique love story in full.",
-    "We take the time to get to know you, so your film truly reflects who you are. As passionate storytellers, we're constantly honing our craft to match the depth of your love. We love working with couples who are excited about preserving their memories as much as we are about capturing them."
-  ]
+    "At HEIRLOOM Wedding Films, I create wedding stories you’ll cherish forever and pass down through your family. Whether you’re planning a traditional ceremony nearby or an adventurous elopement far away, I’m here to capture your love story in all its fullness.",
+    "I make it a point to get to know you so your film truly reflects who you are. I’m passionate about telling stories and dedicated to capturing the genuine emotions and candid moments that make your day unique. I love working with couples who are just as excited about keeping their memories alive as I am about filming them."
+  ],
+  linkText: "About Heirloom Wedding Films"
 } as const; 

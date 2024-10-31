@@ -3,16 +3,28 @@ export const FAQ_CONTENT = {
   buttonText: "LET'S TALK",
   items: [
     {
-      question: "When will we receive our wedding film?",
-      answer: "Your wedding film will be delivered within 12-16 weeks after your wedding date. We take great care in crafting each film to ensure it perfectly captures your special day.",
+      question: "Why do you offer only one all-inclusive package?",
+      answer: "I believe you shouldn't have to choose between different packages or worry about missing out on something important. With my all-inclusive package, you get everything I offer—no compromises, no tough decisions.",
     },
     {
-      question: "What's the process after booking?",
-      answer: "After booking, we'll schedule a consultation to discuss your vision, timeline, and important moments you want captured. We'll stay in touch throughout the planning process and coordinate with your other vendors to ensure everything runs smoothly.",
+      question: "What happens after we book you?",
+      answer: "After booking, we’ll meet for your Love Story Film Session—a fun way to get to know each other and record your story. You’ll receive a beautiful video to share on your wedding website or social media, and I’ll include it in your main wedding film. We’ll also discuss your wedding details, and I’ll coordinate with your vendors to ensure everything goes smoothly.",
     },
     {
       question: "Do you travel for weddings?",
-      answer: "Yes! We travel nationwide and internationally for weddings. Travel fees may apply depending on the location. Contact us for specific details about your destination.",
+      answer: "Yes! I'm happy to travel anywhere in the country or even internationally for your wedding. Travel fees may apply depending on where your wedding is. Get in touch with me for details.",
     },
+    {
+      question: "Do you take drone footage?",
+      answer: "Yes, I can include aerial shots to add something special to your wedding film, capturing amazing views of your venue and surroundings.",
+    },
+    {
+      question: "Can we request specific shots or moments to be included?",
+      answer: "Of course! Before your wedding, we'll talk about any specific shots or moments that are important to you so I can make sure to include them in your film.",
+    },
+    {
+      question: "How do payments and deposits work?",
+      answer: "I ask for a 30% deposit to reserve your date, with the rest due two weeks before your wedding. If you need to set up a payment plan, we can work something out.",
+    }
   ]
 } as const; 

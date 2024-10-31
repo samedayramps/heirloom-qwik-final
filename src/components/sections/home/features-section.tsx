@@ -15,6 +15,7 @@ interface FeatureStyles {
   container: string;
   content: string;
   title: string;
+  intro: string;
   grid: string;
   card: {
     wrapper: string;
@@ -31,6 +32,7 @@ const styles: FeatureStyles = {
   container: "container relative z-10",
   content: "max-w-6xl mx-auto",
   title: "font-playfair text-3xl md:text-4xl text-white mb-8 text-center",
+  intro: "font-opensans text-white text-justify max-w-3xl mx-auto mb-12 leading-relaxed px-4",
   grid: "grid grid-cols-1 md:grid-cols-3 gap-8",
   card: {
     wrapper: "w-full h-full rounded-lg relative flex flex-col",
@@ -70,6 +72,7 @@ export const FeaturesSection = component$(() => {
             {FEATURES_CONTENT.title.main}{' '}
             <span class="font-ephesis">{FEATURES_CONTENT.title.accent}</span>
           </h2>
+          <p class={styles.intro}>{FEATURES_CONTENT.intro}</p>
           <div class={styles.grid}>
             {FEATURES_CONTENT.features.map((feature) => (
               <FeatureCard key={feature.title} {...feature} />

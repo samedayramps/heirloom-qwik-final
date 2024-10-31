@@ -8,23 +8,28 @@ export const PROCESS_CONTENT = {
   steps: [
     {
       number: 1,
-      title: 'Initial Call',
-      description: "We'll have a friendly chat about your wedding vision and answer your questions. This helps us both decide if we're the perfect match for your special day."
+      title: "Let's Chat",
+      description: "We'll talk about your wedding plans and answer any questions you have. This helps us see if we're the right fit for each other."
     },
     {
       number: 2,
-      title: 'Custom Plan',
-      description: "Before the big day, we'll meet to get to know you, your family, and your wedding details. This ensures we capture your unique story in the most authentic way."
+      title: "Love Story Session",
+      description: "After you book, we'll meet for drinks and record your love story. You'll get a beautiful video to share, and I'll include highlights in your wedding film."
     },
     {
       number: 3,
-      title: 'Wedding Day',
-      description: "On your wedding day, we'll be there from start to finish. We'll capture all the special moments discreetly, allowing you to fully enjoy your celebration."
+      title: "Custom Planning",
+      description: "We'll plan out your wedding day coverage, discussing your timeline and any special moments you want captured."
     },
     {
       number: 4,
-      title: 'Film Delivery',
-      description: "Within 90 days, you'll get your wedding film. Gather your loved ones to relive the magic – it's not just a video, but a family heirloom."
+      title: "Your Wedding Day",
+      description: "I'll capture your entire celebration from start to finish, blending into the background so you can fully enjoy your day."
+    },
+    {
+      number: 5,
+      title: "Your Wedding Film",
+      description: "Within 12-16 weeks, you'll receive your wedding film—a beautiful keepsake to share with family for generations."
     }
   ]
 } as const; 
