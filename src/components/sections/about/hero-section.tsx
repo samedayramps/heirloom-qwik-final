@@ -1,5 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { ABOUT_HERO_CONTENT } from '~/constants/about-page/hero';
+import HarlieGarretImage from '~/assets/images/harlie-and-garret-first-look.webp?jsx';
 
 // Types
 interface HeroStyles {
@@ -14,46 +15,61 @@ interface HeroStyles {
   listItem: string;
   bullet: string;
   point: string;
+  grid: string;
+  imageWrapper: string;
+  image: string;
 }
 
 // Styles optimized for above-the-fold content
 const styles: HeroStyles = {
-  section: "relative bg-[#faf9f6] w-full py-24 overflow-hidden",
+  section: "relative bg-[#faf9f6] w-full py-12 md:py-16 overflow-hidden",
   container: "container relative z-10",
-  content: "max-w-4xl mx-auto",
-  title: "font-playfair text-3xl md:text-4xl lg:text-6xl text-gray-800 mb-8 text-center",
-  divider: "w-24 h-px bg-[#d5c6ad] mx-auto mb-12",
-  textContainer: "max-w-3xl mx-auto",
+  grid: "grid md:grid-cols-2 gap-8 items-center",
+  content: "max-w-xl",
+  title: "font-playfair text-3xl md:text-4xl lg:text-5xl text-gray-800 mb-8",
+  divider: "w-24 h-px bg-[#d5c6ad] mb-12",
+  textContainer: "max-w-xl",
   intro: "font-opensans text-gray-700 leading-relaxed mb-8 text-left",
-  list: "font-opensans text-gray-700 leading-relaxed space-y-4 max-w-2xl",
+  list: "font-opensans text-gray-700 leading-relaxed space-y-4",
   listItem: "flex items-start",
   bullet: "mr-3 text-xl",
-  point: "italic"
+  point: "italic",
+  imageWrapper: "relative h-full aspect-[4/5] md:aspect-[4/5]",
+  image: "w-full h-full object-cover rounded-lg shadow-lg"
 } as const;
 
 export const HeroSection = component$(() => {
   return (
     <section class={styles.section}>
       <div class={styles.container}>
-        <div class={styles.content}>
-          <h1 class={styles.title}>
-            {ABOUT_HERO_CONTENT.title}
-          </h1>
-          
-          <div class={styles.divider} aria-hidden="true" />
-          
-          <div class={styles.textContainer}>
-            <p class={styles.intro}>
-              {ABOUT_HERO_CONTENT.intro}
-            </p>
-            <ul class={styles.list}>
-              {ABOUT_HERO_CONTENT.points.map((point) => (
-                <li key={point} class={styles.listItem}>
-                  <span class={styles.bullet}>•</span>
-                  <span class={styles.point}>{point}</span>
-                </li>
-              ))}
-            </ul>
+        <div class={styles.grid}>
+          <div class={styles.content}>
+            <h1 class={styles.title}>
+              {ABOUT_HERO_CONTENT.title}
+            </h1>
+            
+            <div class={styles.divider} aria-hidden="true" />
+            
+            <div class={styles.textContainer}>
+              <p class={styles.intro}>
+                {ABOUT_HERO_CONTENT.intro}
+              </p>
+              <ul class={styles.list}>
+                {ABOUT_HERO_CONTENT.points.map((point) => (
+                  <li key={point} class={styles.listItem}>
+                    <span class={styles.bullet}>•</span>
+                    <span class={styles.point}>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div class={styles.imageWrapper}>
+            <HarlieGarretImage
+              class={styles.image}
+              alt="Harlie and Garret First Look"
+            />
           </div>
         </div>
       </div>
