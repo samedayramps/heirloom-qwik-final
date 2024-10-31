@@ -29,7 +29,7 @@ const styles: HeroStyles = {
   accent: "font-ephesis",
   description: "font-opensans text-base md:text-lg text-gray-600 mb-8",
   cta: "inline-block bg-[#2d2d2d] text-white font-opensans font-light py-2 px-6 rounded-full text-sm uppercase tracking-wider hover:bg-gray-800 transition duration-300",
-  imageWrapper: "relative h-full aspect-[4/5] md:aspect-[4/5] order-first md:order-last",
+  imageWrapper: "relative h-full aspect-[4/3] md:aspect-[4/5] order-first md:order-last",
   image: "w-full h-full object-cover rounded-lg shadow-lg"
 } as const;
 

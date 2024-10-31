@@ -34,7 +34,7 @@ const styles: HeroStyles = {
   listItem: "flex items-start",
   bullet: "mr-3 text-xl",
   point: "italic",
-  imageWrapper: "relative h-full aspect-[4/5] md:aspect-[4/5]",
+  imageWrapper: "relative h-full aspect-[4/3] md:aspect-[4/5]",
   image: "w-full h-full object-cover rounded-lg shadow-lg"
 } as const;
 
