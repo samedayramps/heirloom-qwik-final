@@ -44,7 +44,7 @@ const styles: FeatureStyles = {
 const FeatureCard = component$((props: FeatureCardProps) => (
   <div class={styles.card.wrapper}>
     <WhitePaintBlock 
-      class="absolute inset-0 w-full h-full object-cover rounded-lg"
+      class="absolute inset-0 w-full h-full object-fill rounded-lg"
       aria-hidden="true"
     />
     <div class={styles.card.content}>
@@ -58,10 +58,12 @@ const FeatureCard = component$((props: FeatureCardProps) => (
 export const FeaturesSection = component$(() => {
   return (
     <section class={styles.section}>
-      <Texture 
-        class={styles.overlay}
-        aria-hidden="true"
-      />
+      <div class="absolute inset-0 w-full h-full opacity-30 mix-blend-overlay pointer-events-none">
+        <Texture 
+          class="w-full h-full object-cover"
+          aria-hidden="true"
+        />
+      </div>
       <div class={styles.container}>
         <div class={styles.content}>
           <h2 class={styles.title}>

@@ -34,10 +34,12 @@ const styles: AboutStyles = {
 export const AboutSection = component$(() => {
   return (
     <section class={styles.section}>
-      <Texture 
-        class={styles.overlay}
-        aria-hidden="true"
-      />
+      <div class="absolute inset-0 w-full h-full opacity-30 mix-blend-overlay pointer-events-none">
+        <Texture 
+          class="w-full h-full object-cover"
+          aria-hidden="true"
+        />
+      </div>
 
       <div class={styles.container}>
         <div class={styles.content}>
