@@ -66,8 +66,8 @@ export default component$(() => {
           <div class="w-full aspect-video bg-black/5 rounded-lg overflow-hidden mb-16">
             {iframeLoaded.value ? (
               <div style={{ position: 'relative', paddingTop: '56.25%' }}>
-                <iframe
-                  src={film.videoUrl}
+                <iframe 
+                  src="https://iframe.mediadelivery.net/embed/333221/8a89aff3-22e4-4032-8acf-d2b23cc1317a?autoplay=true&loop=false&muted=false&preload=true&responsive=true"
                   loading="lazy"
                   style={{ border: 0, position: 'absolute', top: 0, height: '100%', width: '100%' }}
                   allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
