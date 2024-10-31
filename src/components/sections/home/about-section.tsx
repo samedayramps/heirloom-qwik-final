@@ -57,7 +57,7 @@ export const AboutSection = component$(() => {
 
           <div class={styles.linkWrapper}>
             <Link href="/about" class={styles.link}>
-              Learn More About Heirloom Wedding Films
+              About Heirloom Wedding Films
             </Link>
           </div>
         </div>

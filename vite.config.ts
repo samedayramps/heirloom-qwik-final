@@ -35,10 +35,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
         output: {
           assetFileNames: 'assets/[name].[hash][extname]'
         }
-      },
-      ssr: {
-        noExternal: [],
-      },
+      }
     }
   };
 });
