@@ -26,7 +26,7 @@ const styles: AboutStyles = {
   title: "font-playfair text-3xl md:text-4xl text-gray-800 mb-6 text-center",
   accent: "font-ephesis",
   textContainer: "font-opensans text-gray-700 space-y-4",
-  paragraph: "leading-relaxed text-justify",
+  paragraph: "leading-relaxed md:text-justify",
   linkWrapper: "mt-6",
   link: "font-opensans text-gray-700 relative after:absolute after:bottom-[-4px] after:left-0 after:h-[1px] after:w-full after:bg-[#2d2d2d] hover:after:h-[2px] after:transition-all after:rounded-full duration-300"
 } as const;

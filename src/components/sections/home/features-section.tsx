@@ -32,13 +32,13 @@ const styles: FeatureStyles = {
   container: "container relative z-10",
   content: "max-w-6xl mx-auto",
   title: "font-playfair text-3xl md:text-4xl text-white mb-8 text-center",
-  intro: "font-opensans text-white text-justify max-w-3xl mx-auto mb-12 leading-relaxed px-4",
+  intro: "font-opensans text-white md:text-justify max-w-3xl mx-auto mb-12 leading-relaxed px-4",
   grid: "grid grid-cols-1 md:grid-cols-3 gap-8",
   card: {
     wrapper: "w-full h-full rounded-lg relative flex flex-col",
     content: "p-6 flex flex-col h-full relative z-10",
     title: "font-playfair text-xl mb-4 text-center",
-    text: "font-opensans text-sm text-justify leading-relaxed flex-1"
+    text: "font-opensans leading-relaxed md:text-justify flex-1"
   }
 } as const;
 
