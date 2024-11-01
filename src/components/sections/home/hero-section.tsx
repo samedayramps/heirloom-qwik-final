@@ -21,7 +21,7 @@ interface HeroStyles {
 
 // Styles optimized for above-the-fold content
 const styles: HeroStyles = {
-  section: "relative w-full py-12 md:py-16 overflow-hidden bg-[#faf9f6]",
+  section: "relative w-full py-6 md:py-4 overflow-hidden bg-[#faf9f6]",
   container: "container relative z-10",
   grid: "grid md:grid-cols-2 gap-8 items-center",
   textContent: "max-w-xl mx-auto md:mx-0 text-center md:text-left",
@@ -29,7 +29,7 @@ const styles: HeroStyles = {
   heading: "font-playfair text-3xl md:text-4xl lg:text-5xl text-gray-800 mb-8 leading-[1.2]",
   accent: "font-ephesis leading-[0.5] inline-block",
   description: "font-opensans text-base md:text-lg text-gray-600 mb-8",
-  link: "inline-block font-opensans text-gray-700 border border-gray-700 rounded-full px-8 py-3 hover:bg-gray-700 hover:text-white transition-colors duration-300",
+  link: "inline-block font-opensans text-gray-700 border border-gray-700 rounded-full px-8 py-3 hover:bg-[#2d2d2d] hover:text-white transition-colors duration-300",
   imageWrapper: "relative h-full aspect-[4/3] md:aspect-[4/5] order-first md:order-last",
   image: "w-full h-full object-contain",
   divider: "w-24 h-px bg-[#d5c6ad] mb-8 mx-auto md:mx-0"

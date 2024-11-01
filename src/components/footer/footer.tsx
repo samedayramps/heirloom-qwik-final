@@ -50,7 +50,7 @@ export const Footer = component$(() => {
     <footer class="relative bg-[#2d2d2d] w-full py-10 overflow-hidden">
       {/* Background texture */}
       <Texture 
-        class="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none transition-opacity duration-700"
+        class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay pointer-events-none transition-opacity duration-700"
         aria-hidden="true"
       />
       
