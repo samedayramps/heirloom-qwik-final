@@ -16,7 +16,6 @@ interface FAQSectionProps {
 // Styles as constants
 const styles = {
   section: "relative bg-[#315141] py-24 px-4 overflow-hidden",
-  overlay: "absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none transition-opacity duration-700",
   container: "container relative z-10",
   content: "max-w-4xl mx-auto text-center",
   title: "font-playfair text-3xl md:text-4xl text-white mb-12 flex items-center justify-center gap-8",
@@ -89,10 +88,13 @@ export const FAQSection = component$<FAQSectionProps>(({ onTalkClick$ }) => {
   return (
     <section class={styles.section}>
       <div class="absolute inset-0 w-full h-full opacity-30 mix-blend-overlay pointer-events-none">
-        <Texture 
-          class="w-full h-full object-cover"
-          aria-hidden="true"
-        />
+        <div class="absolute inset-0 w-full">
+          <Texture 
+            class="w-full object-cover"
+            style="transform-origin: top; transform: scale(1.1)"
+            aria-hidden="true"
+          />
+        </div>
       </div>
       
       <div class={styles.container}>
