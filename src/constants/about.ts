@@ -5,8 +5,7 @@ export const ABOUT_CONTENT = {
     end: "approach"
   },
   paragraphs: [
-    "At HEIRLOOM Wedding Films, I create wedding stories you’ll cherish forever and pass down through your family. Whether you’re planning a traditional ceremony nearby or an adventurous elopement far away, I’m here to capture your love story in all its fullness.",
-    "I make it a point to get to know you so your film truly reflects who you are. I’m passionate about telling stories and dedicated to capturing the genuine emotions and candid moments that make your day unique. I love working with couples who are just as excited about keeping their memories alive as I am about filming them."
+    "At HEIRLOOM Wedding Films, I create wedding stories you’ll cherish forever and pass down through your family. I make it a point to get to know you so your film truly reflects who you are. I’m passionate about telling stories and dedicated to capturing the genuine emotions and candid moments that make your day unique. I love working with couples who are just as excited about keeping their memories alive as I am about filming them."
   ],
   linkText: "About Heirloom Wedding Films"
 } as const; 

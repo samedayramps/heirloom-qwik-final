@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { ABOUT_HERO_CONTENT } from '~/constants/about-page/hero';
-import HarlieGarretImage from '~/assets/images/harlie-and-garret-first-look.webp?jsx';
+import HeroImage from '~/assets/images/ty-walls-black-and-white2.webp?jsx';
 
 // Types
 interface HeroStyles {
@@ -35,7 +35,7 @@ const styles: HeroStyles = {
   bullet: "mr-3 text-xl",
   point: "italic",
   imageWrapper: "relative h-full aspect-[4/3] md:aspect-[4/5]",
-  image: "w-full h-full object-cover rounded-lg shadow-lg"
+  image: "w-full h-full object-contain"
 } as const;
 
 export const HeroSection = component$(() => {
@@ -66,9 +66,9 @@ export const HeroSection = component$(() => {
           </div>
 
           <div class={styles.imageWrapper}>
-            <HarlieGarretImage
+            <HeroImage
               class={styles.image}
-              alt="Harlie and Garret First Look"
+              alt="Elegant Wedding Photo"
             />
           </div>
         </div>
