@@ -15,10 +15,10 @@ module.exports = {
       typography: {
         DEFAULT: {
           css: {
-            color: '#374151', // gray-700
+            color: '#374151',
             h2: {
               fontFamily: 'Playfair Display, serif',
-              color: '#1F2937', // gray-800
+              color: '#1F2937',
               marginTop: '2em',
             },
             p: {
@@ -33,7 +33,7 @@ module.exports = {
               },
             },
             strong: {
-              color: '#1F2937', // gray-800
+              color: '#1F2937',
             },
             'ul > li': {
               '&::before': {
@@ -44,26 +44,53 @@ module.exports = {
         },
       },
       screens: {
-        'xs': '400px', // New breakpoint for very small screens
+        'xs': '400px',
       },
       animation: {
-        'fade-in': 'fadeIn 0.5s ease-in forwards',
-        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
         'notification-pulse': 'notificationPulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'popup-appear': 'popupAppear 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
+        'popup-exit': 'popupExit 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
+        'backdrop-appear': 'backdropAppear 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
       },
       keyframes: {
-        fadeIn: {
+        notificationPulse: {
+          '0%, 100%': { backgroundColor: '#764248' },
+          '50%': { backgroundColor: '#693b40' },
+        },
+        popupAppear: {
+          '0%': { 
+            opacity: '0',
+            transform: 'scale(0.96) translateY(20px)'
+          },
+          '100%': { 
+            opacity: '1',
+            transform: 'scale(1) translateY(0)'
+          },
+        },
+        popupExit: {
+          '0%': { 
+            opacity: '1',
+            transform: 'scale(1) translateY(0)'
+          },
+          '100%': { 
+            opacity: '0',
+            transform: 'scale(0.96) translateY(20px)'
+          },
+        },
+        backdropAppear: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
-        fadeInUp: {
-          '0%': { opacity: '0', transform: 'translateY(10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+      },
+      colors: {
+        brand: {
+          DEFAULT: '#764248',
+          dark: '#693b40',
         },
-        notificationPulse: {
-          '0%, 100%': { backgroundColor: '#764248' },
-          '50%': { backgroundColor: '#693b40' }, // Slightly darker shade
-        },
+        beige: '#d5c6ad',
+        'beige-dark': '#c0b298',
+        'off-white': '#faf9f6',
+        'charcoal': '#2d2d2d',
       },
     },
   },

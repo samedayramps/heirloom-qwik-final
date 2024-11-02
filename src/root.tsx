@@ -4,7 +4,6 @@ import {
   RouterOutlet,
   ServiceWorkerRegister,
 } from "@builder.io/qwik-city";
-import Navbar from './components/navbar/navbar';
 import { RouterHead } from './components/router-head/router-head';
 import "./global.css";
 
@@ -13,11 +12,6 @@ const isDev = import.meta.env.MODE === 'development';
 export default component$(() => {
   const showLeadForm = useSignal(false);
   const showToast = useSignal(false);
-
-  const handleOpenModal = $(() => {
-    showLeadForm.value = true;
-    document.body.style.overflow = 'hidden';
-  });
 
   const handleCloseModal = $(() => {
     showLeadForm.value = false;
@@ -36,7 +30,6 @@ export default component$(() => {
         <RouterHead />
       </head>
       <body lang="en">
-        <Navbar onTalkClick$={handleOpenModal} />
         <RouterOutlet />
         {!isDev && <ServiceWorkerRegister />}
         
@@ -47,7 +40,6 @@ export default component$(() => {
           >
             {import('./components/leadForm/leadForm').then(({ LeadForm }) => (
               <LeadForm 
-                isVisible={showLeadForm.value} 
                 onClose$={handleCloseModal} 
                 onSuccess$={handleShowToast}
               />

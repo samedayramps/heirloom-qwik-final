@@ -154,7 +154,6 @@ export default component$(() => {
           {import('../components/leadForm/leadForm')
             .then(({ LeadForm }) => (
               <LeadForm 
-                isVisible={showLeadForm.value} 
                 onClose$={handleCloseModal}
                 onSuccess$={handleShowToast}
               />

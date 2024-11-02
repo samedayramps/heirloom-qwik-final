@@ -1,4 +1,4 @@
-import { component$, type QRL, useSignal } from '@builder.io/qwik';
+import { component$, type QRL, useSignal, $ } from '@builder.io/qwik';
 import { Form } from '@builder.io/qwik-city';
 import { useLeadFormAction } from '~/routes/index';
 import { FormInput } from './form-input';
@@ -7,13 +7,12 @@ import { FormInput } from './form-input';
 interface LeadFormProps {
   onClose$: QRL<() => void>;
   onSuccess$: QRL<() => void>;
-  isVisible: boolean;
 }
 
 interface FormStyles {
   backdrop: string;
   container: string;
-  modal: (isVisible: boolean) => string;
+  modal: (isExiting: boolean) => string;
   closeButton: string;
   content: string;
   title: string;
@@ -28,13 +27,11 @@ interface FormStyles {
 
 // Styles
 const styles: FormStyles = {
-  backdrop: "fixed inset-0 bg-black/70 transition-opacity duration-300",
+  backdrop: "fixed inset-0 bg-black/70 transition-opacity duration-500",
   container: "fixed inset-0 flex items-center justify-center p-4 md:p-4",
-  modal: (isVisible: boolean) => [
-    'w-full max-w-md bg-[#faf9f6] rounded-3xl shadow-2xl border border-white/20 transition-all duration-300 transform',
-    isVisible 
-      ? 'opacity-100 translate-y-0 scale-100' 
-      : 'opacity-0 translate-y-8 scale-95'
+  modal: (isExiting: boolean) => [
+    'w-full max-w-md bg-[#faf9f6] rounded-3xl shadow-2xl border border-white/20 relative',
+    isExiting ? 'animate-popup-exit' : 'animate-popup-appear'
   ].join(' '),
   closeButton: "absolute -top-4 -right-4 bg-[#faf9f6] rounded-full p-2 shadow-lg text-gray-500 hover:text-gray-700 hover:scale-110 transition-all duration-300",
   content: "p-3 md:p-8",
@@ -54,28 +51,35 @@ const styles: FormStyles = {
 
 export const LeadForm = component$<LeadFormProps>(({ 
   onClose$, 
-  onSuccess$, 
-  isVisible 
+  onSuccess$
 }) => {
   const action = useLeadFormAction();
   const isSubmitting = useSignal(false);
+  const isExiting = useSignal(false);
+
+  const handleClose = $(() => {
+    isExiting.value = true;
+    setTimeout(() => {
+      onClose$();
+    }, 500); // Match animation duration
+  });
 
   return (
-    <>
+    <div class="fixed inset-0 z-50">
       {/* Backdrop */}
       <div 
         class={[
           styles.backdrop,
-          isVisible ? 'opacity-100' : 'opacity-0'
-        ]}
-        onClick$={onClose$}
+          isExiting.value ? "opacity-0" : "animate-backdrop-appear"
+        ].join(" ")}
+        onClick$={handleClose}
       />
 
       {/* Modal Container */}
       <div class={styles.container}>
-        <div class={styles.modal(isVisible)}>
+        <div class={styles.modal(isExiting.value)}>
           <button 
-            onClick$={onClose$}
+            onClick$={handleClose}
             class={styles.closeButton}
             aria-label="Close"
           >
@@ -213,6 +217,6 @@ export const LeadForm = component$<LeadFormProps>(({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 });
