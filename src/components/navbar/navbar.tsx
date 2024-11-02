@@ -23,7 +23,7 @@ interface NavStyles {
 
 // Styles
 const styles: NavStyles = {
-  wrapper: 'fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out transform-gpu',
+  wrapper: 'fixed top-[40px] left-0 right-0 z-50 transition-all duration-700 ease-in-out transform-gpu',
   nav: 'w-full bg-[#2d2d2d] will-change-transform transition-all duration-700 ease-in-out transform-gpu',
   mobileMenu: 'lg:hidden overflow-hidden transition-all duration-300 ease-out fixed left-0 right-0 px-5 top-16',
   menuButton: "inline-flex items-center justify-center p-1 rounded-md text-[#faf9f6] hover:text-[#d5c6ad] hover:scale-110 focus:outline-none transition-all duration-300",
