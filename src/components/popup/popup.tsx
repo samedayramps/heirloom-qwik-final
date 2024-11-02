@@ -16,7 +16,7 @@ const getEmbedUrl = (videoId: string) => {
 const VideoGrid = component$<{ onSelect$: PropFunction<(id: string) => void> }>(({ onSelect$ }) => {
   return (
     <div class="grid grid-cols-3 gap-3 sm:gap-5 mb-10">
-      {VIDEOS.map((video, index) => (
+      {VIDEOS.map((video: { id: string; thumbnail: string }, index: number) => (
         <button
           key={video.id}
           onClick$={() => onSelect$(video.id)}

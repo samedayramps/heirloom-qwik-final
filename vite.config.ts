@@ -7,6 +7,7 @@ import { qwikVite } from "@builder.io/qwik/optimizer";
 import { qwikCity } from "@builder.io/qwik-city/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import pkg from "./package.json";
+import path from "path";
 
 type PkgDep = Record<string, string>;
 const { dependencies = {}, devDependencies = {} } = pkg as any as {
@@ -24,7 +25,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
     plugins: [qwikCity(), qwikVite(), tsconfigPaths()],
     resolve: {
       alias: {
-        '~/assets': '/src/assets'
+        '~': path.resolve(__dirname, './src')
       }
     },
     optimizeDeps: {
