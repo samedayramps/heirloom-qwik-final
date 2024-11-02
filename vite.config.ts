@@ -24,19 +24,23 @@ export default defineConfig(({ command, mode }): UserConfig => {
   return {
     plugins: [qwikCity(), qwikVite(), tsconfigPaths()],
     resolve: {
-      alias: {
-        '~': path.resolve(__dirname, 'src')
-      }
+      alias: [
+        { find: '~', replacement: path.resolve(__dirname, 'src') }
+      ],
+      extensions: ['.js', '.ts', '.jsx', '.tsx', '.json']
     },
     optimizeDeps: {
       exclude: [],
+      include: ['@builder.io/qwik', '@builder.io/qwik-city']
     },
     build: {
       rollupOptions: {
         output: {
           assetFileNames: 'assets/[name].[hash][extname]'
         }
-      }
+      },
+      target: 'esnext',
+      minify: 'esbuild'
     }
   };
 });
