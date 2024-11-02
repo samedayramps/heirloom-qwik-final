@@ -3,7 +3,7 @@ import type { TaskCtx } from '@builder.io/qwik';
 import Navbar from '../components/navbar/navbar';
 import { Toast } from '../components/ui/toast';
 import { Popup } from '../components/popup/popup';
-import { NotificationBar } from '../components/notification-bar/notification-bar';
+import { NotificationBar } from '~/components/notification-bar/notification-bar';
 import type { RequestHandler } from "@builder.io/qwik-city";
 
 // Types
