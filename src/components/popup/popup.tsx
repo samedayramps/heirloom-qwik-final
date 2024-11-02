@@ -1,11 +1,13 @@
 import { component$, useSignal, type PropFunction } from '@builder.io/qwik';
-import { POPUP_CONTENT, VIDEO_IDS } from '~/constants/site';
+import { POPUP_CONTENT, VIDEOS } from '~/constants/site';
+import { LetsTalkButton } from '~/components/ui/lets-talk-button';
 
 interface PopupProps {
   onClose$: PropFunction<() => void>;
+  onTalkClick$: PropFunction<() => void>;
 }
 
-export const Popup = component$<PopupProps>(({ onClose$ }) => {
+export const Popup = component$<PopupProps>(({ onClose$, onTalkClick$ }) => {
   const activeVideoId = useSignal<string | null>(null);
   const iframeLoaded = useSignal(false);
 
@@ -14,15 +16,15 @@ export const Popup = component$<PopupProps>(({ onClose$ }) => {
   };
 
   return (
-    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div class="bg-white p-4 sm:p-8 rounded-lg shadow-lg max-w-2xl w-full mx-4 relative">
+    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
+      <div class="bg-[#faf9f6] p-6 sm:p-10 rounded-xl shadow-xl max-w-3xl w-full mx-auto relative">
         <button 
           onClick$={onClose$}
           class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
           aria-label={POPUP_CONTENT.closeAriaLabel}
         >
           <svg 
-            class="w-6 h-6" 
+            class="w-7 h-7" 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
@@ -30,59 +32,85 @@ export const Popup = component$<PopupProps>(({ onClose$ }) => {
             <path 
               stroke-linecap="round" 
               stroke-linejoin="round" 
-              stroke-width={2} 
+              stroke-width={1.5} 
               d="M6 18L18 6M6 6l12 12" 
             />
           </svg>
         </button>
 
-        <h2 class="font-playfair text-2xl sm:text-3xl font-bold mb-4 text-center">
+        <h2 class="font-playfair text-2xl md:text-3xl lg:text-4xl font-bold text-center text-gray-900 mb-8">
           {POPUP_CONTENT.title}
         </h2>
-        <div class="space-y-4 mb-6">
-          <p class="text-base sm:text-lg text-center text-gray-700"
+
+        <div class="space-y-4">
+          <p class="font-opensans-regular text-base md:text-lg text-center text-gray-800 leading-relaxed"
              dangerouslySetInnerHTML={POPUP_CONTENT.description}
           />
-          <p class="text-base sm:text-lg text-center text-gray-700">
+          <p class="font-opensans-regular text-base md:text-lg text-center text-gray-800 leading-relaxed">
             {POPUP_CONTENT.secondaryDescription}
           </p>
         </div>
 
-        <div class="relative py-4">
+        <div class="relative py-10">
           <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-1/3 border-t border-[#D5C6AD]"></div>
+            <div class="w-1/3 border-t-2 border-[#D5C6AD]"></div>
           </div>
         </div>
 
-        <p class="text-base sm:text-lg text-center text-gray-700 mb-6">
+        <p class="font-opensans-regular text-base md:text-lg text-center text-gray-800 leading-relaxed mb-12">
           {POPUP_CONTENT.tertiaryDescription}
         </p>
         
         {!activeVideoId.value ? (
-          <div class="grid grid-cols-3 gap-2 sm:gap-4">
-            {VIDEO_IDS.map((videoId, index) => (
-              <button
-                key={videoId}
-                onClick$={() => {
-                  activeVideoId.value = videoId;
-                  iframeLoaded.value = false;
-                }}
-                class="aspect-video bg-gray-100 rounded-lg hover:opacity-80 transition-opacity flex items-center justify-center"
-              >
-                <span class="sr-only">{POPUP_CONTENT.watchVideoAriaLabel(index)}</span>
-                <svg 
-                  class="w-8 h-8 sm:w-12 sm:h-12 text-gray-500"
-                  fill="currentColor" 
-                  viewBox="0 0 20 20"
+          <>
+            <div class="grid grid-cols-3 gap-3 sm:gap-5 mb-8">
+              {VIDEOS.map((video, index) => (
+                <button
+                  key={video.id}
+                  onClick$={() => {
+                    activeVideoId.value = video.id;
+                    iframeLoaded.value = false;
+                  }}
+                  class="relative aspect-video bg-gray-100 rounded-lg hover:opacity-90 transition-all duration-300 group overflow-hidden shadow-md hover:shadow-lg transform hover:scale-[1.02]"
                 >
-                  <path d="M10 0a10 10 0 1 0 10 10A10 10 0 0 0 10 0zM8 14.5v-9l6 4.5-6 4.5z"/>
-                </svg>
-              </button>
-            ))}
-          </div>
+                  <span class="sr-only">{POPUP_CONTENT.watchVideoAriaLabel(index)}</span>
+                  <img 
+                    src={video.thumbnail} 
+                    alt="" 
+                    width={640}
+                    height={360}
+                    class="w-full h-full object-cover"
+                  />
+                  <div class="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors duration-300">
+                    <svg 
+                      class="w-12 h-12 sm:w-14 sm:h-14 text-white transform group-hover:scale-110 transition-transform duration-300"
+                      fill="currentColor" 
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M10 0a10 10 0 1 0 10 10A10 10 0 0 0 10 0zM8 14.5v-9l6 4.5-6 4.5z"/>
+                    </svg>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <p class="font-opensans-regular text-base md:text-lg text-center text-gray-800 leading-relaxed mb-10">
+              {POPUP_CONTENT.quaternaryDescription}
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 bg-gray-50 py-5 px-8 rounded-xl">
+              <p class="font-opensans-semibold text-base md:text-lg text-gray-900 text-center">
+                {POPUP_CONTENT.ctaText}
+              </p>
+              <LetsTalkButton
+                onTalkClick$={onTalkClick$}
+                class="w-full sm:w-auto"
+              />
+            </div>
+          </>
         ) : (
           <div>
-            <div class="aspect-video bg-black/5 rounded-lg overflow-hidden">
+            <div class="aspect-video bg-black/5 rounded-lg overflow-hidden shadow-lg">
               <div style={{ position: 'relative', paddingTop: '56.25%' }}>
                 <iframe 
                   src={getEmbedUrl(activeVideoId.value)}
@@ -96,8 +124,21 @@ export const Popup = component$<PopupProps>(({ onClose$ }) => {
             </div>
             <button
               onClick$={() => activeVideoId.value = null}
-              class="mt-4 text-gray-600 hover:text-gray-800 transition-colors"
+              class="mt-6 text-gray-600 hover:text-gray-800 transition-colors flex items-center gap-2 font-opensans-regular text-base md:text-lg"
             >
+              <svg 
+                class="w-5 h-5" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  stroke-width={2} 
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
               {POPUP_CONTENT.backToVideos}
             </button>
           </div>

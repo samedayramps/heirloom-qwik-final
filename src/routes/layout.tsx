@@ -129,7 +129,10 @@ export default component$(() => {
       </main>
       
       {showPopup.value && (
-        <Popup onClose$={handleClosePopup} />
+        <Popup 
+          onClose$={handleClosePopup}
+          onTalkClick$={handleOpenModal}
+        />
       )}
       
       {/* Lazy load footer with error boundary */}
