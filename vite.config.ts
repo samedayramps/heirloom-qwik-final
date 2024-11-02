@@ -27,7 +27,8 @@ export default defineConfig(({ command, mode }): UserConfig => {
       alias: [
         { find: '~', replacement: path.resolve(__dirname, 'src') }
       ],
-      extensions: ['.js', '.ts', '.jsx', '.tsx', '.json']
+      extensions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
+      preserveSymlinks: true
     },
     optimizeDeps: {
       exclude: [],
