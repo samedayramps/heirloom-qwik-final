@@ -102,14 +102,23 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup }: TaskCtx) => {
-    const timer = setTimeout(() => {
-      showPopup.value = true;
-    }, 3000);
+    // Check if user has seen the popup before
+    const hasSeenPopup = localStorage.getItem('hasSeenPopup');
+    
+    if (!hasSeenPopup) {
+      // Show popup after 3 seconds for first time visitors
+      const timer = setTimeout(() => {
+        showPopup.value = true;
+        // Mark that user has seen the popup
+        localStorage.setItem('hasSeenPopup', 'true');
+      }, 3000);
 
-    cleanup(() => clearTimeout(timer));
+      cleanup(() => clearTimeout(timer));
+    }
   });
 
   const handleNotificationClick = $(() => {
+    // Always show popup when notification is clicked, even if seen before
     showPopup.value = true;
   });
 

@@ -15,7 +15,7 @@ const getEmbedUrl = (videoId: string) => {
 // Video Grid Component
 const VideoGrid = component$<{ onSelect$: PropFunction<(id: string) => void> }>(({ onSelect$ }) => {
   return (
-    <div class="grid grid-cols-3 gap-3 sm:gap-5 mb-10">
+    <div class="grid grid-cols-3 gap-3 sm:gap-5 mb-5">
       {VIDEOS.map((video: { id: string; thumbnail: string }, index: number) => (
         <button
           key={video.id}
@@ -140,22 +140,17 @@ export const Popup = component$<PopupProps>(({ onClose$, onTalkClick$ }) => {
             {POPUP_CONTENT.title}
           </h2>
 
-          <div class="space-y-4">
-            <p class="font-opensans-regular text-base md:text-lg text-center text-gray-800 leading-relaxed"
-               dangerouslySetInnerHTML={POPUP_CONTENT.description}
-            />
-            <p class="font-opensans-regular text-base md:text-lg text-center text-gray-800 leading-relaxed">
-              {POPUP_CONTENT.secondaryDescription}
-            </p>
-          </div>
+          <p class="font-opensans-regular text-base md:text-lg text-center text-gray-800 leading-relaxed"
+             dangerouslySetInnerHTML={POPUP_CONTENT.description}
+          />
 
-          <div class="relative py-10">
+          <div class="relative py-5">
             <div class="absolute inset-0 flex items-center justify-center">
               <div class="w-1/3 border-t-2 border-[#D5C6AD]"></div>
             </div>
           </div>
 
-          <p class="font-opensans-regular text-base md:text-lg text-center text-gray-800 leading-relaxed mb-12">
+          <p class="font-opensans-regular text-base md:text-lg text-center text-gray-800 leading-relaxed mb-6">
             {POPUP_CONTENT.tertiaryDescription}
           </p>
           
@@ -167,7 +162,7 @@ export const Popup = component$<PopupProps>(({ onClose$, onTalkClick$ }) => {
           ) : (
             <>
               <VideoGrid onSelect$={(id) => activeVideoId.value = id} />
-              <div class="flex flex-col sm:flex-row items-center justify-center gap-4 bg-gray-50 py-5 px-8 rounded-xl">
+              <div class="flex flex-col sm:flex-row items-center justify-center gap-2 bg-gray-50 py-1.5 px-4 rounded-xl">
                 <p class="font-opensans-semibold text-base md:text-lg text-gray-900 text-center">
                   {POPUP_CONTENT.ctaText}
                 </p>
