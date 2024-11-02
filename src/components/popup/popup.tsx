@@ -1,10 +1,5 @@
 import { component$, useSignal, type PropFunction } from '@builder.io/qwik';
-
-const VIDEOS = [
-  "c3aa2012-b651-4733-b1db-2a31b900fdb8",
-  "c8d9850a-8944-4260-a684-2cce331542b2",
-  "d7742ad2-6c27-494d-a936-875e70d5df54"
-] as const;
+import { POPUP_CONTENT, VIDEO_IDS } from '~/constants/site';
 
 interface PopupProps {
   onClose$: PropFunction<() => void>;
@@ -24,7 +19,7 @@ export const Popup = component$<PopupProps>(({ onClose$ }) => {
         <button 
           onClick$={onClose$}
           class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
-          aria-label="Close popup"
+          aria-label={POPUP_CONTENT.closeAriaLabel}
         >
           <svg 
             class="w-6 h-6" 
@@ -42,15 +37,30 @@ export const Popup = component$<PopupProps>(({ onClose$ }) => {
         </button>
 
         <h2 class="font-playfair text-2xl sm:text-3xl font-bold mb-4 text-center">
-          Ty Walls Films is now Heirloom Wedding Films
+          {POPUP_CONTENT.title}
         </h2>
-        <p class="mb-6 sm:mb-8 text-base sm:text-lg text-center text-gray-700">
-          After 8 years of filming weddings, I have decided to provide my clients with the perfect wedding film for those that want to have something worthy of passing down and watching every anniversary
+        <div class="space-y-4 mb-6">
+          <p class="text-base sm:text-lg text-center text-gray-700"
+             dangerouslySetInnerHTML={POPUP_CONTENT.description}
+          />
+          <p class="text-base sm:text-lg text-center text-gray-700">
+            {POPUP_CONTENT.secondaryDescription}
+          </p>
+        </div>
+
+        <div class="relative py-4">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-1/3 border-t border-[#D5C6AD]"></div>
+          </div>
+        </div>
+
+        <p class="text-base sm:text-lg text-center text-gray-700 mb-6">
+          {POPUP_CONTENT.tertiaryDescription}
         </p>
         
         {!activeVideoId.value ? (
           <div class="grid grid-cols-3 gap-2 sm:gap-4">
-            {VIDEOS.map((videoId, index) => (
+            {VIDEO_IDS.map((videoId, index) => (
               <button
                 key={videoId}
                 onClick$={() => {
@@ -59,7 +69,7 @@ export const Popup = component$<PopupProps>(({ onClose$ }) => {
                 }}
                 class="aspect-video bg-gray-100 rounded-lg hover:opacity-80 transition-opacity flex items-center justify-center"
               >
-                <span class="sr-only">Watch video {index + 1}</span>
+                <span class="sr-only">{POPUP_CONTENT.watchVideoAriaLabel(index)}</span>
                 <svg 
                   class="w-8 h-8 sm:w-12 sm:h-12 text-gray-500"
                   fill="currentColor" 
@@ -88,7 +98,7 @@ export const Popup = component$<PopupProps>(({ onClose$ }) => {
               onClick$={() => activeVideoId.value = null}
               class="mt-4 text-gray-600 hover:text-gray-800 transition-colors"
             >
-              ← Back to videos
+              {POPUP_CONTENT.backToVideos}
             </button>
           </div>
         )}

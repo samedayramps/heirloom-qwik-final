@@ -1,4 +1,5 @@
 import { component$, type PropFunction } from '@builder.io/qwik';
+import { NOTIFICATION_CONTENT } from '~/constants/site';
 
 interface NotificationBarProps {
   onClick$: PropFunction<() => void>;
@@ -11,7 +12,7 @@ export const NotificationBar = component$<NotificationBarProps>(({ onClick$ }) =
         onClick$={onClick$}
         class="container mx-auto flex items-center justify-center gap-2 hover:opacity-80 transition-opacity"
       >
-        <span>Get 15% OFF your wedding film. Learn more</span>
+        <span>{NOTIFICATION_CONTENT.message}</span>
         <svg 
           class="w-4 h-4" 
           fill="none" 

@@ -17,7 +17,7 @@ interface LayoutStyles {
 // Styles
 const styles: LayoutStyles = {
   wrapper: "min-h-screen bg-[#faf9f6] relative flex flex-col",
-  overlay: "fixed top-[80px] left-0 w-full h-16 bg-gradient-to-b from-black/20 to-transparent pointer-events-none z-10",
+  overlay: "fixed top-0 left-0 w-full h-16 bg-gradient-to-b from-black/20 to-transparent pointer-events-none z-10",
   main: "flex-grow pt-[96px]",
   modal: "fixed inset-0 z-[100] transition-all duration-300 opacity-100 pointer-events-auto"
 } as const;
