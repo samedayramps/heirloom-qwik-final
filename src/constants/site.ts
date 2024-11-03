@@ -19,16 +19,16 @@ export const VIDEOS: readonly Video[] = [
 ] as const;
 
 export const POPUP_CONTENT = {
-  title: "Ty Walls Films is now Heirloom Wedding Films",
-  description: "After 8 years of filming weddings, I'm moving beyond highlight reels to offer <span class='font-bold'>full-length wedding films over 30 minutes</span>. No quick recaps—your wedding film will be a complete story that you'll want to watch every anniversary.",
-  tertiaryDescription: "Below are some of our previous highlight films. While these are shorter, they showcase the quality and style we'll bring to your full-length wedding film.",
+  title: "Introducing Heirloom Wedding Films",
+  description: "After 8 years of filming weddings as Ty Walls Films, I’m rebranding and now offering cinematic wedding films over 30 minutes long. Now, your wedding film will be a complete story that you’ll want to watch every anniversary.",
+  tertiaryDescription: "Below are some of my previous highlight films as Ty Walls Films. While these are shorter, they showcase the quality and style brought to your full-length wedding film.",
   backToVideos: "← Back to videos",
   closeAriaLabel: "Close popup",
   watchVideoAriaLabel: (index: number) => `Watch video ${index + 1}`,
-  ctaText: "Start a conversationfor 15% off",
+  ctaText: "To learn more and get 15% off your wedding film, start a conversation today.",
   ctaButtonText: "Let's Talk",
 } as const;
 
 export const NOTIFICATION_CONTENT = {
-  message: "Get 15% OFF your wedding film. Learn more",
+  message: "Get 15% off your wedding film. Learn more",
 } as const;
