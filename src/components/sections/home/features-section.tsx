@@ -4,11 +4,6 @@ import Texture from '~/assets/images/22-texture.webp?jsx';
 import { FEATURES_CONTENT } from '~/constants/features';
 
 // Types
-interface FeatureCardProps {
-  title: string;
-  content: string;
-}
-
 interface FeatureStyles {
   section: string;
   overlay: string;
@@ -16,13 +11,24 @@ interface FeatureStyles {
   content: string;
   title: string;
   intro: string;
-  grid: string;
   card: {
     wrapper: string;
     content: string;
     title: string;
-    text: string;
+    list: string;
+    item: {
+      wrapper: string;
+      button: string;
+      title: string;
+      description: string;
+      expanded: string;
+    };
+    header: {
+      wrapper: string;
+      title: string;
+    };
   };
+  background: string;
 }
 
 // Styles
@@ -31,38 +37,38 @@ const styles: FeatureStyles = {
   overlay: "absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none transition-opacity duration-700 z-0",
   container: "container relative z-10",
   content: "max-w-6xl mx-auto",
-  title: "font-playfair text-3xl md:text-4xl text-white mb-8 text-center",
-  intro: "font-opensans text-white md:text-justify max-w-3xl mx-auto mb-12 leading-relaxed px-4",
-  grid: "grid grid-cols-1 md:grid-cols-3 gap-8",
+  title: "font-playfair text-3xl md:text-4xl text-white mb-6 text-center",
+  intro: "font-opensans text-white leading-relaxed md:text-justify",
   card: {
-    wrapper: "w-full h-full rounded-lg relative flex flex-col",
-    content: "p-6 flex flex-col h-full relative z-10",
-    title: "font-playfair text-xl mb-4 text-center",
-    text: "font-opensans leading-relaxed md:text-justify flex-1"
-  }
-} as const;
-
-// Feature Card Component
-const FeatureCard = component$((props: FeatureCardProps) => (
-  <div class={styles.card.wrapper}>
-    <WhitePaintBlock 
-      class="absolute inset-0 w-full h-full object-fill rounded-lg"
-      aria-hidden="true"
-    />
-    <div class={styles.card.content}>
-      <h3 class={styles.card.title}>{props.title}</h3>
-      <p class={styles.card.text}>{props.content}</p>
-    </div>
-  </div>
-));
+    wrapper: "w-full h-full rounded-lg relative max-w-2xl mx-auto mt-12",
+    content: "p-8 md:p-10 relative z-10",
+    title: "font-playfair text-xl mb-6 text-center",
+    list: "font-opensans space-y-4 max-w-xl mx-auto flex flex-col items-center",
+    item: {
+      wrapper: "w-full group",
+      button: "w-full text-left px-4 py-2 rounded-lg transition-colors duration-300",
+      title: "font-opensans text-base text-[#52453A] transition-colors duration-300 flex items-center gap-2",
+      description: "font-opensans text-sm text-[#52453A]/70 pl-6",
+      expanded: [
+        "grid grid-rows-[0fr] group-hover:grid-rows-[1fr]",
+        "transition-all duration-300 ease-in-out"
+      ].join(" "),
+    },
+    header: {
+      wrapper: "text-center mb-8",
+      title: "font-playfair text-2xl text-[#52453A] relative inline-block after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-2 after:h-[2px] after:bg-[#52453A]/30"
+    }
+  } as const,
+  background: "absolute top-0 left-0 w-full opacity-30 mix-blend-overlay pointer-events-none",
+}
 
 // Main Features Section Component
 export const FeaturesSection = component$(() => {
   return (
     <section class={styles.section}>
-      <div class="absolute inset-0 w-full h-full opacity-30 mix-blend-overlay pointer-events-none">
+      <div class={styles.background}>
         <Texture 
-          class="w-full h-full object-cover"
+          class="w-full h-[1000px] object-cover object-top"
           aria-hidden="true"
         />
       </div>
@@ -73,10 +79,45 @@ export const FeaturesSection = component$(() => {
             <span class="font-ephesis">{FEATURES_CONTENT.title.accent}</span>
           </h2>
           <p class={styles.intro}>{FEATURES_CONTENT.intro}</p>
-          <div class={styles.grid}>
-            {FEATURES_CONTENT.features.map((feature) => (
-              <FeatureCard key={feature.title} {...feature} />
-            ))}
+          
+          <div class={styles.card.wrapper}>
+            <WhitePaintBlock 
+              class="absolute inset-0 w-full h-full object-fill rounded-lg"
+              aria-hidden="true"
+            />
+            <div class={styles.card.content}>
+              <div class={styles.card.header.wrapper}>
+                <h3 class={styles.card.header.title}>{FEATURES_CONTENT.card.title}</h3>
+              </div>
+              <ul class={styles.card.list}>
+                {FEATURES_CONTENT.features.map((feature) => (
+                  <li key={feature.title} class={styles.card.item.wrapper}>
+                    <button class={styles.card.item.button}>
+                      <h3 class={styles.card.item.title}>
+                        <svg 
+                          xmlns="http://www.w3.org/2000/svg" 
+                          class="h-4 w-4 transition-transform duration-300 group-hover:rotate-180 shrink-0"
+                          viewBox="0 0 20 20" 
+                          fill="currentColor"
+                        >
+                          <path 
+                            fill-rule="evenodd" 
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" 
+                            clip-rule="evenodd" 
+                          />
+                        </svg>
+                        {feature.title}
+                      </h3>
+                      <div class={styles.card.item.expanded}>
+                        <div class="overflow-hidden">
+                          <p class={styles.card.item.description}>{feature.description}</p>
+                        </div>
+                      </div>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>

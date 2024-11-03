@@ -51,6 +51,7 @@ module.exports = {
         'popup-appear': 'popupAppear 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
         'popup-exit': 'popupExit 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
         'backdrop-appear': 'backdropAppear 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
+        'fade-in': 'fade-in 0.5s ease-in-out forwards',
       },
       keyframes: {
         notificationPulse: {
@@ -81,6 +82,10 @@ module.exports = {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' }
+        },
       },
       colors: {
         brand: {
@@ -91,6 +96,13 @@ module.exports = {
         'beige-dark': '#c0b298',
         'off-white': '#faf9f6',
         'charcoal': '#2d2d2d',
+      },
+      transitionProperty: {
+        'height': 'height',
+        'spacing': 'margin, padding',
+      },
+      transitionTimingFunction: {
+        'bounce-in-out': 'cubic-bezier(0.87, 0, 0.13, 1)',
       },
     },
   },

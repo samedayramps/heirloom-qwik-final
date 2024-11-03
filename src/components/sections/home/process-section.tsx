@@ -19,8 +19,8 @@ const styles: ProcessStyles = {
   overlay: "absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none transition-opacity duration-700",
   container: "container relative z-10",
   content: "max-w-6xl mx-auto",
-  title: "font-playfair text-3xl md:text-4xl text-gray-800 mb-4 text-center",
-  subtitle: "text-center font-opensans text-gray-600 mb-12 max-w-3xl mx-auto",
+  title: "font-playfair text-3xl md:text-4xl text-gray-800 mb-6 text-center",
+  subtitle: "font-opensans text-gray-600 leading-relaxed md:text-justify",
 } as const;
 
 export const ProcessSection = component$(() => {
@@ -50,7 +50,9 @@ export const ProcessSection = component$(() => {
             {PROCESS_CONTENT.subtitle}
           </p>
           
-          <Stepper steps={steps} />
+          <div class="mt-12">
+            <Stepper steps={steps} />
+          </div>
         </div>
       </div>
     </section>

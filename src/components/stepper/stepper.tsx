@@ -19,7 +19,7 @@ const CLASSES = {
   },
   // Use Tailwind's built-in animation classes
   animation: {
-    item: "animate-fade-in transition-all duration-500 ease-in-out",
+    item: "animate-fade-in transition-all duration-500 ease-in-out opacity-0 [animation-fill-mode:forwards]",
     container: "motion-safe:animate-fade-in-up"
   }
 } as const;
@@ -32,8 +32,11 @@ export const Stepper = component$<{ steps: Step[] }>(({ steps }) => {
         {steps.map((step, index) => (
           <li 
             key={step.number} 
-            class={`${CLASSES.animation.item} opacity-0`}
-            style={{ animationDelay: `${index * 100}ms` }}
+            class={`${CLASSES.animation.item}`}
+            style={{ 
+              animationDelay: `${index * 100}ms`,
+              animationDuration: '500ms'
+            }}
           >
             <div class="flex items-center w-full">
               <div class={CLASSES.stepNumber}>
@@ -59,8 +62,11 @@ export const Stepper = component$<{ steps: Step[] }>(({ steps }) => {
         {steps.map((step, index) => (
           <li 
             key={step.number} 
-            class={`flex ${CLASSES.animation.item} opacity-0`}
-            style={{ animationDelay: `${index * 100}ms` }}
+            class={`flex ${CLASSES.animation.item}`}
+            style={{ 
+              animationDelay: `${index * 100}ms`,
+              animationDuration: '500ms'
+            }}
           >
             <div class="flex flex-col items-center">
               <div class={CLASSES.stepNumber}>
