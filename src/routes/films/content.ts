@@ -20,10 +20,10 @@ export const CONTENT = {
   hero: {
     title: {
       main: "Our",
-      accent: "latest",
+      accent: "latest ",
       end: "films"
     },
-    subtitle: "A collection of love stories, beautifully captured"
+    subtitle: "Many more films coming soon"
   },
   films: [
     {

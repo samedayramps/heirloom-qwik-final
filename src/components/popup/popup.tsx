@@ -104,12 +104,11 @@ export const Popup = component$<PopupProps>(({ onClose$, onTalkClick$ }) => {
     isExiting.value = true;
     setTimeout(() => {
       onClose$();
-    }, 500); // Match animation duration
+    }, 500);
   });
   
   return (
     <div class="fixed inset-0 z-50">
-      {/* Backdrop */}
       <div 
         class={[
           "fixed inset-0 bg-black/50 transition-opacity duration-500",
@@ -118,7 +117,6 @@ export const Popup = component$<PopupProps>(({ onClose$, onTalkClick$ }) => {
         onClick$={handleClose}
       />
 
-      {/* Modal */}
       <div class="fixed inset-0 flex items-center justify-center p-4">
         <div 
           class={[
@@ -162,7 +160,7 @@ export const Popup = component$<PopupProps>(({ onClose$, onTalkClick$ }) => {
           ) : (
             <>
               <VideoGrid onSelect$={(id) => activeVideoId.value = id} />
-              <div class="flex flex-col sm:flex-row items-center justify-center gap-2 bg-gray-50 py-1.5 px-4 rounded-xl">
+              <div class="flex flex-col items-center justify-center gap-2 bg-gray-50 py-3 px-4 rounded-xl">
                 <p class="font-opensans-semibold text-base md:text-lg text-gray-900 text-center">
                   {POPUP_CONTENT.ctaText}
                 </p>
