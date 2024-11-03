@@ -15,7 +15,7 @@ interface FAQSectionProps {
 
 // Styles as constants
 const styles = {
-  section: "relative bg-[#315141] py-24 px-4 overflow-hidden",
+  section: "relative bg-[#315141] py-16 px-4 overflow-hidden",
   container: "container relative z-10",
   content: "max-w-4xl mx-auto text-center",
   title: "font-playfair text-3xl md:text-4xl text-white mb-12 flex items-center justify-center gap-8",

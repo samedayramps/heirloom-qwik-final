@@ -48,7 +48,7 @@ const styles: FeatureStyles = {
       wrapper: "w-full group",
       button: "w-full text-left px-4 py-2 rounded-lg transition-colors duration-300",
       title: "font-opensans text-base text-[#52453A] transition-colors duration-300 flex items-center gap-2",
-      description: "font-opensans text-sm text-[#52453A]/70 pl-6",
+      description: "font-opensans text-base text-[#52453A]/70 pl-6",
       expanded: [
         "grid grid-rows-[0fr] group-hover:grid-rows-[1fr]",
         "transition-all duration-300 ease-in-out"

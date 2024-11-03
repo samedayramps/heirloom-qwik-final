@@ -20,7 +20,7 @@ export const VIDEOS: readonly Video[] = [
 
 export const POPUP_CONTENT = {
   title: "Introducing Heirloom Wedding Films",
-  description: "After 8 years of filming weddings as Ty Walls Films, I’m rebranding and now offering cinematic wedding films over 30 minutes long. Now, your wedding film will be a complete story that you’ll want to watch every anniversary.",
+  description: "After 8 years of filming weddings as Ty Walls Films, I’m rebranding to offer cinematic wedding films over 30 minutes long. Now, your wedding film will be a complete story that you’ll want to watch every anniversary.",
   tertiaryDescription: "Below are some of my previous highlight films as Ty Walls Films. While these are shorter, they showcase the quality and style brought to your full-length wedding film.",
   backToVideos: "← Back to videos",
   closeAriaLabel: "Close popup",
