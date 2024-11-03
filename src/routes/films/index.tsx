@@ -4,6 +4,8 @@ import type { DocumentHead } from "@builder.io/qwik-city";
 import texture from '~/assets/images/22-texture.webp';
 import type { Film } from './content';
 import { META, CONTENT } from './content';
+import { routeLoader$ } from "@builder.io/qwik-city";
+import type { RequestHandler } from "@builder.io/qwik-city";
 
 // Background styles
 const BACKGROUND_STYLES = {
@@ -21,7 +23,8 @@ const FilmCard = component$<{
   date: string;
   thumbnail: string;
   description: string;
-}>(({ slug, title, location, date, thumbnail, description }) => {
+  isFirstCard?: boolean;
+}>(({ slug, title, location, date, thumbnail, description, isFirstCard }) => {
   return (
     <Link 
       href={`/films/${slug}`}
@@ -31,11 +34,11 @@ const FilmCard = component$<{
         <img 
           src={thumbnail}
           alt={`${title} wedding film thumbnail`}
-          width={1200}
-          height={675}
-          loading="lazy"
-          decoding="async"
-          fetchPriority="low"
+          width={640}
+          height={360}
+          loading={isFirstCard ? "eager" : "lazy"}
+          decoding={isFirstCard ? "sync" : "async"}
+          fetchPriority={isFirstCard ? "high" : "low"}
           class="h-full w-full object-cover transform transition duration-500 group-hover:scale-105"
         />
       </div>
@@ -52,7 +55,13 @@ const FilmCard = component$<{
   );
 });
 
+export const useFilmsData = routeLoader$(() => {
+  return CONTENT.films;
+});
+
 export default component$(() => {
+  const films = useFilmsData();
+  
   return (
     <main class="w-full">
       {/* Hero Section */}
@@ -82,10 +91,11 @@ export default component$(() => {
         <div class="container relative z-10">
           <div class="max-w-6xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {CONTENT.films.map((film: Film) => (
+              {films.value.map((film: Film, index) => (
                 <FilmCard 
                   key={film.title}
                   {...film}
+                  isFirstCard={index === 0}
                 />
               ))}
             </div>
@@ -104,13 +114,35 @@ export const head: DocumentHead = {
       content: META.description,
     },
   ],
-  // Add preload for critical images
   links: [
     {
       rel: 'preload',
       as: 'image',
       href: texture,
       type: 'image/webp'
+    },
+    {
+      rel: 'preload',
+      as: 'image',
+      href: CONTENT.films[0].thumbnail,
+      type: 'image/webp'
     }
-  ]
+  ],
+  styles: [
+    {
+      key: 'critical-films',
+      style: `
+        .aspect-video { position: relative; padding-top: 56.25%; }
+        .aspect-video img { position: absolute; top: 0; width: 100%; height: 100%; object-fit: cover; }
+      `,
+    },
+  ],
+};
+
+export const onGet: RequestHandler = async ({ cacheControl }) => {
+  cacheControl({
+    public: true,
+    maxAge: 5,
+    staleWhileRevalidate: 60 * 60 * 24 * 7, // Cache for a week
+  });
 };

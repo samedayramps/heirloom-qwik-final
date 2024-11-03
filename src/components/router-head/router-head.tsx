@@ -23,10 +23,11 @@ export const RouterHead = component$(() => {
 
       {/* Defer non-critical scripts */}
       <script
-        defer
+        async
         src="https://www.googletagmanager.com/gtag/js?id=G-WDV40YN0D8"
+        type="text/partytown"
       />
-      <script defer>
+      <script type="text/partytown">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
