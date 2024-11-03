@@ -54,8 +54,8 @@ module.exports = {
       },
       keyframes: {
         notificationPulse: {
-          '0%, 100%': { backgroundColor: '#764248' },
-          '50%': { backgroundColor: '#693b40' },
+          '0%, 100%': { backgroundColor: '#7D323B' },
+          '50%': { backgroundColor: '#6a2b32' },
         },
         popupAppear: {
           '0%': { 
@@ -84,8 +84,8 @@ module.exports = {
       },
       colors: {
         brand: {
-          DEFAULT: '#764248',
-          dark: '#693b40',
+          DEFAULT: '#7D323B',
+          dark: '#6a2b32',
         },
         beige: '#d5c6ad',
         'beige-dark': '#c0b298',
