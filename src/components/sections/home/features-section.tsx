@@ -35,10 +35,10 @@ const styles = {
         "transition-colors duration-300"
       ].join(" "),
       title: [
-        "font-opensans text-base text-[#52453A]",
+        "font-opensans text-base text-[#2d2d2d]",
         "transition-colors duration-300 flex items-center gap-2"
       ].join(" "),
-      description: "font-opensans text-base text-[#52453A]/70 pl-6",
+      description: "font-opensans text-base text-[#2d2d2d]/70 pl-6",
       expanded: [
         "grid grid-rows-[0fr] group-hover:grid-rows-[1fr]",
         "transition-all duration-300 ease-in-out"
@@ -47,10 +47,10 @@ const styles = {
     header: {
       wrapper: "text-center mb-8",
       title: [
-        "font-playfair text-2xl text-[#52453A] relative",
+        "font-playfair text-2xl text-[#2d2d2d] relative",
         "inline-block after:content-[''] after:absolute",
         "after:left-0 after:right-0 after:-bottom-2",
-        "after:h-[2px] after:bg-[#52453A]/30"
+        "after:h-[2px] after:bg-[#2d2d2d]/30"
       ].join(" ")
     }
   }
