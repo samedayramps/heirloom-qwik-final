@@ -2,34 +2,34 @@ export const PROCESS_CONTENT = {
   title: {
     main: "Your",
     accent: "experience",
-    end: "with us"
+    end: ""
   },
-  subtitle: "From our first hello to the moment you receive your heirloom film, we're here to make everything easy and enjoyable.",
+  subtitle: "I want your wedding day to be the best it can be. I take the time to get to know your unique story so your wedding film is uniquely yours.",
   steps: [
     {
       number: 1,
       title: "Let's Chat",
-      description: "We'll talk about your wedding plans and answer any questions you have. This helps us see if we're the right fit for each other."
+      description: "We'll talk about your wedding plans and answer any questions you have. This helps us understand your needs and see if we’re the right fit for your special day."
     },
     {
       number: 2,
       title: "Love Story Session",
-      description: "After you book, we'll meet for drinks and record your love story. You'll get a beautiful video to share, and I'll include highlights in your wedding film."
+      description: "After booking, we’ll meet to film your love story. This personal touch adds depth to your wedding film and gives you a beautiful video to add to your wedding website or social media."
     },
     {
       number: 3,
-      title: "Custom Planning",
-      description: "We'll plan out your wedding day coverage, discussing your timeline and any special moments you want captured."
+      title: "Planning",
+      description: "We’ll work together to plan your wedding day coverage. We’ll review your timeline, discuss important moments, and make sure we’re prepared to capture everything that’s meaningful to you."
     },
     {
       number: 4,
       title: "Your Wedding Day",
-      description: "I'll capture your entire celebration from start to finish, blending into the background so you can fully enjoy your day."
+      description: "We’ll be there to film your entire celebration, from the big events to the small details. We work unobtrusively so you and your guests can fully enjoy the day while we capture genuine, candid moments."
     },
     {
       number: 5,
       title: "Your Wedding Film",
-      description: "Within 12-16 weeks, you'll receive your wedding film—a beautiful keepsake to share with family for generations."
+      description: "Within 12 weeks, you'll receive your wedding film—a beautiful keepsake to share with family for generations."
     }
   ]
 } as const; 
