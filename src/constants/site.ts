@@ -25,7 +25,7 @@ export const POPUP_CONTENT = {
   backToVideos: "← Back to videos",
   closeAriaLabel: "Close popup",
   watchVideoAriaLabel: (index: number) => `Watch video ${index + 1}`,
-  ctaText: "To learn more and get 15% off your wedding film, start a conversation today.",
+  ctaText: "Learn more and get 15% off your wedding film.",
   ctaButtonText: "Let's Talk",
 } as const;
 
