@@ -1,54 +1,30 @@
-import { component$, Slot, useSignal, $, useOnWindow, useTask$, useVisibleTask$ } from "@builder.io/qwik";
-import type { TaskCtx } from '@builder.io/qwik';
+import { component$, Slot, useSignal, $, useOnWindow, useOnDocument } from "@builder.io/qwik";
+import type { RequestHandler } from "@builder.io/qwik-city";
 import Navbar from '../components/navbar/navbar';
 import { Toast } from '../components/ui/toast';
 import { Popup } from '../components/popup/popup';
 import { NotificationBar } from '~/components/notification-bar/notification-bar';
-import type { RequestHandler } from "@builder.io/qwik-city";
+import { isBrowser } from '@builder.io/qwik/build';
 
-// Types
-interface LayoutStyles {
-  wrapper: string;
-  overlay: string;
-  main: string;
-  modal: string;
-}
-
-// Styles
-const styles: LayoutStyles = {
-  wrapper: "min-h-screen bg-[#faf9f6] relative flex flex-col",
-  overlay: "fixed top-0 left-0 w-full h-16 bg-gradient-to-b from-black/20 to-transparent pointer-events-none z-10",
-  main: "flex-grow pt-[96px]",
-  modal: "fixed inset-0 z-[100] transition-all duration-300 opacity-100 pointer-events-auto"
-} as const;
-
-// Cache configuration
+// Cache configuration for better performance
 const CACHE_CONFIG = {
   staleWhileRevalidate: 60 * 60 * 24 * 7, // 7 days
   maxAge: 5 // 5 seconds
 } as const;
 
-// Debounce scroll handler
-const SCROLL_DEBOUNCE = 150; // ms
-
+// Add proper caching headers
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   cacheControl(CACHE_CONFIG);
 };
 
-export const onRequest: RequestHandler = async ({ redirect, url }) => {
-  if (url.pathname.startsWith('/blog')) {
-    throw redirect(301, '/');
-  }
-};
-
 export default component$(() => {
+  // State management using signals
   const showLeadForm = useSignal(false);
   const showToast = useSignal(false);
-  const footerLoaded = useSignal(false);
-  const scrollTimeout = useSignal<number | undefined>();
   const showPopup = useSignal(false);
+  const footerLoaded = useSignal(false);
 
-  // Modal handlers
+  // Memoize handlers with $
   const handleOpenModal = $(() => {
     showLeadForm.value = true;
     document.body.style.overflow = 'hidden';
@@ -59,7 +35,6 @@ export default component$(() => {
     document.body.style.overflow = 'unset';
   });
 
-  // Toast handlers
   const handleShowToast = $(() => {
     showToast.value = true;
   });
@@ -68,18 +43,28 @@ export default component$(() => {
     showToast.value = false;
   });
 
-  // Event listeners
-  useOnWindow('toggleLeadForm', $(() => {
-    handleOpenModal();
+  const handleClosePopup = $(() => {
+    showPopup.value = false;
+  });
+
+  // Handle popup visibility on document load
+  useOnDocument('DOMContentLoaded', $(() => {
+    if (isBrowser) {
+      const hasSeenPopup = localStorage.getItem('hasSeenPopup');
+      
+      if (!hasSeenPopup) {
+        setTimeout(() => {
+          showPopup.value = true;
+          localStorage.setItem('hasSeenPopup', 'true');
+        }, 3000);
+      }
+    }
   }));
 
-  // Debounced scroll handler for footer loading
-  useOnWindow('scroll', $(() => {
-    if (scrollTimeout.value) {
-      clearTimeout(scrollTimeout.value);
-    }
-
-    scrollTimeout.value = setTimeout(() => {
+  // Optimized scroll handler
+  useOnWindow(
+    'scroll',
+    $(() => {
       if (!footerLoaded.value) {
         const scrollPosition = window.scrollY + window.innerHeight;
         const documentHeight = document.documentElement.scrollHeight;
@@ -88,55 +73,20 @@ export default component$(() => {
           footerLoaded.value = true;
         }
       }
-    }, SCROLL_DEBOUNCE) as any;
-  }));
-
-  // Cleanup scroll timeout
-  useTask$(({ cleanup }) => {
-    cleanup(() => {
-      if (scrollTimeout.value) {
-        clearTimeout(scrollTimeout.value);
-      }
-    });
-  });
-
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ cleanup }: TaskCtx) => {
-    // Check if user has seen the popup before
-    const hasSeenPopup = localStorage.getItem('hasSeenPopup');
-    
-    if (!hasSeenPopup) {
-      // Show popup after 3 seconds for first time visitors
-      const timer = setTimeout(() => {
-        showPopup.value = true;
-        // Mark that user has seen the popup
-        localStorage.setItem('hasSeenPopup', 'true');
-      }, 3000);
-
-      cleanup(() => clearTimeout(timer));
-    }
-  });
-
-  const handleNotificationClick = $(() => {
-    // Always show popup when notification is clicked, even if seen before
-    showPopup.value = true;
-  });
-
-  const handleClosePopup = $(() => {
-    showPopup.value = false;
-  });
+    })
+  );
 
   return (
-    <div class={styles.wrapper}>
-      <NotificationBar onClick$={handleNotificationClick} />
-      <div class={styles.overlay} aria-hidden="true" />
+    <div class="min-h-screen bg-[#faf9f6] relative flex flex-col">
+      <NotificationBar onClick$={() => showPopup.value = true} />
       
       <Navbar onTalkClick$={handleOpenModal} />
       
-      <main class={styles.main}>
+      <main class="flex-grow pt-[96px]">
         <Slot />
       </main>
       
+      {/* Lazy load components when needed */}
       {showPopup.value && (
         <Popup 
           onClose$={handleClosePopup}
@@ -144,40 +94,30 @@ export default component$(() => {
         />
       )}
       
-      {/* Lazy load footer with error boundary */}
+      {/* Lazy load footer when in viewport */}
       {footerLoaded.value && (
         <div>
-          {import('../components/footer/footer')
-            .then(({ Footer }) => <Footer />)
-            .catch(error => {
-              console.error('Error loading footer:', error);
-              return null;
-            })
-          }
+          {import('../components/footer/footer').then((mod) => (
+            <mod.Footer />
+          ))}
         </div>
       )}
       
-      {/* Lazy load LeadForm with error boundary */}
+      {/* Lazy load LeadForm when needed */}
       {showLeadForm.value && (
-        <div class={styles.modal}>
-          {import('../components/leadForm/leadForm')
-            .then(({ LeadForm }) => (
-              <LeadForm 
-                onClose$={handleCloseModal}
-                onSuccess$={handleShowToast}
-              />
-            ))
-            .catch(error => {
-              console.error('Error loading lead form:', error);
-              handleCloseModal();
-              return null;
-            })
-          }
+        <div class="fixed inset-0 z-[100] transition-all duration-300">
+          {import('../components/leadForm/leadForm').then((mod) => (
+            <mod.LeadForm 
+              onClose$={handleCloseModal}
+              onSuccess$={handleShowToast}
+            />
+          ))}
         </div>
       )}
 
+      {/* Only render Toast when needed */}
       {showToast.value && (
-        <Toast
+        <Toast 
           onClose$={handleHideToast}
           duration={5000}
         />
