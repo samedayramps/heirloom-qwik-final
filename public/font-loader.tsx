@@ -5,20 +5,28 @@ export const FontLoader = component$(() => {
   
   return (
     <>
-      {/* Self-hosted fonts with font-display: swap */}
-      <link
-        href="/PlayfairDisplay-Regular.woff2" 
+      {/* Preload self-hosted fonts */}
+      <link 
+        rel="preload"
+        href="/fonts/playfair-display-latin.woff2" 
         as="font"
         type="font/woff2"
         crossOrigin="anonymous"
-        rel="stylesheet"
       />
       <link
-        href="/OpenSans-Regular.woff2"
+        rel="preload" 
+        href="/fonts/open-sans-latin.woff2"
         as="font"
         type="font/woff2"
         crossOrigin="anonymous"
-        rel="stylesheet"
+      />
+
+      {/* Preload critical images */}
+      <link
+        rel="preload"
+        href="/assets/images/16-texture-square.webp"
+        as="image"
+        type="image/webp"
       />
 
       {/* Optimized Google Fonts loading for Ephesis */}
@@ -33,14 +41,17 @@ export const FontLoader = component$(() => {
         crossOrigin="anonymous"
       />
       
-      {/* Load Google Fonts with media strategy */}
+      {/* Preload Google Fonts CSS */}
+      <link 
+        rel="preload"
+        href={EPHESIS_URL}
+        as="style"
+      />
+      
+      {/* Load Google Fonts */}
       <link 
         href={EPHESIS_URL}
         rel="stylesheet"
-        media="print"
-        onLoad$={function(this: HTMLLinkElement) {
-          this.media = 'all';
-        }}
       />
 
       {/* Font-face declarations */}
@@ -50,31 +61,19 @@ export const FontLoader = component$(() => {
           @font-face {
             font-family: 'Playfair Display';
             font-style: normal;
-            font-weight: 400;
+            font-weight: 400 700;
             font-display: swap;
-            src: url('/PlayfairDisplay-Regular.woff2') format('woff2');
+            src: url('/fonts/playfair-display-latin.woff2') format('woff2');
             unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
           }
 
           @font-face {
             font-family: 'Open Sans';
             font-style: normal;
-            font-weight: 400;
+            font-weight: 300 600;
             font-display: swap;
-            src: url('/OpenSans-Regular.woff2') format('woff2');
+            src: url('/fonts/open-sans-latin.woff2') format('woff2');
             unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-          }
-
-          /* Fallback font for Ephesis while loading */
-          @font-face {
-            font-family: 'Ephesis';
-            font-style: normal;
-            font-weight: 400;
-            font-display: swap;
-            src: local('Arial');
-            ascent-override: 90%;
-            descent-override: 20%;
-            line-gap-override: 0%;
           }
         `}
       </style>
