@@ -1,10 +1,9 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, $ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { createLeadFormAction } from '~/lib/actions/lead';
 
 // Import components that are needed for initial render
 import { HeroSection } from "~/components/sections/home/hero-section";
-import { AboutSection } from "~/components/sections/home/about-section";
 
 // Define metadata for better SEO
 const META = {
@@ -16,13 +15,24 @@ const META = {
 export const useLeadFormAction = createLeadFormAction();
 
 export default component$(() => {
+  // Memoize event handler
+  const handleLeadFormToggle = $(() => {
+    const event = new CustomEvent('toggleLeadForm');
+    window.dispatchEvent(event);
+  });
+
   return (
     <main class="w-full relative">
-      {/* Immediately render above-the-fold content */}
+      {/* Immediately render critical above-the-fold content */}
       <HeroSection />
-      <AboutSection />
 
-      {/* Lazy load components below the fold using Qwik's built-in lazy loading */}
+      {/* Lazy load below-the-fold content */}
+      <div data-component="about">
+        {import("~/components/sections/home/about-section").then((mod) => (
+          <mod.AboutSection />
+        ))}
+      </div>
+
       <div data-component="features">
         {import("~/components/sections/home/features-section").then((mod) => (
           <mod.FeaturesSection />
@@ -38,10 +48,7 @@ export default component$(() => {
       <div data-component="faq">
         {import("~/components/sections/home/faq-section").then((mod) => (
           <mod.FAQSection 
-            onTalkClick$={() => {
-              const event = new CustomEvent('toggleLeadForm');
-              window.dispatchEvent(event);
-            }}
+            onTalkClick$={handleLeadFormToggle}
           />
         ))}
       </div>
@@ -56,5 +63,18 @@ export const head: DocumentHead = {
       name: "description",
       content: META.description,
     },
+    {
+      name: "viewport",
+      content: "width=device-width, initial-scale=1.0"
+    },
+    {
+      property: "og:title",
+      content: META.title
+    },
+    {
+      property: "og:description", 
+      content: META.description
+    }
   ],
 };
+

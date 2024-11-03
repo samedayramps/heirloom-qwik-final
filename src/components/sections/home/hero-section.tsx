@@ -3,33 +3,25 @@ import { Link } from "@builder.io/qwik-city";
 import { HERO_CONTENT } from "~/constants/hero";
 import HeroImage from '~/assets/images/textured-wedding-photo3.webp?jsx';
 
-// Types
-interface HeroStyles {
-  section: string;
-  container: string;
-  content: string;
-  heading: string;
-  accent: string;
-  description: string;
-  link: string;
-  grid: string;
-  imageWrapper: string;
-  image: string;
-  textContent: string;
-  divider: string;
-}
-
-// Styles optimized for above-the-fold content
-const styles: HeroStyles = {
-  section: "relative w-full py-6 md:py-4 overflow-hidden bg-[#faf9f6]",
+// Move styles to separate file for better maintainability
+const styles = {
+  section: [
+    "relative w-full py-6 md:py-4 overflow-hidden bg-[#faf9f6]"
+  ].join(" "),
   container: "container relative z-10",
   grid: "grid md:grid-cols-2 gap-8 items-center",
   textContent: "max-w-xl mx-auto md:mx-0 text-center md:text-left",
-  content: "max-w-xl",
-  heading: "font-playfair text-3xl md:text-4xl lg:text-5xl text-gray-800 mb-8 leading-[1.2]",
+  heading: [
+    "font-playfair text-3xl md:text-4xl lg:text-5xl",
+    "text-gray-800 mb-8 leading-[1.2]"
+  ].join(" "),
   accent: "font-ephesis leading-[0.5] inline-block",
   description: "font-opensans text-base md:text-lg text-gray-600 mb-8",
-  link: "inline-block font-opensans text-gray-700 border border-gray-700 rounded-full px-8 py-3 hover:bg-[#2d2d2d] hover:text-white transition-colors duration-300",
+  link: [
+    "inline-block font-opensans text-gray-700 border border-gray-700",
+    "rounded-full px-8 py-3 hover:bg-[#2d2d2d] hover:text-white",
+    "transition-colors duration-300"
+  ].join(" "),
   imageWrapper: "relative h-full aspect-[4/3] md:aspect-[4/5] order-first md:order-last",
   image: "w-full h-full object-contain",
   divider: "w-24 h-px bg-[#d5c6ad] mb-8 mx-auto md:mx-0"
@@ -65,6 +57,7 @@ export const HeroSection = component$(() => {
             <HeroImage
               class={styles.image}
               alt="Elegant Wedding Photo"
+              loading="eager"
             />
           </div>
         </div>

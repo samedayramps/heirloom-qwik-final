@@ -1,9 +1,9 @@
 import { component$ } from '@builder.io/qwik';
 
 export interface Step {
-  readonly number: number;
-  readonly title: string;
-  readonly description: string;
+  number: number;
+  title: string;
+  description: string;
 }
 
 // Reusable classes for better maintainability
@@ -17,17 +17,20 @@ const CLASSES = {
     horizontal: "h-0.5 flex-1 mx-2",
     vertical: "w-0.5 flex-1 my-2"
   },
-  // Use Tailwind's built-in animation classes
   animation: {
     item: "animate-fade-in transition-all duration-500 ease-in-out opacity-0 [animation-fill-mode:forwards]",
     container: "motion-safe:animate-fade-in-up"
   }
 } as const;
 
-export const Stepper = component$<{ steps: Step[] }>(({ steps }) => {
+interface StepperProps {
+  steps: readonly Step[] | Step[];  // Accept both readonly and mutable arrays
+}
+
+export const Stepper = component$<StepperProps>(({ steps }) => {
   return (
     <div class="relative">
-      {/* Desktop version - Changed md: to lg: */}
+      {/* Desktop version */}
       <ul class="hidden lg:grid lg:grid-cols-5 gap-0">
         {steps.map((step, index) => (
           <li 
@@ -57,7 +60,7 @@ export const Stepper = component$<{ steps: Step[] }>(({ steps }) => {
         ))}
       </ul>
 
-      {/* Mobile version - Changed md: to lg: */}
+      {/* Mobile version */}
       <ul class="lg:hidden">
         {steps.map((step, index) => (
           <li 

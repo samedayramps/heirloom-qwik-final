@@ -1,4 +1,4 @@
-import { component$, useSignal, $ } from "@builder.io/qwik";
+import { component$ } from "@builder.io/qwik";
 import {
   QwikCityProvider,
   RouterOutlet,
@@ -7,45 +7,33 @@ import {
 import { RouterHead } from './components/router-head/router-head';
 import "./global.css";
 
+// Development mode check
 const isDev = import.meta.env.MODE === 'development';
 
+/**
+ * The root of a QwikCity site always starts with the <QwikCityProvider> component,
+ * immediately followed by the document's <head> and <body>.
+ */
 export default component$(() => {
-  const showLeadForm = useSignal(false);
-  const showToast = useSignal(false);
-
-  const handleCloseModal = $(() => {
-    showLeadForm.value = false;
-    document.body.style.overflow = 'unset';
-  });
-
-  const handleShowToast = $(() => {
-    showToast.value = true;
-  });
-
   return (
     <QwikCityProvider>
       <head>
-        <meta charset="utf-8" />
-        <link rel="manifest" href={`${import.meta.env.BASE_URL}manifest.json`} />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        {/* Critical resources */}
+        <link rel="manifest" href="/manifest.json" />
+        
+        {/* RouterHead handles meta tags, title, links, and scripts */}
         <RouterHead />
       </head>
+      
       <body lang="en">
+        {/* Main app content */}
         <RouterOutlet />
+
+        {/* Only include ServiceWorker in production for better development experience */}
         {!isDev && <ServiceWorkerRegister />}
-        
-        {/* Dynamically import LeadForm */}
-        {showLeadForm.value && (
-          <div 
-            class="fixed inset-0 z-[100] transition-all duration-300 opacity-100 pointer-events-auto"
-          >
-            {import('./components/leadForm/leadForm').then(({ LeadForm }) => (
-              <LeadForm 
-                onClose$={handleCloseModal} 
-                onSuccess$={handleShowToast}
-              />
-            ))}
-          </div>
-        )}
       </body>
     </QwikCityProvider>
   );

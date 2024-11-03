@@ -1,4 +1,4 @@
-import { component$, useSignal, type QRL } from "@builder.io/qwik";
+import { component$, useSignal, type QRL, $ } from "@builder.io/qwik";
 import { FAQ_CONTENT } from "~/constants/faq";
 import Texture from '~/assets/images/18-texture.webp?jsx';
 import { LetsTalkButton } from "~/components/ui/lets-talk-button";
@@ -13,112 +13,83 @@ interface FAQSectionProps {
   onTalkClick$: QRL<() => void>;
 }
 
-// Styles as constants
-const styles = {
-  section: "relative bg-[#315141] py-16 px-4 overflow-hidden",
-  container: "container relative z-10",
-  content: "max-w-4xl mx-auto text-center",
-  title: "font-playfair text-3xl md:text-4xl text-white mb-12 flex items-center justify-center gap-8",
-  faqList: "space-y-3 text-left",
-} as const;
-
-// FAQ Item Component
+// Move FAQItem to separate component for better code organization
 export const FAQItem = component$((props: { 
   item: FAQItem; 
-  index: number;
   isOpen: boolean;
   onToggle$: QRL<() => void>;
 }) => {
-  const itemStyles = {
-    base: "bg-white rounded-lg overflow-hidden transform transition-all duration-500 ease-in-out translate-y-0 opacity-100 hover:bg-gray-50",
-    button: "w-full text-left px-6 py-5 flex justify-between items-center",
-    question: "text-xl font-playfair",
-    content: [
-      "transition-all duration-500 ease-in-out overflow-hidden",
-      props.isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-    ].join(" "),
-    answer: [
-      "px-6 pb-5 text-gray-600 font-opensans transform transition-all duration-500 ease-in-out",
-      props.isOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-    ].join(" "),
-    chevron: [
-      "transform transition-transform duration-300 ease-in-out",
-      props.isOpen ? "rotate-180" : ""
-    ].join(" ")
-  };
-
+  // Inline operations in template for better optimization
   return (
-    <div class={itemStyles.base}>
+    <div class={[
+      "bg-white rounded-lg overflow-hidden transform transition-all duration-500",
+      "ease-in-out translate-y-0 opacity-100 hover:bg-gray-50"
+    ].join(" ")}>
       <button
         onClick$={props.onToggle$}
-        class={itemStyles.button}
+        class="w-full text-left px-6 py-5 flex justify-between items-center"
         aria-expanded={props.isOpen}
       >
-        <span class={itemStyles.question}>{props.item.question}</span>
-        <span class={itemStyles.chevron}>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              d="M19 9L12 16L5 9"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+        <span class="text-xl font-playfair">{props.item.question}</span>
+        <span class={[
+          "transform transition-transform duration-300 ease-in-out",
+          props.isOpen ? "rotate-180" : ""
+        ].join(" ")}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M19 9L12 16L5 9" stroke="currentColor" stroke-width="2" 
+              stroke-linecap="round" stroke-linejoin="round"
             />
           </svg>
         </span>
       </button>
-      <div class={itemStyles.content}>
-        <div class={itemStyles.answer}>{props.item.answer}</div>
+      <div class={[
+        "transition-all duration-500 ease-in-out overflow-hidden",
+        props.isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+      ].join(" ")}>
+        <div class={[
+          "px-6 pb-5 text-gray-600 font-opensans transform transition-all",
+          "duration-500 ease-in-out",
+          props.isOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+        ].join(" ")}>
+          {props.item.answer}
+        </div>
       </div>
     </div>
   );
 });
 
-// Main FAQ Section Component
 export const FAQSection = component$<FAQSectionProps>(({ onTalkClick$ }) => {
   const openIndex = useSignal<number | null>(null);
 
+  // Memoize toggle handler with proper $ import
+  const handleToggle = $((index: number) => {
+    openIndex.value = openIndex.value === index ? null : index;
+  });
+
   return (
-    <section class={styles.section}>
+    <section class="relative bg-[#315141] py-16 px-4 overflow-hidden">
       <div class="absolute inset-0 w-full h-full opacity-30 mix-blend-overlay pointer-events-none">
-        <div class="absolute inset-0 w-full">
-          <Texture 
-            class="w-full object-cover"
-            style="transform-origin: top; transform: scale(1.1)"
-            aria-hidden="true"
-          />
-        </div>
+        <Texture 
+          class="w-full object-cover"
+          style="transform-origin: top; transform: scale(1.1)"
+          aria-hidden="true"
+        />
       </div>
       
-      <div class={styles.container}>
-        <div class={styles.content}>
-          <h2 class={styles.title}>
+      <div class="container relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+          <h2 class="font-playfair text-3xl md:text-4xl text-white mb-12 flex items-center justify-center gap-8">
             {FAQ_CONTENT.title}
-            <LetsTalkButton 
-              onTalkClick$={() => {
-                document.body.style.overflow = 'hidden';
-                onTalkClick$();
-              }}
-            />
+            <LetsTalkButton onTalkClick$={onTalkClick$} />
           </h2>
 
-          <div class={styles.faqList}>
+          <div class="space-y-3 text-left">
             {FAQ_CONTENT.items.map((item, index) => (
               <FAQItem 
-                key={index} 
-                item={item} 
-                index={index}
+                key={index}
+                item={item}
                 isOpen={openIndex.value === index}
-                onToggle$={() => {
-                  openIndex.value = openIndex.value === index ? null : index;
-                }}
+                onToggle$={() => handleToggle(index)}
               />
             ))}
           </div>
