@@ -12,43 +12,79 @@ const SITE_URLS = [
   ...filmUrls
 ] as const;
 
-// Cache configuration
+// Production domain
+const DOMAIN = {
+  development: 'http://localhost:5173',
+  preview: 'http://localhost:4173',
+  production: 'https://heirloomweddingfilms.com'
+};
+
+// Cache configuration for production
 const CACHE_CONFIG = {
-  staleWhileRevalidate: 60 * 60 * 24 * 7, // 7 days
-  maxAge: 60 * 60, // 1 hour
+  development: {
+    noCache: true,
+    maxAge: 0
+  },
+  production: {
+    public: true,
+    maxAge: 60 * 60, // 1 hour
+    staleWhileRevalidate: 60 * 60 * 24 * 7, // 7 days
+  }
 } as const;
 
-export const onGet: RequestHandler = async ({ cacheControl, url, send }) => {
-  console.log('Generating sitemap...', {
-    origin: url.origin,
-    urls: SITE_URLS,
-    env: process.env.NODE_ENV
-  });
+export const onGet: RequestHandler = async ({ cacheControl, url, env, send }) => {
+  try {
+    const isProd = env.get('PROD') === 'true';
+    const mode = env.get('MODE');
+    
+    console.log('Generating sitemap...', {
+      origin: url.origin,
+      urls: SITE_URLS.length,
+      mode,
+      isProd
+    });
 
-  cacheControl(CACHE_CONFIG);
+    // Set appropriate caching based on environment
+    cacheControl(isProd ? CACHE_CONFIG.production : CACHE_CONFIG.development);
 
-  // Determine the correct origin
-  const origin = process.env.NODE_ENV === 'production'
-    ? 'https://heirloomweddingfilms.com'  // Replace with your actual domain
-    : url.origin;
+    // Determine the correct origin
+    const origin = isProd 
+      ? DOMAIN.production
+      : mode === 'preview' 
+        ? DOMAIN.preview 
+        : DOMAIN.development;
 
-  // Generate sitemap XML
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+    // Generate sitemap XML with proper formatting
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${SITE_URLS.map(path => `  <url>
     <loc>${origin}${path}</loc>
     <changefreq>weekly</changefreq>
     <priority>${path === '/' ? '1.0' : '0.8'}</priority>
+    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
   </url>`).join('\n')}
 </urlset>`;
 
-  console.log('Generated sitemap:', sitemap);
-
-  // Send response with correct headers
-  send(new Response(sitemap, {
-    headers: {
-      'content-type': 'application/xml; charset=utf-8',
-      'cache-control': 'public, max-age=3600',
-    },
-  }));
+    // Send response with correct headers
+    send(new Response(sitemap, {
+      headers: {
+        'content-type': 'application/xml; charset=utf-8',
+        'cache-control': isProd 
+          ? 'public, max-age=3600, s-maxage=86400' 
+          : 'no-cache, no-store, must-revalidate',
+        'x-robots-tag': isProd ? 'all' : 'noindex'
+      },
+    }));
+  } catch (error) {
+    console.error('Error generating sitemap:', error);
+    
+    // Send error response
+    send(new Response('Error generating sitemap', {
+      status: 500,
+      headers: {
+        'content-type': 'text/plain',
+        'cache-control': 'no-cache, no-store, must-revalidate'
+      }
+    }));
+  }
 }; 
