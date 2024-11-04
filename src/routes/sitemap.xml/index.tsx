@@ -1,51 +1,52 @@
 import type { RequestHandler } from '@builder.io/qwik-city';
 import { CONTENT } from '../films/content';
 
-// Define your site's URLs
-const filmUrls = CONTENT.films.map(film => `/films/${film.slug}`);
+// Define your site's URLs with error handling
+const getUrls = () => {
+  const baseUrls = [
+    '/',
+    '/about',
+    '/films',
+    '/blog',
+  ];
 
-const SITE_URLS = [
-  '/',
-  '/about',
-  '/films',
-  '/blog',
-  ...filmUrls
-] as const;
+  try {
+    // Add film URLs if available
+    if (CONTENT.films.length) {
+      const filmUrls = CONTENT.films.map(film => `/films/${film.slug}`);
+      return [...baseUrls, ...filmUrls];
+    }
+    
+    console.log('No film content found, using base URLs only');
+    return baseUrls;
+  } catch (error) {
+    console.error('Error getting film URLs:', error);
+    return baseUrls;
+  }
+};
+
+const SITE_URLS = getUrls();
 
 // Production domain
 const DOMAIN = {
   development: 'http://localhost:5173',
   preview: 'http://localhost:4173',
   production: 'https://heirloomweddingfilms.com'
-};
-
-// Cache configuration for production
-const CACHE_CONFIG = {
-  development: {
-    noCache: true,
-    maxAge: 0
-  },
-  production: {
-    public: true,
-    maxAge: 60 * 60, // 1 hour
-    staleWhileRevalidate: 60 * 60 * 24 * 7, // 7 days
-  }
 } as const;
 
-export const onGet: RequestHandler = async ({ cacheControl, url, env, send }) => {
+export const onGet: RequestHandler = async ({ url, env, send }) => {
   try {
     const isProd = env.get('PROD') === 'true';
     const mode = env.get('MODE');
     
     console.log('Generating sitemap...', {
       origin: url.origin,
-      urls: SITE_URLS.length,
+      urls: SITE_URLS,
+      urlsCount: SITE_URLS.length,
       mode,
-      isProd
+      isProd,
+      hasFilms: Boolean(CONTENT.films.length)
     });
-
-    // Set appropriate caching based on environment
-    cacheControl(isProd ? CACHE_CONFIG.production : CACHE_CONFIG.development);
 
     // Determine the correct origin
     const origin = isProd 
@@ -65,6 +66,8 @@ ${SITE_URLS.map(path => `  <url>
   </url>`).join('\n')}
 </urlset>`;
 
+    console.log('Generated sitemap content:', sitemap);
+
     // Send response with correct headers
     send(new Response(sitemap, {
       headers: {
@@ -78,11 +81,19 @@ ${SITE_URLS.map(path => `  <url>
   } catch (error) {
     console.error('Error generating sitemap:', error);
     
-    // Send error response
-    send(new Response('Error generating sitemap', {
-      status: 500,
+    // Send error response with base URLs only
+    const fallbackSitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${DOMAIN.production}/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`;
+
+    send(new Response(fallbackSitemap, {
       headers: {
-        'content-type': 'text/plain',
+        'content-type': 'application/xml; charset=utf-8',
         'cache-control': 'no-cache, no-store, must-revalidate'
       }
     }));
