@@ -45,6 +45,11 @@ const SOCIAL_LINKS = [
   { href: '#', icon: FacebookIcon, label: 'Facebook' }
 ] as const;
 
+const FOOTER_LINKS = [
+  { href: '/sitemap.xml', label: 'Sitemap' },
+  { href: '/robots.txt', label: 'Robots.txt' }
+] as const;
+
 export const Footer = component$(() => {
   return (
     <footer class="relative bg-[#2d2d2d] w-full py-10 overflow-hidden">
@@ -79,6 +84,21 @@ export const Footer = component$(() => {
               ))}
             </div>
           </nav>
+
+          {/* SEO Links */}
+          <div class="flex gap-4">
+            {FOOTER_LINKS.map(({ href, label }) => (
+              <a
+                key={label}
+                href={href}
+                class="text-white/60 hover:text-[#d5c6ad] text-sm transition-colors duration-300"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {label}
+              </a>
+            ))}
+          </div>
 
           {/* Copyright */}
           <div class="text-white/80 text-sm font-light">
