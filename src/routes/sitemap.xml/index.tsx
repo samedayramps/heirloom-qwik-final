@@ -6,9 +6,6 @@ import BLOG_POSTS from '../blog/[slug]/index';
 export const onGet: RequestHandler = ({ url, send }) => {
   const baseUrl = url.origin;
 
-  // Log CONTENT data
-  console.log('CONTENT in production:', CONTENT);
-
   const staticRoutes = [
     { loc: '/', priority: 1.0 },
     { loc: '/about', priority: 0.8 },
@@ -27,9 +24,6 @@ export const onGet: RequestHandler = ({ url, send }) => {
   }));
 
   const allRoutes = [...staticRoutes, ...filmRoutes, ...blogRoutes];
-
-  // Log all routes
-  console.log('All Routes:', allRoutes);
 
   const sitemap = createSitemap(allRoutes, baseUrl);
 
