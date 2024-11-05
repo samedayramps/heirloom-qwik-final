@@ -11,12 +11,22 @@ export const onGet: RequestHandler = ({ url, send }) => {
     { loc: '/blog', priority: 0.8 },
   ];
 
+  console.log('Static Routes:', staticRoutes);
+
   const filmRoutes = CONTENT.films.map(film => ({
     loc: `/films/${film.slug}`,
     priority: 0.8,
   }));
 
-  const sitemap = createSitemap([...staticRoutes, ...filmRoutes], baseUrl);
+  console.log('Film Routes:', filmRoutes);
+
+  const allRoutes = [...staticRoutes, ...filmRoutes];
+
+  console.log('All Routes:', allRoutes);
+
+  const sitemap = createSitemap(allRoutes, baseUrl);
+
+  console.log('Generated Sitemap:', sitemap);
 
   send(new Response(sitemap, {
     headers: {
