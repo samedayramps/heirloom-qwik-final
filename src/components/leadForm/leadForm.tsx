@@ -120,17 +120,17 @@ export const LeadForm = component$<LeadFormProps>(({
               name="contact"
               method="POST"
               data-netlify="true"
-              netlify-honeypot="bot-field"
+              data-netlify-honeypot="bot-field"
               onSubmit$={handleSubmit}
               class={styles.form}
             >
+              <input type="hidden" name="form-name" value="contact" />
+
               <p class="hidden">
                 <label>
                   Don't fill this out if you're human: <input name="bot-field" />
                 </label>
               </p>
-
-              <input type="hidden" name="form-name" value="contact" />
 
               <div class={styles.grid}>
                 <FormInput

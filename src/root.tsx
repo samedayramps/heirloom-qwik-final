@@ -30,6 +30,24 @@ export default component$(() => {
       </head>
       
       <body lang="en">
+        {/* Hidden form for Netlify Forms detection */}
+        <form
+          name="contact"
+          data-netlify="true"
+          data-netlify-honeypot="bot-field"
+          hidden
+        >
+          <input type="hidden" name="form-name" value="contact" />
+          <input name="bot-field" />
+          <input type="text" name="firstName" />
+          <input type="text" name="lastName" />
+          <input type="email" name="email" />
+          <input type="tel" name="phoneNumber" />
+          <input type="date" name="weddingDate" />
+          <input type="text" name="weddingVenue" />
+          <textarea name="message"></textarea>
+        </form>
+
         {/* Main app content */}
         <RouterOutlet />
 
