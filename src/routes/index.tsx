@@ -1,6 +1,8 @@
-import { component$, $ } from "@builder.io/qwik";
+import { component$, $, useSignal } from '@builder.io/qwik';
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { createLeadFormAction } from '~/lib/actions/lead';
+import { LeadForm } from '~/components/leadForm/leadForm';
+import { Toast } from '~/components/ui/toast';
 
 // Import components that are needed for initial render
 import { HeroSection } from "~/components/sections/home/hero-section";
@@ -15,6 +17,9 @@ const META = {
 export const useLeadFormAction = createLeadFormAction();
 
 export default component$(() => {
+  const showForm = useSignal(false);
+  const showToast = useSignal(false);
+
   // Memoize event handler
   const handleLeadFormToggle = $(() => {
     const event = new CustomEvent('toggleLeadForm');
@@ -52,6 +57,20 @@ export default component$(() => {
           />
         ))}
       </div>
+
+      {showForm.value && (
+        <LeadForm
+          onClose$={() => showForm.value = false}
+          onSuccess$={() => showToast.value = true}
+        />
+      )}
+
+      {showToast.value && (
+        <Toast
+          duration={3000}
+          onClose$={() => showToast.value = false}
+        />
+      )}
     </main>
   );
 });

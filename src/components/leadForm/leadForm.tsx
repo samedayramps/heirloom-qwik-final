@@ -76,11 +76,10 @@ export const LeadForm = component$<LeadFormProps>(({
       });
 
       if (response.ok) {
+        handleClose();
+        await new Promise(resolve => setTimeout(resolve, 500));
+        onSuccess$();
         isSubmitting.value = false;
-        onClose$();
-        setTimeout(() => {
-          onSuccess$();
-        }, 300);
       } else {
         console.error('Form submission failed:', response);
         isSubmitting.value = false;
