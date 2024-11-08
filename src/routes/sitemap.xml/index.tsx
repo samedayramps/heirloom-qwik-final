@@ -1,29 +1,18 @@
 import type { RequestHandler } from '@builder.io/qwik-city';
 import { createSitemap } from './create-sitemap';
-import { CONTENT } from '../films/content';
-import BLOG_POSTS from '../blog/[slug]/index';
 
-export const onGet: RequestHandler = ({ url, send }) => {
-  const baseUrl = url.origin;
+export const onGet: RequestHandler = ({ send }) => {
+  // Use production domain
+  const baseUrl = 'https://heirloomweddingfilms.com';
 
-  const staticRoutes = [
+  // Define all known routes
+  const allRoutes = [
     { loc: '/', priority: 1.0 },
     { loc: '/about', priority: 0.8 },
     { loc: '/films', priority: 0.8 },
     { loc: '/blog', priority: 0.8 },
+    { loc: '/films/harlie-and-garret', priority: 0.8 },
   ];
-
-  const filmRoutes = CONTENT.films.map(film => ({
-    loc: `/films/${film.slug}`,
-    priority: 0.8,
-  }));
-
-  const blogRoutes = Object.keys(BLOG_POSTS).map(slug => ({
-    loc: `/blog/${slug}`,
-    priority: 0.8,
-  }));
-
-  const allRoutes = [...staticRoutes, ...filmRoutes, ...blogRoutes];
 
   const sitemap = createSitemap(allRoutes, baseUrl);
 
