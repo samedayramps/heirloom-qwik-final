@@ -119,8 +119,8 @@ export const LeadForm = component$<LeadFormProps>(({
             <form
               name="contact"
               method="POST"
-              netlify
-              netlify-honeypot="bot-field"
+              data-netlify="true"
+              data-netlify-honeypot="bot-field"
               onSubmit$={handleSubmit}
               class={styles.form}
             >
