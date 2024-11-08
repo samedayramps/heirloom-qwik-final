@@ -28,8 +28,10 @@
     "qwik": "qwik"
   },
   "devDependencies": {
+    "@builder.io/partytown": "^0.8.1",
     "@builder.io/qwik": "^1.9.1",
     "@builder.io/qwik-city": "^1.9.1",
+    "@builder.io/qwik-react": "^0.5.5",
     "@netlify/edge-functions": "^2.0.0",
     "@tailwindcss/typography": "^0.5.15",
     "@types/eslint": "8.56.10",
@@ -39,6 +41,7 @@
     "autoprefixer": "^10.4.20",
     "eslint": "8.57.0",
     "eslint-plugin-qwik": "^1.9.1",
+    "fs-extra": "^10.0.0",
     "netlify-cli": "^15.0.0",
     "postcss": "^8.4.47",
     "prettier": "3.3.3",
@@ -47,15 +50,14 @@
     "typescript": "5.4.5",
     "undici": "*",
     "vite": "5.3.5",
-    "vite-tsconfig-paths": "^4.2.1",
-    "@builder.io/qwik-react": "^0.5.5",
-    "fs-extra": "^10.0.0"
+    "vite-tsconfig-paths": "^4.2.1"
   },
   "dependencies": {
     "@builder.io/partytown": "^0.10.2",
     "@netlify/functions": "^2.8.2",
     "@types/node-fetch": "^2.6.11",
     "hls.js": "^1.5.17",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "web-vitals": "^4.2.4"
   }
 }

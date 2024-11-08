@@ -5,7 +5,9 @@ import {
   ServiceWorkerRegister,
 } from "@builder.io/qwik-city";
 import { RouterHead } from './components/router-head/router-head';
+import { QwikPartytown } from './components/partytown/partytown'; // Import Partytown
 import "./global.css";
+import './lib/web-vitals'; // Import the web vitals script
 
 // Development mode check
 const isDev = import.meta.env.MODE === 'development';
@@ -26,6 +28,23 @@ export default component$(() => {
         
         {/* RouterHead handles meta tags, title, links, and scripts */}
         <RouterHead />
+        <QwikPartytown forward={['gtag', 'dataLayer.push']} />
+        <script
+          async
+          type="text/partytown"
+          src="https://www.googletagmanager.com/gtag/js?id=G-0VN4745TTH"
+        />
+        <script
+          type="text/partytown"
+          dangerouslySetInnerHTML={`
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function() {
+              dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'G-0VN4745TTH');
+          `}
+        />
       </head>
       
       <body lang="en">
