@@ -6,24 +6,18 @@ export interface SitemapEntry {
 }
 
 export function createSitemap(entries: SitemapEntry[], baseUrl: string) {
-  if (!Array.isArray(entries)) {
-    throw new Error('Entries must be an array');
-  }
+  // Remove trailing slash from baseUrl if it exists
+  baseUrl = baseUrl.replace(/\/$/, '');
 
-  if (!baseUrl.endsWith('/')) {
-    baseUrl += '/';
-  }
-
-  return `
+  return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${entries.map(
-  (entry) => `
-  <url>
+  (entry) => `  <url>
     <loc>${baseUrl}${entry.loc}</loc>
     ${entry.lastmod ? `<lastmod>${entry.lastmod}</lastmod>` : ''}
     ${entry.changefreq ? `<changefreq>${entry.changefreq}</changefreq>` : ''}
     <priority>${entry.priority}</priority>
-  </url>`,
-).join('')}
+  </url>`
+).join('\n')}
 </urlset>`.trim();
 } 
