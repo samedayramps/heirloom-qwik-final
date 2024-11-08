@@ -28,7 +28,7 @@
     "qwik": "qwik"
   },
   "devDependencies": {
-    "@builder.io/partytown": "^0.8.1",
+    "@builder.io/partytown": "^0.10.2",
     "@builder.io/qwik": "^1.9.1",
     "@builder.io/qwik-city": "^1.9.1",
     "@builder.io/qwik-react": "^0.5.5",
@@ -53,7 +53,6 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "dependencies": {
-    "@builder.io/partytown": "^0.10.2",
     "@netlify/functions": "^2.8.2",
     "@types/node-fetch": "^2.6.11",
     "hls.js": "^1.5.17",
