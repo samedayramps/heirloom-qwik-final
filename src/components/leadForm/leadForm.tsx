@@ -1,6 +1,4 @@
 import { component$, type QRL, useSignal, $ } from '@builder.io/qwik';
-import { Form } from '@builder.io/qwik-city';
-import { useLeadFormAction } from '~/routes/index';
 import { FormInput } from './form-input';
 
 // Types
@@ -53,7 +51,6 @@ export const LeadForm = component$<LeadFormProps>(({
   onClose$, 
   onSuccess$
 }) => {
-  const action = useLeadFormAction();
   const isSubmitting = useSignal(false);
   const isExiting = useSignal(false);
 
@@ -61,12 +58,41 @@ export const LeadForm = component$<LeadFormProps>(({
     isExiting.value = true;
     setTimeout(() => {
       onClose$();
-    }, 500); // Match animation duration
+    }, 500);
+  });
+
+  const handleSubmit = $(async (event: any) => {
+    event.preventDefault();
+    isSubmitting.value = true;
+
+    try {
+      const form = event.target;
+      const data = new FormData(form);
+      
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(data as any).toString()
+      });
+
+      if (response.ok) {
+        isSubmitting.value = false;
+        onClose$();
+        setTimeout(() => {
+          onSuccess$();
+        }, 300);
+      } else {
+        console.error('Form submission failed:', response);
+        isSubmitting.value = false;
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      isSubmitting.value = false;
+    }
   });
 
   return (
     <div class="fixed inset-0 z-50">
-      {/* Backdrop */}
       <div 
         class={[
           styles.backdrop,
@@ -75,7 +101,6 @@ export const LeadForm = component$<LeadFormProps>(({
         onClick$={handleClose}
       />
 
-      {/* Modal Container */}
       <div class={styles.container}>
         <div class={styles.modal(isExiting.value)}>
           <button 
@@ -88,52 +113,31 @@ export const LeadForm = component$<LeadFormProps>(({
             </svg>
           </button>
 
-          {/* Form Content */}
           <div class={styles.content}>
             <h3 class={styles.title}>Let's Talk</h3>
 
-            {action.value?.failed && (
-              <div class={styles.error}>
-                {action.value.message}
-              </div>
-            )}
-
-            <Form
-              action={action}
-              onSubmit$={() => {
-                console.log('Form submitted with data:', action.value);
-                isSubmitting.value = true;
-              }}
-              onSubmitCompleted$={async () => {
-                console.log('Form submission completed with result:', action.value);
-                if (action.value?.success) {
-                  await new Promise(resolve => setTimeout(resolve, 1000));
-                  isSubmitting.value = false;
-                  onClose$();
-                  await new Promise(resolve => setTimeout(resolve, 300));
-                  onSuccess$();
-                } else {
-                  console.error('Form submission failed:', action.value);
-                  isSubmitting.value = false;
-                }
-              }}
+            <form
+              name="contact"
+              method="POST"
+              data-netlify="true"
+              onSubmit$={handleSubmit}
               class={styles.form}
             >
-              {/* Form Inputs */}
+              {/* Required hidden input for Netlify Forms */}
+              <input type="hidden" name="form-name" value="contact" />
+
               <div class={styles.grid}>
                 <FormInput
                   id="firstName"
                   label="First Name"
                   type="text"
                   required
-                  error={action.value?.fieldErrors?.firstName}
                 />
                 <FormInput
                   id="lastName"
                   label="Last Name"
                   type="text"
                   required
-                  error={action.value?.fieldErrors?.lastName}
                 />
               </div>
 
@@ -143,13 +147,11 @@ export const LeadForm = component$<LeadFormProps>(({
                   label="Email"
                   type="email"
                   required
-                  error={action.value?.fieldErrors?.email}
                 />
                 <FormInput
                   id="phoneNumber"
                   label="Phone Number"
                   type="tel"
-                  error={action.value?.fieldErrors?.phoneNumber}
                 />
               </div>
 
@@ -158,14 +160,12 @@ export const LeadForm = component$<LeadFormProps>(({
                   id="weddingDate"
                   label="Wedding Date"
                   type="date"
-                  error={action.value?.fieldErrors?.weddingDate}
                   class="h-[46px] w-full"
                 />
                 <FormInput
                   id="weddingVenue"
                   label="Wedding Venue"
                   type="text"
-                  error={action.value?.fieldErrors?.weddingVenue}
                 />
               </div>
 
@@ -217,7 +217,7 @@ export const LeadForm = component$<LeadFormProps>(({
                   )}
                 </button>
               </div>
-            </Form>
+            </form>
           </div>
         </div>
       </div>

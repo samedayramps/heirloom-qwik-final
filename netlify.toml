@@ -42,3 +42,14 @@ command = "npm run build"
   [headers.values]
     Content-Type = "application/xml"
     X-Content-Type-Options = "nosniff"
+
+# Add form settings
+[forms]
+  # Configure form notifications
+  [forms."contact"]
+    email = "ty@heirloomweddingfilms.com"
+    subject = "New Lead Form Submission - Heirloom Wedding Films"
+
+[functions]
+  external_node_modules = ["postmark"]
+  node_bundler = "esbuild"
