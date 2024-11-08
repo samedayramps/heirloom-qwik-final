@@ -33,8 +33,8 @@ export default component$(() => {
         {/* Hidden form for Netlify Forms detection */}
         <form
           name="contact"
-          data-netlify="true"
-          data-netlify-honeypot="bot-field"
+          netlify
+          netlify-honeypot="bot-field"
           hidden
         >
           <input type="hidden" name="form-name" value="contact" />

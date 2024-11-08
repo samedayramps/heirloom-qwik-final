@@ -50,6 +50,13 @@ command = "npm run build"
     email = "ty@heirloomweddingfilms.com"
     subject = "New Lead Form Submission - Heirloom Wedding Films"
 
+# Enable form detection
+[build.processing]
+  skip_processing = false
+
+[build.processing.html]
+  pretty_urls = true
+
 [functions]
   external_node_modules = ["postmark"]
   node_bundler = "esbuild"
