@@ -69,7 +69,7 @@ export const LeadForm = component$<LeadFormProps>(({
       const form = event.target;
       const data = new FormData(form);
       
-      const response = await fetch('/', {
+      const response = await fetch('/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(data as any).toString()
@@ -120,10 +120,16 @@ export const LeadForm = component$<LeadFormProps>(({
               name="contact"
               method="POST"
               data-netlify="true"
+              netlify-honeypot="bot-field"
               onSubmit$={handleSubmit}
               class={styles.form}
             >
-              {/* Required hidden input for Netlify Forms */}
+              <p class="hidden">
+                <label>
+                  Don't fill this out if you're human: <input name="bot-field" />
+                </label>
+              </p>
+
               <input type="hidden" name="form-name" value="contact" />
 
               <div class={styles.grid}>
