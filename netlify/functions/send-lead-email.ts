@@ -88,16 +88,41 @@ const handler: Handler = async (event) => {
     }
 
     console.log('Notification email sent successfully');
+
+    // Send Pushover notification
+    const pushoverResponse = await fetch('https://api.pushover.net/1/messages.json', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        token: process.env.PUSHOVER_API_TOKEN,
+        user: process.env.PUSHOVER_USER_KEY,
+        message: `New lead from ${requestBody.firstName} ${requestBody.lastName}`,
+        title: 'New Lead Submission',
+        url: siteUrl,
+        url_title: 'View Lead Details'
+      }),
+    });
+
+    if (!pushoverResponse.ok) {
+      const errorText = await pushoverResponse.text();
+      console.error('Pushover notification error:', errorText);
+      throw new Error(`Pushover notification failed: ${errorText}`);
+    }
+
+    console.log('Pushover notification sent successfully');
+
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: "Notification email sent successfully" }),
+      body: JSON.stringify({ message: "Notification email and Pushover notification sent successfully" }),
     };
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('Error sending email or Pushover notification:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({ 
-        message: error instanceof Error ? error.message : "Error sending email" 
+        message: error instanceof Error ? error.message : "Error sending email or Pushover notification" 
       }),
     };
   }
