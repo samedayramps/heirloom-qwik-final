@@ -38,9 +38,7 @@ export default component$(() => {
           type="text/partytown"
           dangerouslySetInnerHTML={`
             window.dataLayer = window.dataLayer || [];
-            window.gtag = function() {
-              dataLayer.push(arguments);
-            }
+            function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-0VN4745TTH');
           `}
