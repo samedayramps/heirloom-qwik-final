@@ -1,57 +1,28 @@
 import { component$ } from "@builder.io/qwik";
-import {
-  QwikCityProvider,
-  RouterOutlet,
-  ServiceWorkerRegister,
-} from "@builder.io/qwik-city";
-import { RouterHead } from './components/router-head/router-head';
-import { QwikPartytown } from './components/partytown/partytown'; // Import Partytown
-import "./global.css";
-import './lib/web-vitals'; // Import the web vitals script
+import { useStylesScoped$ } from "@builder.io/qwik";
+import styles from "./root.css?inline";
 
-// Development mode check
-const isDev = import.meta.env.MODE === 'development';
-
-/**
- * The root of a QwikCity site always starts with the <QwikCityProvider> component,
- * immediately followed by the document's <head> and <body>.
- */
 export default component$(() => {
+  useStylesScoped$(styles);
+
   return (
-    <QwikCityProvider>
+    <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        
-        {/* Critical resources */}
-        <link rel="manifest" href="/manifest.json" />
-        
-        {/* RouterHead handles meta tags, title, links, and scripts */}
-        <RouterHead />
-        <QwikPartytown forward={['gtag', 'dataLayer.push']} />
-        <script
-          async
-          type="text/partytown"
-          src="https://www.googletagmanager.com/gtag/js?id=G-0VN4745TTH"
-        />
-        <script
-          type="text/partytown"
-          dangerouslySetInnerHTML={`
+        <title>HEIRLOOM Wedding Films</title>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-WDV40YN0D8"></script>
+        <script>
+          {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-0VN4745TTH');
+            gtag('config', 'G-WDV40YN0D8');
           `}
-        />
+        </script>
       </head>
-      
-      <body lang="en">
-        {/* Main app content */}
-        <RouterOutlet />
-
-        {/* Only include ServiceWorker in production for better development experience */}
-        {!isDev && <ServiceWorkerRegister />}
+      <body>
+        <slot />
       </body>
-    </QwikCityProvider>
+    </html>
   );
 });
