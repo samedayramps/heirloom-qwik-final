@@ -36,3 +36,16 @@ command = "npm run build"
 
 [[plugins]]
   package = "@netlify/plugin-emails"
+
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Content-Type = "application/xml"
+    X-Content-Type-Options = "nosniff"
+
+# Copy sitemap during build
+[[plugins]]
+package = "@netlify/plugin-local-install-core"
+
+[[plugins.inputs]]
+command = "cp public/sitemap.xml dist/sitemap.xml"

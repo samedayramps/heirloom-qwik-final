@@ -23,6 +23,7 @@ errorOnDuplicatesPkgDeps(devDependencies, dependencies);
 export default defineConfig(({ command, mode }): UserConfig => {
   return {
     plugins: [qwikCity(), qwikVite(), tsconfigPaths()],
+    publicDir: 'public',
     resolve: {
       alias: [
         { find: '~', replacement: path.resolve(__dirname, 'src') }
@@ -41,7 +42,8 @@ export default defineConfig(({ command, mode }): UserConfig => {
         }
       },
       target: 'esnext',
-      minify: 'esbuild'
+      minify: 'esbuild',
+      copyPublicDir: true,
     }
   };
 });

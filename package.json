@@ -15,7 +15,7 @@
     "build": "qwik build",
     "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
-    "build.server": "vite build -c adapters/netlify-edge/vite.config.ts",
+    "build.server": "vite build -c adapters/static/vite.config.ts",
     "build.types": "tsc --incremental --noEmit",
     "deploy": "netlify deploy --build",
     "dev": "vite --mode ssr",
@@ -48,7 +48,9 @@
     "undici": "*",
     "vite": "5.3.5",
     "vite-tsconfig-paths": "^4.2.1",
-    "@builder.io/qwik-react": "^0.5.5"
+    "@builder.io/qwik-react": "^0.5.5",
+    "@netlify/plugin-local-install-core": "^1.0.0",
+    "fs-extra": "^10.0.0"
   },
   "dependencies": {
     "@builder.io/partytown": "^0.10.2",
