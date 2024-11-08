@@ -101,9 +101,11 @@ export const LeadForm = component$<LeadFormProps>(({
             <Form
               action={action}
               onSubmit$={() => {
+                console.log('Form submitted with data:', action.value);
                 isSubmitting.value = true;
               }}
               onSubmitCompleted$={async () => {
+                console.log('Form submission completed with result:', action.value);
                 if (action.value?.success) {
                   await new Promise(resolve => setTimeout(resolve, 1000));
                   isSubmitting.value = false;
@@ -111,6 +113,7 @@ export const LeadForm = component$<LeadFormProps>(({
                   await new Promise(resolve => setTimeout(resolve, 300));
                   onSuccess$();
                 } else {
+                  console.error('Form submission failed:', action.value);
                   isSubmitting.value = false;
                 }
               }}
