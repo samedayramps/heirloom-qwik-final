@@ -66,6 +66,8 @@ export const LeadForm = component$<LeadFormProps>(({
     isSubmitting.value = true;
 
     try {
+      const submissionStart = Date.now();
+
       const form = event.target;
       const data = new FormData(form);
       
@@ -76,16 +78,27 @@ export const LeadForm = component$<LeadFormProps>(({
       });
 
       if (response.ok) {
+        const submissionDuration = Date.now() - submissionStart;
+        
+        if (submissionDuration < 1000) {
+          await new Promise(resolve => setTimeout(resolve, 1000 - submissionDuration));
+        }
+
         handleClose();
         await new Promise(resolve => setTimeout(resolve, 500));
         onSuccess$();
         isSubmitting.value = false;
       } else {
         console.error('Form submission failed:', response);
+        const submissionDuration = Date.now() - submissionStart;
+        if (submissionDuration < 1000) {
+          await new Promise(resolve => setTimeout(resolve, 1000 - submissionDuration));
+        }
         isSubmitting.value = false;
       }
     } catch (error) {
       console.error('Form submission error:', error);
+      await new Promise(resolve => setTimeout(resolve, 1000));
       isSubmitting.value = false;
     }
   });
