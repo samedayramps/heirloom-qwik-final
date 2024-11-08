@@ -39,7 +39,7 @@ const handler: Handler = async (event) => {
     const siteUrl = 'https://heirloomweddingfilms.com';
 
     // Add a verification check
-    const POSTMARK_VERIFIED = false; // Toggle this when verified
+    const POSTMARK_VERIFIED = true; // Toggle this when verified
 
     if (!POSTMARK_VERIFIED) {
       console.log('Postmark not verified yet. Would have sent email with:', requestBody);
@@ -81,35 +81,9 @@ const handler: Handler = async (event) => {
       throw new Error(`Notification email failed: ${errorText}`);
     }
 
-    // Send confirmation email to the customer
-    const confirmationResponse = await fetch(`${siteUrl}/.netlify/functions/emails/lead-confirmation`, {
-      headers: {
-        "netlify-emails-secret": process.env.NETLIFY_EMAILS_SECRET,
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify({
-        from: "ty@heirloomweddingfilms.com",
-        fromName: "HEIRLOOM Wedding Films",
-        to: requestBody.email,
-        subject: "Thanks for Contacting HEIRLOOM Wedding Films",
-        parameters: {
-          name: requestBody.firstName,
-          weddingDate: requestBody.weddingDate || 'Not provided',
-          weddingVenue: requestBody.weddingVenue || 'Not provided'
-        },
-      }),
-    });
-
-    if (!confirmationResponse.ok) {
-      const errorText = await confirmationResponse.text();
-      console.error('Confirmation email error:', errorText);
-      throw new Error(`Confirmation email failed: ${errorText}`);
-    }
-
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: "Emails sent successfully" }),
+      body: JSON.stringify({ message: "Notification email sent successfully" }),
     };
   } catch (error) {
     console.error('Error sending email:', error);

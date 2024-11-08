@@ -116,6 +116,7 @@ export const LeadForm = component$<LeadFormProps>(({
               }}
               class={styles.form}
             >
+              {/* Form Inputs */}
               <div class={styles.grid}>
                 <FormInput
                   id="firstName"
