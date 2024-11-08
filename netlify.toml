@@ -50,12 +50,6 @@ command = "npm run build"
     email = "ty@heirloomweddingfilms.com"
     subject = "New Lead Form Submission - Heirloom Wedding Films"
 
-[[redirects]]
-  from = "/contact"
-  to = "/.netlify/functions/submission-created"
-  status = 200
-  force = true
-
 [functions]
   external_node_modules = ["postmark"]
   node_bundler = "esbuild"
