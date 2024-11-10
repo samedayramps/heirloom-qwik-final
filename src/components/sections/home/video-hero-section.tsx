@@ -25,7 +25,7 @@ export const VideoHeroSection = component$(() => {
       </div>
 
       {/* Content */}
-      <div class="relative z-10 flex flex-col items-center justify-center w-full h-full">
+      <div class="relative z-10 flex flex-col items-center justify-center w-full h-full pt-16">
         <div class="max-w-2xl mx-auto text-center px-4">
           <h1 class="font-playfair text-3xl md:text-4xl lg:text-5xl text-white mb-8 leading-[1.2] drop-shadow-lg">
             {HERO_CONTENT.heading}
@@ -48,23 +48,6 @@ export const VideoHeroSection = component$(() => {
             {HERO_CONTENT.ctaText}
           </Link>
         </div>
-      </div>
-
-      {/* Scroll Indicator */}
-      <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <svg 
-          class="w-6 h-6 text-white drop-shadow-lg"
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
-        >
-          <path 
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width={2}
-            d="M19 14l-7 7m0 0l-7-7m7 7V3"
-          />
-        </svg>
       </div>
     </section>
   );
