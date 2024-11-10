@@ -14,7 +14,7 @@ export const VideoHeroSection = component$(() => {
           playsInline={true}
           preload="auto"
           class="object-cover w-full h-full"
-          poster="/images/video-poster.jpg"
+          poster="/images/harlie-garret-thumbnail.jpg"
         >
           <source 
             src="https://heirloom-wedding-films.b-cdn.net/caleb_%2B_kirsten___minneapolis_renaissance%2C_the_depot%20(2160p).mp4"
