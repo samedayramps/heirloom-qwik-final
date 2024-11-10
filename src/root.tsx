@@ -6,15 +6,10 @@ import {
 } from "@builder.io/qwik-city";
 import { RouterHead } from './components/router-head/router-head';
 import "./global.css";
-import './lib/web-vitals'; // Import the web vitals script
+import './lib/web-vitals';
 
-// Development mode check
 const isDev = import.meta.env.MODE === 'development';
 
-/**
- * The root of a QwikCity site always starts with the <QwikCityProvider> component,
- * immediately followed by the document's <head> and <body>.
- */
 export default component$(() => {
   return (
     <QwikCityProvider>
@@ -22,6 +17,15 @@ export default component$(() => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         
+        {/* Google Tag Manager */}
+        <script dangerouslySetInnerHTML={`
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-TM49ZMV');
+        `} />
+
         {/* Critical resources */}
         <link rel="manifest" href="/manifest.json" />
         
@@ -30,6 +34,12 @@ export default component$(() => {
       </head>
       
       <body lang="en">
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TM49ZMV"
+          height="0" width="0" style="display:none;visibility:hidden"></iframe>
+        </noscript>
+
         {/* Hidden form for Netlify Forms detection */}
         <form
           name="contact"
