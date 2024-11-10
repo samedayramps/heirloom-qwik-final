@@ -1,4 +1,4 @@
-import { component$, type PropFunction } from '@builder.io/qwik';
+import { component$, type PropFunction, useSignal, useOnWindow, $ } from '@builder.io/qwik';
 import { NOTIFICATION_CONTENT } from '~/constants/site';
 
 interface NotificationBarProps {
@@ -6,8 +6,23 @@ interface NotificationBarProps {
 }
 
 export const NotificationBar = component$<NotificationBarProps>(({ onClick$ }) => {
+  const isVisible = useSignal(true);
+
+  // Add scroll listener
+  useOnWindow(
+    'scroll',
+    $(() => {
+      isVisible.value = window.scrollY < 10;
+    })
+  );
+
   return (
-    <div class="sticky top-0 w-full text-white py-2 px-4 text-center z-50 animate-notification-pulse">
+    <div 
+      class={[
+        "fixed top-0 w-full text-white py-2 px-4 text-center z-50 transition-all duration-300",
+        isVisible.value ? "translate-y-0" : "-translate-y-full"
+      ].join(" ")}
+    >
       <button
         onClick$={onClick$}
         class="container mx-auto flex items-center justify-center gap-2 hover:opacity-80 transition-opacity"

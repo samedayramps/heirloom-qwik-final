@@ -3,9 +3,7 @@ import type { DocumentHead } from "@builder.io/qwik-city";
 import { createLeadFormAction } from '~/lib/actions/lead';
 import { LeadForm } from '~/components/leadForm/leadForm';
 import { Toast } from '~/components/ui/toast';
-
-// Import components that are needed for initial render
-import { HeroSection } from "~/components/sections/home/hero-section";
+import { VideoHeroSection } from "~/components/sections/home/video-hero-section";
 
 // Define metadata for better SEO
 const META = {
@@ -28,8 +26,8 @@ export default component$(() => {
 
   return (
     <main class="w-full relative">
-      {/* Immediately render critical above-the-fold content */}
-      <HeroSection />
+      {/* Video Hero Section */}
+      <VideoHeroSection />
 
       {/* Lazy load below-the-fold content */}
       <div data-component="about">
