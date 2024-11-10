@@ -47,7 +47,8 @@ const SOCIAL_LINKS = [
 
 const FOOTER_LINKS = [
   { href: '/sitemap.xml', label: 'Sitemap' },
-  { href: '/robots.txt', label: 'Robots.txt' }
+  { href: '/robots.txt', label: 'Robots.txt' },
+  { href: '/privacy-policy', label: 'Privacy Policy' }
 ] as const;
 
 export const Footer = component$(() => {

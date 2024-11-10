@@ -3,7 +3,6 @@ import type { RequestHandler } from "@builder.io/qwik-city";
 import Navbar from '../components/navbar/navbar';
 import { Toast } from '../components/ui/toast';
 import { Popup } from '../components/popup/popup';
-import { NotificationBar } from '~/components/notification-bar/notification-bar';
 import { isBrowser } from '@builder.io/qwik/build';
 
 // Cache configuration for better performance
@@ -78,11 +77,9 @@ export default component$(() => {
 
   return (
     <div class="min-h-screen bg-[#faf9f6] relative flex flex-col">
-      <NotificationBar onClick$={() => showPopup.value = true} />
-      
       <Navbar onTalkClick$={handleOpenModal} />
       
-      <main class="flex-grow pt-[96px]">
+      <main class="flex-grow">
         <Slot />
       </main>
       
