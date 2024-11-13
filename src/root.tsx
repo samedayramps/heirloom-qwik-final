@@ -17,6 +17,9 @@ export default component$(() => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         
+        {/* Facebook Domain Verification */}
+        <meta name="facebook-domain-verification" content="uaj1zejlxdjhfw95og8rglbaxjdtd8" />
+        
         {/* Google Tag Manager */}
         <script dangerouslySetInnerHTML={`
           (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
