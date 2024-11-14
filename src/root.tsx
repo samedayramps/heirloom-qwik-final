@@ -35,7 +35,6 @@ export default component$(() => {
         {/* RouterHead handles meta tags, title, links, and scripts */}
         <RouterHead />
       </head>
-      
       <body lang="en">
         {/* Google Tag Manager (noscript) */}
         <noscript>

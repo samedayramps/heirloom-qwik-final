@@ -1,6 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import { HERO_CONTENT } from "~/constants/hero";
+import HeroFallback from "~/assets/images/harlie-garret-thumbnail.jpg?jsx";
 
 // Move styles to separate file for better maintainability
 const styles = {
@@ -20,12 +21,15 @@ const styles = {
     "rounded-full px-8 py-3 hover:bg-[#2d2d2d] hover:text-white",
     "transition-colors duration-300"
   ].join(" "),
-  divider: "w-24 h-px bg-[#d5c6ad] mb-8 mx-auto"
+  divider: "w-24 h-px bg-[#d5c6ad] mb-8 mx-auto",
+  fallbackImage: "absolute inset-0 w-full h-full object-cover -z-10"
 } as const;
 
 export const HeroSection = component$(() => {
   return (
     <section class={styles.section}>
+      <HeroFallback class={styles.fallbackImage} />
+      
       <div class={styles.container}>
         <div class={styles.content}>
           <h1 class={styles.heading}>
